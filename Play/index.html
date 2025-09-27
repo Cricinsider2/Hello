@@ -77,13 +77,13 @@
       const preferredKey = urlParams.get("cdn");
 
       if (!id) {
-        document.body.innerHTML = <p style="color:white;text-align:center">No ID provided (?id=)</p>;
+        document.body.innerHTML = `<p style="color:white;text-align:center">No ID provided (?id=)</p>`;
         return;
       }
 
       const source = await getStreamUrl(id, preferredKey);
       if (!source) {
-        document.body.innerHTML = <p style="color:white;text-align:center">No playable stream found for ID ${id}</p>;
+        document.body.innerHTML = `<p style="color:white;text-align:center">No playable stream found for ID ${id}</p>`;
         return;
       }
 
@@ -114,7 +114,7 @@
           const player = new Plyr(video, plyrOptions);
 
           // Fullscreen orientation lock
-document.addEventListener('fullscreenchange', () => {
+          document.addEventListener('fullscreenchange', () => {
             if (document.fullscreenElement && screen.orientation?.lock) {
               screen.orientation.lock('landscape').catch(err => console.warn('Orientation lock failed:', err));
             }
@@ -124,7 +124,7 @@ document.addEventListener('fullscreenchange', () => {
         video.src = source;
         new Plyr(video, plyrOptions);
       } else {
-        document.body.innerHTML = '<p style="color:white;text-align:center">Your browser does not support HLS playback.</p>';
+        document.body.innerHTML = `<p style="color:white;text-align:center">Your browser does not support HLS playback.</p>`;
       }
 
       // Enable Picture-in-Picture via double-click or PiP button
