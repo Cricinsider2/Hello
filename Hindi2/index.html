@@ -21,6 +21,16 @@
       top: 0;
       left: 0;
     }
+    /* 👇 Controls ko thoda upar shift kiya */
+    .vjs-control-bar {
+      bottom: 50px !important;
+    }
+    /* 👇 Mobile ke liye aur upar */
+    @media (max-width: 768px) {
+      .vjs-control-bar {
+        bottom: 70px !important;
+      }
+    }
   </style>
 </head>
 <body>
@@ -35,7 +45,7 @@
   preload="auto"
   poster=""
 >
-  <!-- Replace this with a valid permanent .m3u8 URL -->
+  <!-- Replace this with a valid permanent HLS URL -->
   <source src="https://liveakmt-p-web.slivcdn.com/hls/live/2119921/cricacc12809/HIN/std_lrh-800300010.m3u8?hdnea=exp=1759116160~acl=/*~id=77259800088723949116205136098909~hmac=28c0a108385f589838df4574cd9df81c29ebf132a539f3abc44a8e806ae9119f" type="application/x-mpegURL" />
 </video>
 
