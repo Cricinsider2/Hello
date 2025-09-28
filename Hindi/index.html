@@ -23,18 +23,18 @@
     }
     /* 👇 Controls ko aur upar shift kiya */
     .vjs-control-bar {
-      bottom: 100px !important; /* jitna chahiye utna adjust kar lo */
+      bottom: 100px !important;
     }
     /* 👇 Buttons ko bada kiya */
     .vjs-control-bar .vjs-button {
-      font-size: 2em !important;   /* icons bade ho gaye */
+      font-size: 2em !important;
       width: 60px !important;
       height: 60px !important;
     }
     .vjs-control-bar .vjs-control {
       line-height: 60px !important;
     }
-    /* 👇 Progress bar ko bhi thoda mota */
+    /* 👇 Progress bar ko bhi mota */
     .vjs-progress-holder {
       height: 8px !important;
     }
@@ -73,11 +73,29 @@
 <script src="https://vjs.zencdn.net/8.10.0/video.min.js"></script>
 <script>
   const player = videojs('my-video');
+
   player.ready(function () {
     player.muted(false);
     player.play().catch(() => {
       console.warn('Autoplay might be blocked by browser.');
     });
+  });
+
+  // 👇 Fullscreen change pe orientation lock/unlock
+  player.on('fullscreenchange', function () {
+    if (player.isFullscreen()) {
+      if (screen.orientation && screen.orientation.lock) {
+        screen.orientation.lock('landscape').catch(err => {
+          console.warn("Orientation lock not supported:", err);
+        });
+      }
+    } else {
+      if (screen.orientation && screen.orientation.lock) {
+        screen.orientation.lock('portrait').catch(err => {
+          console.warn("Orientation unlock failed:", err);
+        });
+      }
+    }
   });
 </script>
 
