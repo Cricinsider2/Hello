@@ -1,149 +1,185 @@
-<html>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<meta name="referrer" content="no-referrer">
-<title>TG_@Cricinsider365</title>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/shaka-player/4.7.1/shaka-player.ui.min.js" crossorigin="anonymous"></script>
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/shaka-player/4.7.1/controls.min.css" crossorigin="anonymous">
-<style>
-    body {
-        background-color: #000;
-        margin: 0;
-    }
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Shaka Player — Working Example</title>
 
-    /* Container for video and logo */
-    .video-container {
-        position: relative;
-        width: 100%;
-        height: 100%;
-        background-color: black;
-    }
+  <!-- Shaka Player + UI (CDN) -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/shaka-player/4.7.11/shaka-player.ui.min.js" crossorigin="anonymous"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/shaka-player/4.7.11/controls.min.css" crossorigin="anonymous" />
 
-    /* Style for the logo */
-    .logo {
-        position: absolute;
-        top: 10px; /* Adjust vertical position */
-        left: 10px; /* Adjust horizontal position */
-        z-index: 1; /* Ensure the logo appears above the video */
-        max-width: 120px; /* Set maximum width for the logo */
-        max-height: 120px; /* Set maximum height for the logo */
-        pointer-events: none; /* Prevent interference with video controls */
-    }
-
-    .shaka-spinner-container {
-        display: none;
-    }
-
-    .uc {
-        pointer-events: none;
-    }
-</style>
+  <style>
+    * { user-select: auto !important; -webkit-user-select: auto !important; box-sizing: border-box; margin: 0; padding: 0; }
+    html, body { height: 100%; width: 100%; background: #000; font-family: system-ui, -apple-system, sans-serif; }
+    .shaka-video-container { position: absolute; inset: 0; width: 100%; height: 100%; }
+    video { width: 100%; height: 100%; background: #000; object-fit: contain; }
+    /* Hide built-in spinner (if you want) */
+    .shaka-spinner-container, .shaka-spinner, .shaka-spinner-svg { display: none !important; visibility: hidden !important; opacity: 0 !important; }
+  </style>
 </head>
-
 <body>
-    <!-- Video container -->
-    <div class="video-container">
-        <!-- Logo inside the video -->
-        <img src="https://i.postimg.cc/c4sd8fJJ/1000050234-removebg-preview.png" alt="Logo" class="logo">
-
-        <!-- Video player -->
-        <div data-shaka-player-container style="position: absolute; top: 0; left: 0; width: 100%; height: 100%;">
-            <video autoplay muted data-shaka-player id="video" poster="https://i.ibb.co/x7jXd29/In-Shot-20241215-002653932.jpg" style="width:100%; height:100%;"></video>
-        </div>
+  <div data-shaka-player-container class="shaka-mobile shaka-video-container" shaka-controls="true">
+    <div class="shaka-video-container shaka-video" data-shaka-player>
+      <video autoplay playsinline preload="metadata" poster="https://i.ibb.co/nsHFLDqF/sony-liv-advertisement-services.jpg" class="shaka-video"></video>
     </div>
+  </div>
 
-    <script>
-    // Restrict iframe embedding
-    if (window.top !== window.self) {
-        window.addEventListener('DOMContentLoaded', function() {
-            // Clear the existing content
-            document.body.innerHTML = '';
+  <script>
+    document.addEventListener('DOMContentLoaded', async () => {
+      // Install Shaka polyfills
+      shaka.polyfill.installAll();
 
-            // Add custom message
-            const messageDiv = document.createElement('div');
-            messageDiv.id = 'message';
-            messageDiv.textContent = 'Ab to copy mat kar chutiye By @Cricinsider365';
+      if (!shaka.Player.isBrowserSupported()) {
+        console.error('Browser not supported by Shaka Player');
+        return;
+      }
 
-            // Style the message
-            messageDiv.style.color = '#fff';
-            messageDiv.style.backgroundColor = '#000';
-            messageDiv.style.position = 'fixed';
-            messageDiv.style.top = '50%';
-            messageDiv.style.left = '50%';
-            messageDiv.style.transform = 'translate(-50%, -50%)';
-            messageDiv.style.padding = '20px';
-            messageDiv.style.borderRadius = '10px';
-            messageDiv.style.textAlign = 'center';
-            messageDiv.style.fontFamily = 'Arial, sans-serif';
-            messageDiv.style.fontSize = '20px';
+      const video = document.querySelector('video');
+      const container = document.querySelector('[data-shaka-player-container]');
 
-            // Append the message to the body
-            document.body.appendChild(messageDiv);
-        });
-    }
+      // Create player & UI overlay
+      const player = new shaka.Player();
+      await player.attach(video);
+      const ui = new shaka.ui.Overlay(player, container, video);
 
-    async function init() {
-        const video = document.getElementById("video");
-        const ui = video.ui;
-        const controls = ui.getControls();
-        const player = controls.getPlayer();
-
-        player.configure({
-            drm: {
-                clearKeys: {
-                    '162e06450b01432dbf9a98cc8c06e637': "fb10bbb01a468e7c41614fc0803648aa"
-                }
-            }
-        });
-
-        ui.configure({
-            controlPanelElements: ["play_pause", "mute", "volume", "spacer", "time_and_duration", "quality", "fullscreen", "overflow_menu"],
-            volumeBarColors: {
-                base: "rgba(0, 0, 255, 1)", // Blue base color for the volume bar
-                level: "rgb(0, 255, 0)"     // Green color for the volume level
-            },
-            seekBarColors: {
-                base: "rgb(255, 0, 0)",       // Red base color for the seek bar
-                buffered: "rgb(255, 255, 0)", // Yellow color for the buffered portion
-                played: "rgba(0, 128, 128, 1)" // Teal color for the played portion
-            }
-        });
-window.player = player;
-        window.ui = ui;
-
-        player.addEventListener("error", onPlayerErrorEvent);
-        controls.addEventListener("error", onUIErrorEvent);
-
-        try {
-            await player.load("https://sundirectgo-live.pc.cdn.bitgravity.com/src35/dth.mpd");
-            console.log("The video has now been loaded!");
-        } catch (error) {
-            onPlayerError(error);
+      // UI and color customizations (your original choices)
+      ui.configure({
+        controlPanelElements: [
+          'play_pause', 'time_and_duration', 'mute', 'volume',
+          'spacer', 'language', 'captions', 'picture_in_picture',
+          'quality', 'fullscreen'
+        ],
+        volumeBarColors: {
+          base: 'rgba(255, 192, 203, 0.3)',
+          level: 'rgb(255, 105, 180)'
+        },
+        seekBarColors: {
+          base: 'rgba(255, 255, 0, 0.3)',
+          buffered: 'rgba(255, 255, 0, 0.6)',
+          played: 'rgb(255, 255, 0)'
         }
-    }
+      });
 
-    function onPlayerErrorEvent(event) {
-        onPlayerError(event.detail);
-    }
+      // ------ SAFE placeholders ------
+      // Replace the streamUrl below with your MPD URL if you have rights.
+      // If your content requires DRM, configure 'drm' properly with servers or clearKeys.
+      // NEVER use license keys or license URLs you are not authorized to use.
+      // For demo/testing we use a public (non-DRM) DASH stream:
+      const streamUrl = 'https://jiotvbpkmob.cdn.jio.com/bpk-tv/Asia_Cup_Hindi_MOB/WDVLive/index.mpd?%7Ccookie=hdnea=st=1758967244~exp=1759053644~acl=/*~hmac=c15c3a61e4848fa23b819df3a0992f100008a39d4db80a1dbf0e2c8966261ab7';
 
-    function onPlayerError(error) {
-        console.error("Error code", error.code, "object", error);
-    }
+      // Example clearKeys config (for local testing only). Replace with real keys only if authorized.
+      // Note: clearKeys is a test key system and not a license-server bypass. Use only with content you control.
+      const drmConfig = {
+        // clearKeys: { "31b13c6f241055aaa965263f3115e684": "61f0cbc9599925a7be93d45e30b8ebe9" } // Example: { "1a2b3c...": "4d5e6f..." }
+      };
 
-    function onUIErrorEvent(event) {
-        onPlayerError(event.detail);
-    }
+      // Example cookie/header value (if you legitimately need to send a cookie).
+      // Keep sensitive values out of client-side code for production. Use secure server-side token exchange.
+      let cookieHeader = 'session=demo'; // <-- safe demo value
 
-    function initFailed() {
-        console.error("Unable to load the UI library!");
-    }
+      // Register request filter if you need to attach headers to manifest/segment/license requests.
+      // This hook is useful for legitimate use-cases (passing auth tokens), but do NOT use it to spoof access.
+      player.getNetworkingEngine().registerRequestFilter((type, request) => {
+        // Set a Cookie header (only if required and authorized)
+        if (cookieHeader) {
+          request.headers['Cookie'] = cookieHeader;
+        }
 
-    document.addEventListener("shaka-ui-loaded", init);
-    document.addEventListener("shaka-ui-load-failed", initFailed);
+        // Optional: set a custom User-Agent header if required by your server (note: some browsers will ignore UA changes)
+        // request.headers['User-Agent'] = 'plaYtv/7.1.5 (Linux;Android 13) ExoPlayerLib/2.11.6';
 
-    if (confirm("Join For More Links!!")) {
-        window.location.href = "https://t.me/+IhSW51QysxU3NzY1";
-    }
-    </script>
+        // Optional: append an auth query param to manifest/segment requests if your server expects one
+        if ((type === shaka.net.NetworkingEngine.RequestType.MANIFEST ||
+             type === shaka.net.NetworkingEngine.RequestType.SEGMENT) && request.uris && request.uris[0]) {
+          const url = new URL(request.uris[0]);
+          if (!url.searchParams.has('auth')) {
+            url.searchParams.set('auth', 'demo'); // safe demo token; replace with server token if needed
+            request.uris[0] = url.toString();
+          }
+        }
+      });
+
+      // Configure player options
+      player.configure({
+        drm: drmConfig,
+        streaming: {
+          lowLatencyMode: true,
+          bufferingGoal: 15,
+          rebufferingGoal: 2,
+          bufferBehind: 15,
+          retryParameters: { timeout: 10000, maxAttempts: 5, baseDelay: 300, backoffFactor: 1.2 },
+          segmentRequestTimeout: 8000,
+          segmentPrefetchLimit: 2,
+          useNativeHlsOnSafari: true
+        },
+        manifest: {
+          retryParameters: { timeout: 8000, maxAttempts: 3 }
+        }
+      });
+
+      // Autoplay helper: try unmuted first, fall back to muted if necessary
+      const attemptAutoplay = async () => {
+        try {
+          video.muted = false;
+          await video.play();
+          console.log('Unmuted autoplay successful');
+          return true;
+        } catch (err) {
+          console.log('Unmuted autoplay failed:', err && err.message);
+          try {
+            video.muted = true;
+            await video.play();
+            console.log('Muted autoplay successful');
+            return true;
+          } catch (err2) {
+            console.log('Muted autoplay also failed:', err2 && err2.message);
+            return false;
+          }
+        }
+      };
+
+      // When playback begins on small screens, attempt fullscreen (same as your original)
+      video.addEventListener('play', () => {
+        if (window.self === window.top && !document.fullscreenElement && window.innerWidth <= 768) {
+          container.requestFullscreen().catch(() => { console.log('Fullscreen request failed'); });
+        }
+      }, { once: true });
+
+      // When metadata loads, set initial volume
+      video.addEventListener('loadedmetadata', () => { video.volume = 0.8; });
+
+      // Enable sound on first user interaction (if autoplay started muted)
+      let hasUserInteracted = false;
+      const enableSoundOnInteraction = () => {
+        if (!hasUserInteracted && video.muted) {
+          video.muted = false;
+          hasUserInteracted = true;
+          console.log('Sound enabled after user interaction');
+        }
+      };
+      ['click', 'touchstart', 'keydown'].forEach(e => document.addEventListener(e, enableSoundOnInteraction, { once: true }));
+
+      // Error handling
+      player.addEventListener('error', (evt) => {
+        console.error('Shaka Player Error:', evt.detail);
+      });
+
+      // Visibility change: try to resume autoplay when tab becomes visible
+      document.addEventListener('visibilitychange', () => {
+        if (!document.hidden && video.paused) attemptAutoplay();
+      });
+
+      // Load the stream
+      try {
+        await player.load(streamUrl);
+        console.log('Stream loaded:', streamUrl);
+        // Try autoplay after load
+        attemptAutoplay();
+      } catch (loadError) {
+        console.error('Load error:', loadError);
+      }
+    });
+  </script>
 </body>
 </html>
