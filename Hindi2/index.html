@@ -21,14 +21,35 @@
       top: 0;
       left: 0;
     }
-    /* 👇 Controls ko thoda upar shift kiya */
+    /* 👇 Controls ko aur upar shift kiya */
     .vjs-control-bar {
-      bottom: 50px !important;
+      bottom: 100px !important; /* jitna chahiye utna adjust kar lo */
     }
-    /* 👇 Mobile ke liye aur upar */
+    /* 👇 Buttons ko bada kiya */
+    .vjs-control-bar .vjs-button {
+      font-size: 2em !important;   /* icons bade ho gaye */
+      width: 60px !important;
+      height: 60px !important;
+    }
+    .vjs-control-bar .vjs-control {
+      line-height: 60px !important;
+    }
+    /* 👇 Progress bar ko bhi thoda mota */
+    .vjs-progress-holder {
+      height: 8px !important;
+    }
+    /* 👇 Mobile ke liye aur responsive */
     @media (max-width: 768px) {
       .vjs-control-bar {
-        bottom: 70px !important;
+        bottom: 120px !important;
+      }
+      .vjs-control-bar .vjs-button {
+        font-size: 2.5em !important;
+        width: 70px !important;
+        height: 70px !important;
+      }
+      .vjs-progress-holder {
+        height: 10px !important;
       }
     }
   </style>
