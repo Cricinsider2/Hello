@@ -1,124 +1,154 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>TG_@Cricinsider365</title>
+<!DOCTYPE html><html lang="en"><head>
+    <style type="text/css">
+        * { user-select: auto !important; -webkit-user-select: auto !important; }
+    </style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TG_@Cricinsider365</title>
+    <style>
+        html, body {
+            margin: 0;
+            padding: 0;
+            height: 100%;
+            overflow: hidden;
+            font-family: Arial, sans-serif;
+        }
 
-  <!-- Video.js CSS -->
-  <link href="https://vjs.zencdn.net/8.10.0/video-js.css" rel="stylesheet" />
+        #contentFrame {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 65.25vw; /* 16:9 aspect ratio */
+            max-height: 100vh;
+            border: none;
+        }
 
-  <style>
-    html, body {
-      margin: 0;
-      padding: 0;
-      height: 100%;
-      background-color: #000;
-      overflow: hidden;
-    }
+        .message-banner {
+            position: absolute;
+            top: 65.25vw; /* Just below the video */
+            width: 100%;
+            background: white;
+            padding: 15px 10px;
+            font-size: 18px;
+            font-weight: bold;
+            color: #111;
+            text-align: center;
+            z-index: 10;
+            box-shadow: 0 -2px 5px rgba(0,0,0,0.1);
+        }
 
-    .video-js {
-      width: 100% !important;
-      height: 100% !important;
-      object-fit: cover;
-    }
+        .popup-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100vh;
+            background: rgba(0, 0, 0, 0.85);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+            animation: fadeIn 0.5s ease-in-out;
+        }
 
-    #my-video {
-      position: absolute;
-      top: 0;
-      left: 0;
-    }
+        .popup-content {
+            background: #1a1a1a;
+            color: white;
+            text-align: center;
+            padding: 30px;
+            border-radius: 10px;
+            max-width: 400px;
+            box-shadow: 0 0 20px rgba(255, 0, 0, 0.8);
+            animation: pulse 1.5s infinite alternate;
+        }
 
-    /* Controls shift */
-    .vjs-control-bar {
-      bottom: 100px !important;
-    }
+        .popup-content h2 {
+            font-size: 24px;
+            margin-bottom: 10px;
+            color: #ff4444;
+            text-transform: uppercase;
+        }
 
-    /* Bigger buttons */
-    .vjs-control-bar .vjs-button {
-      font-size: 2em !important;
-      width: 60px !important;
-      height: 60px !important;
-    }
+        .popup-content p {
+            font-size: 18px;
+            margin-bottom: 20px;
+        }
 
-    .vjs-control-bar .vjs-control {
-      line-height: 60px !important;
-    }
+        .popup-content a {
+            display: inline-block;
+            padding: 12px 20px;
+            background: #ff4444;
+            color: white;
+            text-decoration: none;
+            font-size: 20px;
+            font-weight: bold;
+            border-radius: 5px;
+            box-shadow: 0 0 10px rgba(255, 0, 0, 0.7);
+            transition: 0.3s;
+        }
 
-    /* Thicker progress bar */
-    .vjs-progress-holder {
-      height: 8px !important;
-    }
+        .popup-content a:hover {
+            background: #cc0000;
+        }
 
-    /* Responsive for mobile */
-    @media (max-width: 768px) {
-      .vjs-control-bar {
-        bottom: 120px !important;
-      }
-      .vjs-control-bar .vjs-button {
-        font-size: 2.5em !important;
-        width: 70px !important;
-        height: 70px !important;
-      }
-      .vjs-progress-holder {
-        height: 10px !important;
-      }
-    }
-  </style>
-</head>
+        .close-btn {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            font-size: 30px;
+            color: white;
+            cursor: pointer;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            100% { transform: scale(1.1); }
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+    </style>
+<style type="text/css">* {user-select: auto !important; -webkit-user-select: auto !important;}</style><input type="hidden" id="inject_idm_text_selection"></head>
 <body>
 
-  <video
-    id="my-video"
-    class="video-js vjs-default-skin"
-    controls
-    autoplay
-    muted
-    playsinline
-    preload="auto"
-    poster=""
-  >
-    <!-- Replace with a valid permanent HLS URL -->
-    <source src="https://liveakmt-p-web.slivcdn.com/hls/live/2119921/cricacc12809/HIN/std_lrh-800300010.m3u8?hdnea=exp=1759116160~acl=/*~id=77259800088723949116205136098909~hmac=28c0a108385f589838df4574cd9df81c29ebf132a539f3abc44a8e806ae9119f" type="application/x-mpegURL" />
-    Your browser does not support the video tag.
-  </video>
+    <iframe id="contentFrame" sandbox="allow-forms allow-pointer-lock allow-same-origin allow-scripts allow-top-navigation" frameborder="0" allowfullscreen="true" scrolling="no" src="https://lasiona.tataplays.site/xixa-cup-hindi">
+    </iframe>
 
-  <!-- Video.js Script -->
-  <script src="https://vjs.zencdn.net/8.10.0/video.min.js"></script>
-  <script>
-    const player = videojs('my-video');
+    <!-- Message below the video -->
+    <div class="message-banner">
+        Tap On This &lt; 👈🏻 For All Quality And Full Screen Mode
+    </div>
 
-    player.ready(function () {
-      player.muted(false);
-      player.play().catch(() => {
-        console.warn('Autoplay might be blocked by the browser.');
-      });
-    });
+    <script>
+        // Set the iframe source via script
+        document.getElementById('contentFrame').src = "https://lasiona.tataplays.site/xixa-cup-hindi";
+    </script>
 
-    // Orientation handling on fullscreen
-    player.on('fullscreenchange', function () {
-      if (player.isFullscreen()) {
-        if (screen.orientation?.lock) {
-          screen.orientation.lock('landscape').catch(err => {
-            console.warn("Orientation lock not supported:", err);
-          });
+    <!-- Telegram popup -->
+<div class="popup-overlay" id="popup" style="display: none;">
+        <div class="popup-content">
+            <span class="close-btn" onclick="closePopup()">×</span>
+            <h2>🚨 Emergency Alert! 🚨</h2>
+            <p>Join our Telegram now for live updates and breaking news!</p>
+            <a href="https://t.me/+IhSW51QysxU3NzY1" target="_blank">Join Now</a>
+        </div>
+    </div>
+
+    <script>
+        function closePopup() {
+            document.getElementById("popup").style.display = "none";
         }
-      } else {
-        if (screen.orientation?.lock) {
-          screen.orientation.lock('portrait').catch(err => {
-            console.warn("Orientation unlock failed:", err);
-          });
+
+        // Telegram prompt on page load
+        if (confirm("Join Our Telegram Channel @Cricinsider365") == true) {
+            window.open("https://t.me/+IhSW51QysxU3NzY1", '_blank');
         }
-      }
-    });
+    </script>
 
-    // Telegram join popup
-    window.addEventListener("load", () => {
-      if (confirm("Join Our Telegram Channel @Cricinsider365")) {
-        window.open("https://t.me/+IhSW51QysxU3NzY1", '_blank');
-      }
-    });
-  </script>
 
-</body>
-</html>
+</body></html>
