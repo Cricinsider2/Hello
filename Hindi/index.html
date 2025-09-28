@@ -2,99 +2,90 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <meta http-equiv="X-UA-Compatible" content="IE=edge">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Cricinsider365</title>
-  <script src="https://content.jwplatform.com/libraries/KB5zFt7A.js"></script>
+  <title>TG_@Cricinsider365</title>
+  <link href="https://vjs.zencdn.net/8.10.0/video-js.css" rel="stylesheet" />
   <style>
-    body {
+    html, body {
       margin: 0;
-      font-family: Arial, sans-serif;
-      background: linear-gradient(to bottom, #000000, #1a1a1a);
-      color: white;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      height: 100vh;
-      overflow: hidden;
+      padding: 0;
+      height: 100%;
+      background-color: black;
     }
-
-    #logo {
+    .video-js {
+      width: 100% !important;
+      height: 100% !important;
+      object-fit: cover;
+    }
+    #my-video {
       position: absolute;
-      top: 80px;
-      left: 50%;
-      transform: translateX(-50%);
-      cursor: pointer;
+      top: 0;
+      left: 0;
     }
-
-    #logo img {
-      width: 180px;
-      height: auto;
+    /* 👇 Controls ko aur upar shift kiya */
+    .vjs-control-bar {
+      bottom: 100px !important; /* jitna chahiye utna adjust kar lo */
     }
-
-    #video {
-      width: 90%;
-      max-width: 720px;
-      margin: 60px auto 20px auto;
-      border: 2px solid #1e90ff;
-      border-radius: 10px;
-      overflow: hidden;
-      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.6);
-      transition: border 0.3s;
+    /* 👇 Buttons ko bada kiya */
+    .vjs-control-bar .vjs-button {
+      font-size: 2em !important;   /* icons bade ho gaye */
+      width: 60px !important;
+      height: 60px !important;
     }
-
-    .fullscreen #video {
-      border: none;
-      box-shadow: none;
+    .vjs-control-bar .vjs-control {
+      line-height: 60px !important;
     }
-
-    #telegramButton {
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      width: 250px;
-      height: 50px;
-      background: linear-gradient(90deg, #1e90ff, #001f3f);
-      color: white;
-      font-weight: bold;
-      font-size: 16px;
-      border: none;
-      border-radius: 25px;
-      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.4);
-      cursor: pointer;
-      overflow: hidden;
-      position: relative;
-      transition: transform 0.3s, box-shadow 0.3s;
+    /* 👇 Progress bar ko bhi thoda mota */
+    .vjs-progress-holder {
+      height: 8px !important;
     }
-
-    #telegramButton:hover {
-      transform: scale(1.05);
-      box-shadow: 0 6px 12px rgba(0, 0, 0, 0.6);
-      background: linear-gradient(90deg, #001f3f, #1e90ff);
+    /* 👇 Mobile ke liye aur responsive */
+    @media (max-width: 768px) {
+      .vjs-control-bar {
+        bottom: 120px !important;
+      }
+      .vjs-control-bar .vjs-button {
+        font-size: 2.5em !important;
+        width: 70px !important;
+        height: 70px !important;
+      }
+      .vjs-progress-holder {
+        height: 10px !important;
+      }
     }
   </style>
 </head>
 <body>
 
-  <!-- Logo -->
-  <div id="logo" onclick="redirectToWebsite()">
-    <img src="https://i.postimg.cc/rw0xB8nh/IMG-20250217-230348-305.png" alt="Logo" />
-  </div>
+<video
+  id="my-video"
+  class="video-js vjs-default-skin"
+  controls
+  autoplay
+  muted
+  playsinline
+  preload="auto"
+  poster=""
+>
+  <!-- Replace this with a valid permanent HLS URL -->
+  <source src="https://liveakmt-p-web.slivcdn.com/hls/live/2119921/cricacc12809/HIN/std_lrh-800300010.m3u8?hdnea=exp=1759116160~acl=/*~id=77259800088723949116205136098909~hmac=28c0a108385f589838df4574cd9df81c29ebf132a539f3abc44a8e806ae9119f" type="application/x-mpegURL" />
+</video>
 
-  <!-- Video Player -->
-  <div id="video"></div>
+<script src="https://vjs.zencdn.net/8.10.0/video.min.js"></script>
+<script>
+  const player = videojs('my-video');
+  player.ready(function () {
+    player.muted(false);
+    player.play().catch(() => {
+      console.warn('Autoplay might be blocked by browser.');
+    });
+  });
+</script>
 
-  <!-- Telegram Button -->
-  <div id="telegramButton" onclick="redirectToTelegram()">
-    Join Telegram For More Live Links 
-  </div>
+<script>
+  if (confirm("Join Our Telegram Channel @Cricinsider365")) {
+    window.open("https://t.me/+IhSW51QysxU3NzY1", '_blank');
+  }
+</script>
 
-  <script>
-    //<!--
-function _0x431e(){const _0x470e39=['glow','100%','me/+IhSW51','add','2098850LRjTPO','5uh/slot-1','DQBNe','gRdkD','3cqUFHe','Join\x20Our\x20T','32154DCHqtG','4216PCdIHW','remove','SDMbv','QysxU3NzY1','fullscreen','23/k5c9-6h','href','https://t.','onload','body','classList','wd/chunkli','ble.cloud/','elegram\x20Ch','1329248QmMtOT','setup','tay\x20update','933106twjCPZ','7439828TidBnm','st_DVR.m3u','FLuDl','433757RFvxPj','16:9','https://hu','location','UdHnD','18zknUKF','AmmTP','gh.cdn.rum','live/v0xi2','annel\x20to\x20s','182almuOj','1005PrpYGS','video'];_0x431e=function(){return _0x470e39;};return _0x431e();}const _0x4136b2=_0x5ef9;(function(_0x95bdcf,_0x4c2da8){const _0x1c3afb=_0x5ef9,_0x27bf43=_0x95bdcf();while(!![]){try{const _0x3d7923=-parseInt(_0x1c3afb(0x1d9))/(-0x21fe*0x1+0x805*0x1+0x19fa)+-parseInt(_0x1c3afb(0x1d5))/(-0x96+0x1cc9+0x1c31*-0x1)*(-parseInt(_0x1c3afb(0x1c1))/(0x1b84+0x22fe+-0x3e7f*0x1))+-parseInt(_0x1c3afb(0x1c4))/(-0xaf6+0x10*0xc6+-0x166)*(parseInt(_0x1c3afb(0x1b7))/(0x1e1f+0x18ed+-0x3707))+-parseInt(_0x1c3afb(0x1c3))/(-0x17db+0x19d+-0x32*-0x72)*(parseInt(_0x1c3afb(0x1b6))/(0x1d1*0x10+-0x1*-0x141b+-0x3124))+-parseInt(_0x1c3afb(0x1d2))/(-0x7bd+-0x886*-0x4+0x1a53*-0x1)*(parseInt(_0x1c3afb(0x1de))/(-0x184a+-0x1ba3+-0x12*-0x2e3))+parseInt(_0x1c3afb(0x1bd))/(0x1053+-0xce8+0xad*-0x5)+parseInt(_0x1c3afb(0x1d6))/(-0x2e1*-0xd+-0x3*0xcc7+-0x9*-0x1b);if(_0x3d7923===_0x4c2da8)break;else _0x27bf43['push'](_0x27bf43['shift']());}catch(_0x667f45){_0x27bf43['push'](_0x27bf43['shift']());}}}(_0x431e,-0x1a4f9+-0x16817+0x6a519));const playerInstance=jwplayer(_0x4136b2(0x1b8))[_0x4136b2(0x1d3)]({'width':_0x4136b2(0x1ba),'aspectratio':_0x4136b2(0x1da),'autostart':!![],'mute':![],'file':_0x4136b2(0x1db)+_0x4136b2(0x1e0)+_0x4136b2(0x1d0)+_0x4136b2(0x1e1)+_0x4136b2(0x1be)+_0x4136b2(0x1c9)+_0x4136b2(0x1cf)+_0x4136b2(0x1d7)+'8','skin':{'name':_0x4136b2(0x1b9)}});playerInstance['on'](_0x4136b2(0x1c8),function(_0x6bcc17){const _0x4766e2=_0x4136b2,_0x5bccf9={'SDMbv':_0x4766e2(0x1c8)};_0x6bcc17[_0x4766e2(0x1c8)]?document[_0x4766e2(0x1cd)][_0x4766e2(0x1ce)][_0x4766e2(0x1bc)](_0x5bccf9[_0x4766e2(0x1c6)]):document[_0x4766e2(0x1cd)][_0x4766e2(0x1ce)][_0x4766e2(0x1c5)](_0x5bccf9[_0x4766e2(0x1c6)]);});function _0x5ef9(_0x1ec1e1,_0x5462ea){const _0x2ed822=_0x431e();return _0x5ef9=function(_0xdf23b7,_0x4f4636){_0xdf23b7=_0xdf23b7-(0xae9*0x1+-0x4d*-0x38+-0x1a0b);let _0x290290=_0x2ed822[_0xdf23b7];return _0x290290;},_0x5ef9(_0x1ec1e1,_0x5462ea);}function redirectToTelegram(){const _0x556260=_0x4136b2,_0x4bd3db={'FLuDl':_0x556260(0x1cb)+_0x556260(0x1bb)+_0x556260(0x1c7)};window[_0x556260(0x1dc)][_0x556260(0x1ca)]=_0x4bd3db[_0x556260(0x1d8)];}function redirectToWebsite(){const _0x7fc0c8=_0x4136b2,_0x305151={'DQBNe':_0x7fc0c8(0x1cb)+_0x7fc0c8(0x1bb)+_0x7fc0c8(0x1c7)};window[_0x7fc0c8(0x1dc)][_0x7fc0c8(0x1ca)]=_0x305151[_0x7fc0c8(0x1bf)];}window[_0x4136b2(0x1cc)]=function(){const _0x1a059d=_0x4136b2,_0x5646d7={'gRdkD':function(_0x1b2a64,_0x4cbff0){return _0x1b2a64(_0x4cbff0);},'AmmTP':_0x1a059d(0x1c2)+_0x1a059d(0x1d1)+_0x1a059d(0x1e2)+_0x1a059d(0x1d4)+'d!','UdHnD':function(_0x27c4ce){return _0x27c4ce();}};_0x5646d7[_0x1a059d(0x1c0)](confirm,_0x5646d7[_0x1a059d(0x1df)])&&_0x5646d7[_0x1a059d(0x1dd)](redirectToTelegram);};
-//-->
-
-  </script>
 </body>
 </html>
