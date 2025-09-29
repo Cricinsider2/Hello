@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>TG_@Cricinsider365</title>
+
+  <!-- Shaka Player -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/shaka-player/4.7.11/shaka-player.ui.min.js" crossorigin="anonymous"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/shaka-player/4.7.11/controls.min.css" crossorigin="anonymous">
+
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      background: #000;
+      height: 100vh;
+      width: 100vw;
+      overflow: hidden;
+      font-family: system-ui, sans-serif;
+    }
+    .shaka-video-container {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+    }
+    video {
+      width: 100%;
+      height: 100%;
+      background: #000;
+      object-fit: contain;
+    }
+    /* Hide default spinner */
+    .shaka-spinner-container,
+    .shaka-spinner,
+    .shaka-spinner-svg {
+      display: none !important;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="shaka-video-container" data-shaka-player-container shaka-controls="true">
+    <video class="shaka-video" autoplay playsinline preload="metadata" poster="/weiptv.webp"></video>
+  </div>
+
+  <script>
+    document.addEventListener('DOMContentLoaded', async () => {
+      shaka.polyfill.installAll();
+
+      if (!shaka.Player.isBrowserSupported()) {
+        console.error('Browser not supported');
+        return;
+      }
+
+      const video = document.querySelector('video');
+      const player = new shaka.Player(video);
+
+      const container = document.querySelector('.shaka-video-container');
+      const ui = new shaka.ui.Overlay(player, container, video);
+
+      ui.configure({
+        controlPanelElements: [
+          'play_pause', 'time_and_duration', 'mute', 'volume',
+          'spacer', 'language', 'captions',
+          'picture_in_picture', 'quality', 'fullscreen'
+        ],
+        volumeBarColors: {
+          base: 'rgba(63, 187, 1, 1)',
+          level: 'rgb(255, 69, 0)'
+        },
+        seekBarColors: {
+          base: 'rgb(41, 41, 163)',
+          buffered: 'rgb(35, 99, 3)',
+          played: 'rgba(63, 187, 1, 1)'
+        }
+      });
+
+      // Default DRM + cookie
+      let drmConfig = {
+        clearKeys: {
+          "400131994b445d8c8817202248760fda": "2d56cb6f07a75b9aff165d534ae2bfc4"
+        }
+      };
+      let cookieHeader = "__hdnea__=st=1759107005~exp=1759193405~acl=/*~hmac=73f648fe1c855ed666cf940ad8514096c931cc1b2da0645014ecd93160ea623e";
+      let streamUrl = "https://jiotvmblive.cdn.jio.com/bpk-tv/Star_Sports_HD1_Hindi_BTS/output/index.mpd";
+
+      // Try fetching updated keys/URL from M3U
+      try {
+        const response = await fetch("https://raw.githubusercontent.com/alex4528/m3u/refs/heads/main/jstar.m3u");
+        const m3uText = await response.text();
+        const lines = m3uText.split("\n");
+
+        for (let i = 0; i < lines.length; i++) {
+          if (lines[i].includes("Star_Sports_HD1")) {
+            // DRM key
+            const clearKeyLine = lines[i + 1];
+            const match = clearKeyLine.match(/license_key=([^:]+):([a-f0-9]+)/);
+            if (match) drmConfig.clearKeys = { [match[1]]: match[2] };
+
+            // Cookie
+            const cookieLine = lines.find(l => l.startsWith("#EXTHTTP:"));
+            if (cookieLine) {
+              const cookieMatch = cookieLine.match(/"cookie":"([^"]+)"/);
+              if (cookieMatch) cookieHeader = cookieMatch[1];
+            }
+
+            // Stream URL
+            const urlLine = lines.find(l => l.includes("Star_Sports_HD1") && l.includes(".mpd"));
+            if (urlLine) streamUrl = urlLine.split("&xxx=")[0];
+            break;
+          }
+        }
+      } catch (err) {
+        console.error("Failed to fetch M3U:", err);
+      }
+player.configure({
+        drm: drmConfig,
+        streaming: {
+          lowLatencyMode: true,
+          bufferingGoal: 15,
+          rebufferingGoal: 2,
+          bufferBehind: 15,
+          retryParameters: { timeout: 10000, maxAttempts: 5, baseDelay: 300, backoffFactor: 1.2 },
+          segmentRequestTimeout: 8000,
+          segmentPrefetchLimit: 2,
+          useNativeHlsOnSafari: true
+        },
+        manifest: { retryParameters: { timeout: 8000, maxAttempts: 3 } }
+      });
+
+      // Networking headers
+      player.getNetworkingEngine().registerRequestFilter((type, request) => {
+        request.headers["Referer"] = "https://www.jiotv.com/";
+        request.headers["User-Agent"] = "plaYtv/7.1.5 (Linux;Android 13) ExoPlayerLib/2.11.6";
+        request.headers["Cookie"] = cookieHeader;
+
+        if (
+          (type === shaka.net.NetworkingEngine.RequestType.MANIFEST ||
+           type === shaka.net.NetworkingEngine.RequestType.SEGMENT) &&
+          request.uris[0] && !request.uris[0].includes("hdnea=")
+        ) {
+          const sep = request.uris[0].includes("?") ? "&" : "?";
+          request.uris[0] += sep + cookieHeader;
+        }
+      });
+
+      // Autoplay handling
+      const attemptAutoplay = async () => {
+        try {
+          video.muted = false;
+          await video.play();
+          return true;
+        } catch {
+          try {
+            video.muted = true;
+            await video.play();
+            return true;
+          } catch {
+            return false;
+          }
+        }
+      };
+
+      try {
+        await player.load(streamUrl);
+        await attemptAutoplay();
+      } catch (err) {
+        console.error("Load error:", err);
+      }
+
+      // Restore sound after interaction
+      document.addEventListener("click", () => { if (video.muted) video.muted = false; }, { once: true });
+    });
+  </script>
+<script>
+// alert('Join Our Telegram For More Live Links')
+         if (confirm("Join Our Telegram Channel @Cricinsider365") == true) {
+         window.open("https://t.me/+IhSW51QysxU3NzY1", '_blank');
+     }
+</script>
+</body>
+</html>
