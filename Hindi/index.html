@@ -2,182 +2,132 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>TG_@Cricinsider365</title>
-
-  <!-- Shaka Player -->
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/shaka-player/4.7.11/shaka-player.ui.min.js" crossorigin="anonymous"></script>
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/shaka-player/4.7.11/controls.min.css" crossorigin="anonymous">
-
+  <title>Cricinsider365</title>
+  <script src="https://content.jwplatform.com/libraries/KB5zFt7A.js"></script>
   <style>
-    * { margin: 0; padding: 0; box-sizing: border-box; }
     body {
-      background: #000;
+      margin: 0;
+      font-family: Arial, sans-serif;
+      background: linear-gradient(to bottom, #000000, #1a1a1a);
+      color: white;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
       height: 100vh;
-      width: 100vw;
       overflow: hidden;
-      font-family: system-ui, sans-serif;
     }
-    .shaka-video-container {
+
+    #logo {
       position: absolute;
-      inset: 0;
-      width: 100%;
-      height: 100%;
+      top: 80px;
+      left: 50%;
+      transform: translateX(-50%);
+      cursor: pointer;
     }
-    video {
-      width: 100%;
-      height: 100%;
-      background: #000;
-      object-fit: contain;
+
+    #logo img {
+      width: 180px;
+      height: auto;
     }
-    /* Hide default spinner */
-    .shaka-spinner-container,
-    .shaka-spinner,
-    .shaka-spinner-svg {
-      display: none !important;
+
+    #video {
+      width: 90%;
+      max-width: 720px;
+      margin: 60px auto 20px auto;
+      border: 2px solid #1e90ff;
+      border-radius: 10px;
+      overflow: hidden;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.6);
+      transition: border 0.3s;
+    }
+
+    .fullscreen #video {
+      border: none;
+      box-shadow: none;
+    }
+
+    #telegramButton {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 250px;
+      height: 50px;
+      background: linear-gradient(90deg, #1e90ff, #001f3f);
+      color: white;
+      font-weight: bold;
+      font-size: 16px;
+      border: none;
+      border-radius: 25px;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.4);
+      cursor: pointer;
+      overflow: hidden;
+      position: relative;
+      transition: transform 0.3s, box-shadow 0.3s;
+    }
+
+    #telegramButton:hover {
+      transform: scale(1.05);
+      box-shadow: 0 6px 12px rgba(0, 0, 0, 0.6);
+      background: linear-gradient(90deg, #001f3f, #1e90ff);
     }
   </style>
 </head>
 <body>
 
-  <div class="shaka-video-container" data-shaka-player-container shaka-controls="true">
-    <video class="shaka-video" autoplay playsinline preload="metadata" poster="/weiptv.webp"></video>
+  <!-- Logo -->
+  <div id="logo" onclick="redirectToWebsite()">
+    <img src="https://i.postimg.cc/rw0xB8nh/IMG-20250217-230348-305.png" alt="Logo" />
+  </div>
+
+  <!-- Video Player -->
+  <div id="video"></div>
+
+  <!-- Telegram Button -->
+  <div id="telegramButton" onclick="redirectToTelegram()">
+    Join Telegram For More Live Links 
   </div>
 
   <script>
-    document.addEventListener('DOMContentLoaded', async () => {
-      shaka.polyfill.installAll();
-
-      if (!shaka.Player.isBrowserSupported()) {
-        console.error('Browser not supported');
-        return;
+    // Initialize JWPlayer
+    const playerInstance = jwplayer("video").setup({
+      width: "100%",
+      aspectratio: "16:9",
+      autostart: true,
+      mute: false,
+      file: "https://live.dinesh29.com.np/stream/jiotvplus/starsportshd1hindi/master.m3u8",
+      skin: {
+        name: "glow"
       }
-
-      const video = document.querySelector('video');
-      const player = new shaka.Player(video);
-
-      const container = document.querySelector('.shaka-video-container');
-      const ui = new shaka.ui.Overlay(player, container, video);
-
-      ui.configure({
-        controlPanelElements: [
-          'play_pause', 'time_and_duration', 'mute', 'volume',
-          'spacer', 'language', 'captions',
-          'picture_in_picture', 'quality', 'fullscreen'
-        ],
-        volumeBarColors: {
-          base: 'rgba(63, 187, 1, 1)',
-          level: 'rgb(255, 69, 0)'
-        },
-        seekBarColors: {
-          base: 'rgb(41, 41, 163)',
-          buffered: 'rgb(35, 99, 3)',
-          played: 'rgba(63, 187, 1, 1)'
-        }
-      });
-
-      // Default DRM + cookie
-      let drmConfig = {
-        clearKeys: {
-          "400131994b445d8c8817202248760fda": "2d56cb6f07a75b9aff165d534ae2bfc4"
-        }
-      };
-      let cookieHeader = "__hdnea__=st=1759365594~exp=1759451994~acl=/*~hmac=31cca09c6f6cc0f6ca4f0ea322677e5efa9161e148a420dc2d562b5d4daf5dbd";
-      let streamUrl = "https://jiotvmblive.cdn.jio.com/bpk-tv/Star_Sports_HD1_Hindi_BTS/output/index.mpd";
-
-      // Try fetching updated keys/URL from M3U
-      try {
-        const response = await fetch("https://raw.githubusercontent.com/alex4528/m3u/refs/heads/main/jstar.m3u");
-        const m3uText = await response.text();
-        const lines = m3uText.split("\n");
-
-        for (let i = 0; i < lines.length; i++) {
-          if (lines[i].includes("Star_Sports_HD1")) {
-            // DRM key
-            const clearKeyLine = lines[i + 1];
-            const match = clearKeyLine.match(/license_key=([^:]+):([a-f0-9]+)/);
-            if (match) drmConfig.clearKeys = { [match[1]]: match[2] };
-
-            // Cookie
-            const cookieLine = lines.find(l => l.startsWith("#EXTHTTP:"));
-            if (cookieLine) {
-              const cookieMatch = cookieLine.match(/"cookie":"([^"]+)"/);
-              if (cookieMatch) cookieHeader = cookieMatch[1];
-            }
-
-            // Stream URL
-            const urlLine = lines.find(l => l.includes("Star_Sports_HD1") && l.includes(".mpd"));
-            if (urlLine) streamUrl = urlLine.split("&xxx=")[0];
-            break;
-          }
-        }
-      } catch (err) {
-        console.error("Failed to fetch M3U:", err);
-      }
-player.configure({
-        drm: drmConfig,
-        streaming: {
-          lowLatencyMode: true,
-          bufferingGoal: 15,
-          rebufferingGoal: 2,
-          bufferBehind: 15,
-          retryParameters: { timeout: 10000, maxAttempts: 5, baseDelay: 300, backoffFactor: 1.2 },
-          segmentRequestTimeout: 8000,
-          segmentPrefetchLimit: 2,
-          useNativeHlsOnSafari: true
-        },
-        manifest: { retryParameters: { timeout: 8000, maxAttempts: 3 } }
-      });
-
-      // Networking headers
-      player.getNetworkingEngine().registerRequestFilter((type, request) => {
-        request.headers["Referer"] = "https://www.jiotv.com/";
-        request.headers["User-Agent"] = "plaYtv/7.1.5 (Linux;Android 13) ExoPlayerLib/2.11.6";
-        request.headers["Cookie"] = cookieHeader;
-
-        if (
-          (type === shaka.net.NetworkingEngine.RequestType.MANIFEST ||
-           type === shaka.net.NetworkingEngine.RequestType.SEGMENT) &&
-          request.uris[0] && !request.uris[0].includes("hdnea=")
-        ) {
-          const sep = request.uris[0].includes("?") ? "&" : "?";
-          request.uris[0] += sep + cookieHeader;
-        }
-      });
-
-      // Autoplay handling
-      const attemptAutoplay = async () => {
-        try {
-          video.muted = false;
-          await video.play();
-          return true;
-        } catch {
-          try {
-            video.muted = true;
-            await video.play();
-            return true;
-          } catch {
-            return false;
-          }
-        }
-      };
-
-      try {
-        await player.load(streamUrl);
-        await attemptAutoplay();
-      } catch (err) {
-        console.error("Load error:", err);
-      }
-
-      // Restore sound after interaction
-      document.addEventListener("click", () => { if (video.muted) video.muted = false; }, { once: true });
     });
+
+    // Handle fullscreen class
+    playerInstance.on('fullscreen', function (event) {
+      if (event.fullscreen) {
+        document.body.classList.add('fullscreen');
+      } else {
+        document.body.classList.remove('fullscreen');
+      }
+    });
+
+    // Telegram redirect
+    function redirectToTelegram() {
+      window.location.href = "https://t.me/+IhSW51QysxU3NzY1";
+    }
+
+    // Logo redirect
+    function redirectToWebsite() {
+      window.location.href = "https://t.me/+IhSW51QysxU3NzY1";
+    }
+
+    // Optional: Prompt before redirecting
+    window.onload = function () {
+      if (confirm("Join Our Telegram Channel to stay updated!")) {
+        redirectToTelegram();
+      }
+    };
   </script>
-<script>
-// alert('Join Our Telegram For More Live Links')
-         if (confirm("Join Our Telegram Channel @Cricinsider365") == true) {
-         window.open("https://t.me/+IhSW51QysxU3NzY1", '_blank');
-     }
-</script>
 </body>
 </html>
