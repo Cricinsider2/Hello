@@ -1,309 +1,256 @@
-<!DOCTYPE html><html lang="en"><head>
-  <meta charset="UTF-8">
-  <title>Vibrant Video Player</title>
-  <meta http-equiv="X-UA-Compatible" content="IE=edge">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <script src="https://content.jwplatform.com/libraries/SAHhwvZq.js"></script><style type="text/css">* {user-select: auto !important; -webkit-user-select: auto !important;}</style><input type="hidden" id="inject_idm_text_selection">
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="">
-  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700&amp;display=swap" rel="stylesheet">
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>ISHITA TIPS - Cricket Match Predictions</title>
+  <meta name="description" content="Accurate cricket match predictions and expert insights. Join ISHITA TIPS Telegram channel for free!">
+
+  <!-- Facebook Meta Pixel -->
+  <script async src="https://connect.facebook.net/en_US/fbevents.js"></script>
+  <script>
+    !(function (f, b, e, v, n, t, s) {
+      if (f.fbq) return;
+      n = f.fbq = function () {
+        n.callMethod ? n.callMethod.apply(n, arguments) : n.queue.push(arguments);
+      };
+      if (!f._fbq) f._fbq = n;
+      n.push = n;
+      n.loaded = !0;
+      n.version = '2.0';
+      n.queue = [];
+      t = b.createElement(e);
+      t.async = !0;
+      t.src = v;
+      s = b.getElementsByTagName(e)[0];
+      s.parentNode.insertBefore(t, s);
+    })(window, document, 'script', 'https://connect.facebook.net/en_US/fbevents.js');
+    fbq('init', '1853390818945456');
+    fbq('track', 'PageView');
+  </script>
+
   <style>
     :root {
-      --gradient-start: #6dd5ed;
-      --gradient-mid: #2193b0;
-      --gradient-end: #007bff; /* A nice blue for accent */
-      --form-bg-color: rgba(255, 255, 255, 0.1);
-      --text-color-light: #f0f0f0;
-      --text-color-dark: #333;
-      --input-border-color: rgba(255, 255, 255, 0.3);
-      --input-focus-border: #8aff8a; /* A bright green for focus */
-      --button-gradient-start: #a7a6cb;
-      --button-gradient-end: #8989ba;
-    }
-
-    * {
-      margin: 0;
-      padding: 0;
-      box-sizing: border-box;
+      --primary: #6b46c1;
+      --secondary: #48dbfb;
+      --success: #00d856;
+      --gradient: linear-gradient(135deg, #667eea, #764ba2);
+      --radius: 24px;
     }
 
     body {
-      font-family: 'Montserrat', sans-serif;
-      background: linear-gradient(135deg, var(--gradient-start), var(--gradient-mid), var(--gradient-end));
-      background-size: 400% 400%;
-      animation: backgroundGradient 15s ease infinite;
-      color: var(--text-color-light);
+      margin: 0;
+      font-family: 'Poppins', 'Segoe UI', Roboto, sans-serif;
+      background: url('https://rdbhai.com/wp-content/uploads/2025/10/ishita.jpg') center/cover no-repeat fixed;
       display: flex;
-      align-items: center;
       justify-content: center;
+      align-items: center;
       min-height: 100vh;
+      padding: 20px;
+      color: #222;
+    }
+
+    .card {
+      background: rgba(255, 255, 255, 0.9);
+      border-radius: var(--radius);
+      padding: 40px 25px;
+      max-width: 460px;
+      width: 100%;
+      box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
+      position: relative;
       overflow: hidden;
-      transition: background 0.5s ease;
+      text-align: center;
+      backdrop-filter: blur(10px);
     }
 
-    @keyframes backgroundGradient {
-      0% {
-        background-position: 0% 50%;
-      }
-      50% {
-        background-position: 100% 50%;
-      }
-      100% {
-        background-position: 0% 50%;
-      }
+    .card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 6px;
+      background: linear-gradient(90deg, #ff6b6b, #feca57, #48dbfb, #6b46c1);
     }
 
-    /* State for when video is playing */
-    body.playing #player-ui {
-      opacity: 0;
-      pointer-events: none;
-      transform: scale(0.9) translateY(-20px);
+    .avatar {
+      width: 110px;
+      height: 110px;
+      border-radius: 50%;
+      border: 4px solid var(--primary);
+      object-fit: cover;
+      box-shadow: 0 10px 25px rgba(107, 70, 193, 0.3);
+      margin-bottom: 12px;
     }
 
-    body.playing #player-container {
-      opacity: 1;
-      pointer-events: auto;
-      width: 100%;
-      height: 100%;
-    }
-
-    .container {
-      width: 100%;
-      height: 100%;
+    .verified-badge {
+      position: absolute;
+      bottom: 0;
+      right: 0;
+      background: var(--success);
+      color: white;
+      width: 32px;
+      height: 32px;
+      border-radius: 50%;
       display: flex;
       align-items: center;
       justify-content: center;
-      position: relative;
-    }
-    
-    #player-ui {
-      background: var(--form-bg-color);
-      backdrop-filter: blur(15px); /* Frosted glass effect */
-      border: 1px solid rgba(255, 255, 255, 0.2);
-      border-radius: 20px;
-      box-shadow: 0 15px 35px rgba(0, 0, 0, 0.3);
-      padding: 40px;
-      text-align: center;
-      width: 90%;
-      max-width: 550px;
-      transition: opacity 0.6s ease-out, transform 0.6s ease-out;
+      font-size: 18px;
+      border: 3px solid white;
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
     }
 
-    #player-ui h1 {
-      font-size: 2.5rem;
-      font-weight: 700;
-      margin-bottom: 10px;
-      color: var(--text-color-light);
-      text-shadow: 0 3px 6px rgba(0, 0, 0, 0.2);
-    }
-    
-    #player-ui .announcement {
-      margin-bottom: 35px;
-      color: rgba(255, 255, 255, 0.8);
-      font-size: 1rem;
-      line-height: 1.6;
-      font-weight: 400;
+    .name {
+      font-size: 2em;
+      font-weight: 900;
+      background: var(--gradient);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      margin: 0;
     }
 
-    .form-group {
-      margin-bottom: 1.5rem;
-      text-align: left;
-    }
-
-    label {
-      display: block;
-      margin-bottom: 0.6rem;
+    .subtitle {
+      color: #555;
+      font-size: 1em;
       font-weight: 600;
-      font-size: 0.95rem;
-      color: var(--text-color-light);
-      text-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+      margin-bottom: 15px;
     }
 
-    input[type="text"] {
+    .stats {
+      display: flex;
+      justify-content: space-between;
+      margin: 20px 0;
+      padding: 10px 0;
+      border-top: 1px solid #eee;
+      border-bottom: 1px solid #eee;
+    }
+
+    .stats div {
+      text-align: center;
+    }
+
+    .stats span:first-child {
+      font-size: 1.6em;
+      font-weight: 800;
+      background: var(--gradient);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    .stats span:last-child {
+      display: block;
+      font-size: 0.8em;
+      color: #777;
+      font-weight: 600;
+    }
+
+    .cta {
+      display: inline-block;
       width: 100%;
-      padding: 14px 18px;
-      box-sizing: border-box;
-      border: 1px solid var(--input-border-color);
-      border-radius: 10px;
-      font-size: 1.05rem;
-      background-color: rgba(255, 255, 255, 0.1);
-      color: var(--text-color-light);
-      transition: border-color 0.3s ease, box-shadow 0.3s ease, background-color 0.3s ease;
-    }
-
-    input[type="text"]::placeholder {
-      color: rgba(255, 255, 255, 0.5);
-    }
-
-    input[type="text"]:focus {
-      outline: none;
-      border-color: var(--input-focus-border);
-      background-color: rgba(255, 255, 255, 0.15);
-      box-shadow: 0 0 0 3px rgba(138, 255, 138, 0.3);
-    }
-
-    input[type="button"] {
-      background: linear-gradient(45deg, var(--button-gradient-start), var(--button-gradient-end));
-      color: white;
-      cursor: pointer;
-      font-size: 1.2rem;
+      background: linear-gradient(135deg, var(--success), #00a844);
+      color: #fff;
+      padding: 12px;
+      border-radius: 50px;
       font-weight: 700;
-      padding: 15px 25px;
-      border: none;
-      border-radius: 10px;
-      width: 100%;
-      transition: transform 0.3s ease, box-shadow 0.3s ease;
-      margin-top: 20px;
-      letter-spacing: 0.5px;
-      box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
-    }
-    
-    input[type="button"]:hover {
-        transform: translateY(-5px) scale(1.02);
-        box-shadow: 0 12px 25px rgba(0, 0, 0, 0.3);
+      font-size: 1em;
+      text-decoration: none;
+      transition: all 0.3s ease;
+      box-shadow: 0 10px 25px rgba(0, 216, 86, 0.4);
     }
 
-    #player-container {
-        position: absolute;
-        top: 0;
-        left: 0;
-        width: 100%;
-        height: 100%;
-        opacity: 0;
-        pointer-events: none;
-        background-color: #000; /* Black background behind the player */
-        transition: opacity 0.7s ease;
+    .cta:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 15px 35px rgba(0, 216, 86, 0.5);
     }
-    
-    /* Ensure JWPlayer fills the container */
-    #player-container .jwplayer {
-        position: absolute !important;
-        width: 100% !important;
-        height: 100% !important;
+
+    .features {
+      background: var(--gradient);
+      color: white;
+      border-radius: 16px;
+      padding: 18px;
+      text-align: left;
+      margin-top: 25px;
+      box-shadow: 0 8px 20px rgba(102, 126, 234, 0.3);
     }
+
+    .features h2 {
+      font-size: 1.1em;
+      font-weight: 700;
+      margin-bottom: 12px;
+    }
+
+    .feature-item {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 8px;
+      font-size: 0.95em;
+    }
+
+    .trust {
+      display: flex;
+      justify-content: center;
+      gap: 10px;
+      flex-wrap: wrap;
+      margin-top: 20px;
+    }
+
+    .trust span {
+      background: #f3f3f3;
+      padding: 6px 12px;
+      border-radius: 20px;
+      font-size: 0.8em;
+      font-weight: 600;
+      color: #444;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .note {
+      font-size: 0.75em;
+      color: #888;
+      margin-top: 12px;
+      line-height: 1.5;
+    }
+
   </style>
 </head>
 
 <body>
-
-  <div class="container">
-    <div id="player-ui">
-      <h1>StreamFlow Player</h1>
-      <div class="announcement">
-        Immerse yourself in content. Simply enter your DASH or HLS stream URL. Key IDs and Keys are optional for DRM-protected streams.
-      </div>
-      <form id="videoForm" onsubmit="event.preventDefault(); playVideo();">
-        <div class="form-group">
-          <label for="manifest">Stream URL</label>
-          <input type="text" id="manifest" name="manifest" placeholder="e.g., https://example.com/stream.mpd" required="">
-        </div>
-        <div class="form-group">
-          <label for="keyId">Key ID (Optional)</label>
-          <input type="text" id="keyId" name="keyId" placeholder="For DRM streams (KID)">
-        </div>
-        <div class="form-group">
-          <label for="key">Key (Optional)</label>
-          <input type="text" id="key" name="key" placeholder="For DRM streams (Key)">
-        </div>
-        <input type="button" value="Play Stream" onclick="playVideo()">
-      </form>
+  <main class="card">
+    <div style="position: relative; display: inline-block;">
+      <img src="cricket.jpg" alt="ISHITA TIPS Logo" class="avatar">
+      <div class="verified-badge">✓</div>
     </div>
 
-    <div id="player-container"></div>
-  </div>
+    <h1 class="name">ISHITA TIPS</h1>
+    <p class="subtitle">🏏 Expert Cricket Match Predictions</p>
 
+    <div class="stats">
+      <div><span>160K+</span><span>Members</span></div>
+      <div><span>90%</span><span>Accuracy</span></div>
+      <div><span>Daily</span><span>Updates</span></div>
+    </div>
 
-  <script type="text/javascript">
-    /**
-     * Waits for the JWPlayer library to be loaded before executing a callback.
-     * @param {function} callback - The function to execute once JWPlayer is ready.
-     */
-    function waitForJWPlayer(callback) {
-      if (typeof jwplayer === 'function') {
-        callback();
-      } else {
-        setTimeout(() => waitForJWPlayer(callback), 100);
-      }
-    }
+    <a href="https://t.me/+DFfRtL6axghjODc9" class="cta">📱 JOIN CHANNEL FREE</a>
 
-    /**
-     * Initiates the video playback process.
-     * It adds a 'playing' class to the body to trigger UI transitions.
-     */
-    function playVideo() {
-      const manifestInput = document.getElementById("manifest");
-      if (!manifestInput.value) {
-          alert("Please enter a stream URL.");
-          return;
-      }
-      document.body.classList.add("playing");
+    <div class="features">
+      <h2>What You'll Get:</h2>
+      <div class="feature-item">🎯 Accurate Match Predictions</div>
+      <div class="feature-item">⚡ Live Match Analysis</div>
+      <div class="feature-item">📊 Expert Gameplay Tips</div>
+      <div class="feature-item">🔥 Premium Predictions FREE</div>
+    </div>
 
-      // Wait for the UI transition to start before setting up the player
-      setTimeout(() => {
-        waitForJWPlayer(setupVideoPlayer);
-      }, 600); // Should match the longest transition duration
-    }
+    <a href="https://t.me/+DFfRtL6axghjODc9" class="cta" style="margin-top: 18px;">📱 JOIN CHANNEL FREE</a>
 
-    /**
-     * Gathers configuration from the form and sets up the JWPlayer instance.
-     */
-    function setupVideoPlayer() {
-      const manifestUrl = document.getElementById("manifest").value;
-      const keyId = document.getElementById("keyId").value;
-      const key = document.getElementById("key").value;
+    <div class="trust">
+      <span>✅ 100% Free</span>
+      <span>🔒 Instant Access</span>
+    </div>
 
-      let streamType = '';
-      if (manifestUrl.includes('.mpd')) {
-        streamType = 'dash';
-      } else if (manifestUrl.includes('.m3u8')) {
-        streamType = 'hls';
-      }
-
-      const playerConfig = {
-        file: manifestUrl,
-        autostart: true,
-        width: "100%",
-        height: "100%",
-        stretching: "uniform",
-      };
-      
-      if (streamType) {
-          playerConfig.type = streamType;
-      }
-
-      // Add DRM settings only if both keyId and key are provided
-      if (keyId && key) {
-        playerConfig.drm = {
-          clearkey: {
-            keyId: keyId,
-            key: key,
-          },
-        };
-      }
-
-      jwplayer("player-container").setup(playerConfig);
-    }
-
-    /**
-     * On page load, check for URL parameters to automatically play a video.
-     */
-    document.addEventListener('DOMContentLoaded', () => {
-      const urlParams = new URLSearchParams(window.location.search);
-      const fileUrl = urlParams.get('emmbed-url');
-      const kid = urlParams.get('kid');
-      const key = urlParams.get('key');
-
-      if (fileUrl) {
-        // Pre-fill the form fields from URL parameters
-        document.getElementById('manifest').value = fileUrl;
-        if (kid) document.getElementById('keyId').value = kid;
-        if (key) document.getElementById('key').value = key;
-        
-        // Automatically start playback
-        playVideo();
-      }
-    });
-  </script>
-
-
-</body></html>
+    <p class="note">Join thousands of cricket fans getting winning predictions daily. Completely free forever!</p>
+  </main>
+</body>
+</html>
