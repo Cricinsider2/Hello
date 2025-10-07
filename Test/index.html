@@ -18,48 +18,19 @@
       text-align: center;
     }
 
-    /* Header with full black background */
+    /* Header with Image */
     .header {
-      background: #000000; /* Full dark black */
-      padding: 20px;
+      background: #000000; /* Black background behind image */
+      padding: 10px;
       border-bottom: 2px solid #333;
       border-radius: 6px;
       margin: 10px;
     }
 
-    /* Glowing text inside header */
-    .header h1 {
-      font-size: 36px;
-      font-weight: bold;
-      color: #fff;
-      text-align: center;
-      text-shadow:
-        0 0 5px #00f,
-        0 0 10px #00f,
-        0 0 20px #00f,
-        0 0 40px #00f,
-        0 0 80px #00f;
-      animation: glow 1.5s infinite alternate;
-      margin: 0;
-    }
-
-    @keyframes glow {
-      from {
-        text-shadow:
-          0 0 5px #00f,
-          0 0 10px #00f,
-          0 0 20px #00f,
-          0 0 40px #00f,
-          0 0 80px #00f;
-      }
-      to {
-        text-shadow:
-          0 0 10px #00ccff,
-          0 0 20px #00ccff,
-          0 0 30px #00ccff,
-          0 0 50px #00ccff,
-          0 0 100px #00ccff;
-      }
+    .header img {
+      width: 100%;
+      max-width: 300px; /* Adjust size as needed */
+      border-radius: 10px;
     }
 
     /* Video Box */
@@ -130,9 +101,9 @@
 </head>
 
 <body>
-  <!-- Header with full black background -->
+  <!-- Header with Image -->
   <div class="header">
-    <h1>@Cricinsider365</h1>
+    <img src="https://i.postimg.cc/fRSw4ZRD/IMG-20250925-223757.jpg" alt="@Cricinsider365">
   </div>
 
   <!-- Video -->
