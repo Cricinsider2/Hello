@@ -25,6 +25,8 @@
       border-bottom: 2px solid #333;
       border-radius: 6px;
       margin: 10px;
+      cursor: pointer; /* Show clickable cursor */
+      display: inline-block;
     }
 
     .header img {
@@ -101,8 +103,8 @@
 </head>
 
 <body>
-  <!-- Header with Image -->
-  <div class="header">
+  <!-- Header with Image (Clickable) -->
+  <div class="header" onclick="redirectToTelegram()">
     <img src="https://i.postimg.cc/fRSw4ZRD/IMG-20250925-223757.jpg" alt="@Cricinsider365">
   </div>
 
@@ -178,6 +180,11 @@
 
     // Telegram Join Prompt
     if (confirm("Join Our Telegram Channel @Cricinsider365") == true) {
+      window.open("https://t.me/+IhSW51QysxU3NzY1", '_blank');
+    }
+
+    // Redirect when header is clicked
+    function redirectToTelegram() {
       window.open("https://t.me/+IhSW51QysxU3NzY1", '_blank');
     }
   </script>
