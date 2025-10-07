@@ -1,206 +1,154 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>TG_@Cricinsider365</title>
+<!DOCTYPE html>  <html lang="en">  
+<head>  
+  <meta charset="UTF-8">  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">  
+  <title>TG_@Cricinsider365</title>  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/shaka-player/4.7.1/shaka-player.ui.min.js" crossorigin="anonymous"></script>  
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/shaka-player/4.7.1/controls.min.css" crossorigin="anonymous">    <style>  
+    body {  
+      margin: 0;  
+      background-color: #0a1744;  
+      font-family: Arial, sans-serif;  
+      color: white;  
+      text-align: center;  
+    }  
 
-  <!-- Strong client-side frame blocking (use server headers as primary defense) -->
-  <!-- This CSP meta helps in modern browsers. To be truly effective set the header on server:
-       Content-Security-Policy: frame-ancestors 'none';
-       X-Frame-Options: DENY
-  -->
-  <meta http-equiv="Content-Security-Policy" content="default-src 'self' https: data: 'unsafe-inline' 'unsafe-eval'; img-src 'self' data: https:; media-src *; frame-ancestors 'none';">
-  <meta http-equiv="X-Content-Type-Options" content="nosniff">
-  <meta name="referrer" content="no-referrer">
+    /* Header */  
+    .header {  
+      background: #03265c;  
+      padding: 14px;  
+      font-size: 20px;  
+      font-weight: bold;  
+      border-bottom: 2px solid #004aad;  
+      border-radius: 6px;  
+      margin: 10px;  
+    }  
 
-  <!-- Shaka Player UI (CDN) -->
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/shaka-player/4.7.1/controls.min.css" crossorigin="anonymous">
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/shaka-player/4.7.1/shaka-player.compiled.js" crossorigin="anonymous"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/shaka-player/4.7.1/shaka-player.ui.min.js" crossorigin="anonymous"></script>
+    /* Video */  
+    .video-box {  
+      margin: 15px;  
+      border-radius: 12px;  
+      overflow: hidden;  
+      box-shadow: 0 0 12px rgba(0,0,0,0.6);  
+    }  
 
-  <style>
-    :root{
-      --bg:#07123a;
-      --card:#07224e;
-      --accent:#007bff;
-      --danger:#e03b3b;
-      --radius:12px;
-      --glass: rgba(255,255,255,0.03);
+    video {  
+      width: 100%;  
+      height: auto;  
+    }  
+
+    /* Buttons Box */  
+    .btn-box {  
+      margin: 15px auto;  
+      padding: 15px;  
+      background: #03265c;  
+      border-radius: 10px;  
+      width: 90%;  
+      max-width: 500px;  
+    }  
+
+    .btn-box h3 {  
+      margin: 12px 0;  
+      font-size: 18px;  
+    }  
+
+    /* Default Blue Button */  
+    .btn {  
+      display: block;  
+      text-decoration: none;  
+      color: white;  
+      font-weight: bold;  
+      background: #007bff;  
+      padding: 14px;  
+      margin: 10px 0;  
+      border-radius: 8px;  
+      transition: 0.3s;  
+      border: 1px solid #fff;  
+    }  
+
+    .btn:hover {  
+      background: #0056b3;  
+    }  
+
+    /* Red Important Button */  
+    .btn-red {  
+      background: #e60000;  
+      border: 1px solid #fff;  
+    }  
+
+    .btn-red:hover {  
+      background: #b30000;  
+    }  
+
+    .important-text {  
+      font-size: 16px;  
+      font-weight: bold;  
+      color: #ff4444;  
+      margin-top: 15px;  
+      margin-bottom: 5px;  
+    }  
+  </style>  </head>  <body>  
+  <!-- Header -->  
+  <div class="header">TG_@Cricinsider365</div>    <!-- Video -->    <div class="video-box">  
+    <div data-shaka-player-container>  
+      <video autoplay muted data-shaka-player id="video" poster="https://i.ibb.co/x7jXd29/In-Shot-20241215-002653932.jpg"></video>  
+    </div>  
+  </div>    <!-- Buttons -->    <div class="btn-box">  
+    <h3>📢 Follow us for Updates!</h3>  
+    <a href="https://t.me/+IhSW51QysxU3NzY1" class="btn">Click Here To Join Telegram For More Links</a>  <!-- Important Button -->  
+<div class="important-text">❗ IMPORTANT</div>  
+<a href="#" onclick="copyLink()" class="btn btn-red">Copy Link & Use in Chrome Browser Only</a>  
+
+<a href="#" onclick="sharePage()" class="btn">Click Here To Share This Page Link ❤️</a>
+
+  </div>    <script>  
+    async function init() {  
+      const video = document.getElementById("video");  
+      const ui = video.ui;  
+      const controls = ui.getControls();  
+      const player = controls.getPlayer();  
+
+      player.configure({  
+        drm: {  
+          clearKeys: {  
+            '1779c27b9d077a3ba0c9cc1bb9a94b9f': "cc5cf3b7928fb9e0a1ee6a8b566f0a8e"  
+          }  
+        }  
+      });  
+
+      try {  
+        await player.load("https://abmyxykaaaaaaaamkyvb65fuqebyg.7a77200bf98444ac997a89ed83775793.emt.cf.ww.aiv-cdn.net/iad-nitro/live/clients/dash/enc/f60kqesunw/out/v1/a435ed7a00f947deb4369b46d8f2fb70/cenc.mpd");  
+        console.log("The video has now been loaded!");  
+      } catch (error) {  
+        console.error("Error loading video", error);  
+      }  
+    }  
+
+    document.addEventListener("shaka-ui-loaded", init);  
+
+    // ✅ Copy Link Function  
+    function copyLink() {  
+      navigator.clipboard.writeText(window.location.href).then(() => {  
+        alert("✅ Link copied! Now open it in Chrome Browser.");  
+      }).catch(() => {  
+        alert("❌ Failed to copy. Please copy manually.");  
+      });  
     }
-    html,body{height:100%;margin:0;background:linear-gradient(180deg,var(--bg),#020617);font-family:Inter,system-ui,Arial,sans-serif;color:#fff}
-    .wrap{max-width:980px;margin:18px auto;padding:18px;box-sizing:border-box}
-    header.site-header{background:var(--card);border-radius:10px;padding:12px 16px;border:1px solid rgba(255,255,255,0.04);display:flex;align-items:center;justify-content:space-between;gap:12px}
-    header .title{font-weight:700;font-size:18px;letter-spacing:0.4px}
-    .grid{display:grid;grid-template-columns:1fr;gap:16px;margin-top:16px}
-    @media(min-width:860px){ .grid{grid-template-columns: 2fr 1fr} }
-
-    /* video container */
-    .video-card{background:var(--glass);border-radius:var(--radius);overflow:hidden;box-shadow:0 8px 30px rgba(0,0,0,0.6);border:1px solid rgba(255,255,255,0.03)}
-    .video-placeholder{position:relative;padding-top:56.25%} /* 16:9 */
-    video[data-shaka-player]{position:absolute;top:0;left:0;width:100%;height:100%;display:block;background:#000;object-fit:cover}
-    .meta-row{display:flex;gap:10px;align-items:center;padding:12px}
-
-    /* side/card actions */
-    .card{background:var(--card);border-radius:var(--radius);padding:14px;border:1px solid rgba(255,255,255,0.03)}
-    .btn{display:block;text-decoration:none;color:#fff;background:var(--accent);padding:12px;border-radius:10px;text-align:center;font-weight:700;margin:8px 0;box-shadow:0 8px 20px rgba(0,123,255,0.15)}
-    .btn:hover{transform:translateY(-4px)}
-    .btn-red{background:var(--danger)}
-    .small{font-size:13px;color:#cbd5e1}
-
-    /* important note */
-    .important{color:#ffd7d7;background:rgba(224,59,59,0.06);padding:10px;border-radius:8px;font-weight:600;margin-top:8px}
-
-    /* visually hide iframes attempts (extra) */
-    iframe { display:none !important; }
-  </style>
-</head>
-<body>
-  <div class="wrap">
-    <header class="site-header" role="banner">
-      <div class="title">TG_@Cricinsider365</div>
-      <div class="small">Join: <strong>@Cricinsider365</strong></div>
-    </header>
-
-    <main class="grid" role="main">
-      <!-- Video area -->
-      <section class="video-card" aria-label="Live stream">
-        <div class="video-placeholder" data-shaka-player-container>
-          <!-- note crossorigin attribute and playsinline for mobile -->
-          <video id="video" data-shaka-player poster="https://i.ibb.co/x7jXd29/In-Shot-20241215-002653932.jpg"
-                 crossorigin="anonymous" playsinline muted controls></video>
-        </div>
-        <div class="meta-row">
-          <div style="flex:1">
-            <div style="font-weight:700">Live Cricket Stream</div>
-            <div class="small">Autoplay muted (user gesture may be required on some browsers)</div>
-          </div>
-          <div style="width:1px;height:32px;background:rgba(255,255,255,0.04)"></div>
-          <div style="min-width:140px">
-            <div class="small">Status: <span id="status">initializing...</span></div>
-          </div>
-        </div>
-      </section>
-
-      <!-- Actions/CTA -->
-      <aside class="card" aria-label="Actions">
-        <h3 style="margin:4px 0 8px">📢 Follow us for Updates</h3>
-
-        <a class="btn" href="https://t.me/+IhSW51QysxU3NzY1" target="_blank" rel="noopener noreferrer">Click Here To Join Telegram For More Links</a>
-
-        <div class="important">❗ IMPORTANT: Use Chrome for best playback & copy the link if needed.</div>
-
-        <button class="btn btn-red" id="copyBtn" type="button">Copy Page Link & Open in Chrome</button>
-        <button class="btn" id="shareBtn" type="button">Share This Page Link ❤️</button>
-
-        <p class="small" style="margin-top:10px">If you host this page please set the HTTP headers: <code>Content-Security-Policy: frame-ancestors 'none';</code> and <code>X-Frame-Options: DENY</code> on your server to block embedding.</p>
-      </aside>
-    </main>
-  </div>
-
-  <script>
-    // -- FRAME BUST & PROTECTION (client-side)
-    (function frameProtection(){
-      try {
-        // If inside a frame, try to break out.
-        if (window.top !== window.self) {
-          // Best-effort: replace top location (may be blocked by some browsers)
-          try { window.top.location = window.location; } catch (e) { /* ignore */ }
-          document.documentElement.innerHTML = '<div style="padding:40px;color:#fff;background:#111;text-align:center">This content cannot be displayed in an embedded frame.</div>';
-          // stop further execution
-          return;
-        }
-      } catch (err) {
-        // Access denied -> assume framed, clear UI
-        document.documentElement.innerHTML = '<div style="padding:40px;color:#fff;background:#111;text-align:center">This content cannot be displayed in an embedded frame.</div>';
-        return;
-      }
-    })();
-
-    // -- COPY & SHARE
-    document.getElementById('copyBtn').addEventListener('click', function(){
-      const url = window.location.href;
-      navigator.clipboard?.writeText(url).then(() => {
-        alert('✅ Link copied! Open in Chrome for best playback.');
-      }).catch(()=> {
-        prompt('Copy this link manually:', url);
-      });
-    });
-
-    document.getElementById('shareBtn').addEventListener('click', function(){
-      if (navigator.share) {
-        navigator.share({ title: 'Cricinsider365', text: 'Watch Live Cricket Now 🚀', url: window.location.href })
-          .catch(err => console.error('Share failed', err));
-      } else {
-        alert('Sharing not supported on this browser. Copy link instead.');
-      }
-    });
-
-    // -- Shaka player init with robust error handling & clearKeys example
-    (async function initShaka(){
-      // Ensure shaka is loaded
-      if (!window.shaka) {
-        document.getElementById('status').textContent = 'Shaka player not found';
-        console.error('Shaka player lib not loaded');
-        return;
-      }
-      shaka.polyfill.installAll();
-      if (!shaka.Player.isBrowserSupported()) {
-        document.getElementById('status').textContent = 'Browser not supported';
-        console.error('Browser not supported by Shaka Player');
-        return;
-      }
-
-      const video = document.getElementById('video');
-
-      // Create UI
-      const ui = new shaka.ui.Overlay(new shaka.ui.Controls(video, /*container=*/document.querySelector('[data-shaka-player-container]')));
-      const controls = ui.getControls();
-      const player = controls.getPlayer();
-
-      // Player configuration: adjust as needed
-      player.configure({
-        streaming: {
-          retryParameters: { maxAttempts: 3 }
-        },
-        // Example: configure clearKeys
-        drm: {
-          // If you have clearKeys, provide them here as {'<hex-key-id>': '<hex-key>'}
-          // replace the example keyId/key with your real values
-          clearKeys: {
-            // keyId : key
-            // '1779c27b9d077a3ba0c9cc1bb9a94b9f': 'cc5cf3b7928fb9e0a1ee6a8b566f0a8e'
-          },
-          // servers: { 'com.widevine.alpha': 'https://license.example.com/get' } // if using license server
-        }
-      });
-
-      // OPTIONAL: If you want to programmatically set clearKeys when you get them dynamically:
-      // player.getNetworkingEngine()... (left out for brevity)
-
-      // Stream URL (replace with your DASH/HLS)
-      const manifestUri = 'https://abmyxykaaaaaaaamkyvb65fuqebyg.7a77200bf98444ac997a89ed83775793.emt.cf.ww.aiv-cdn.net/iad-nitro/live/clients/dash/enc/f60kqesunw/out/v1/a435ed7a00f947deb4369b46d8f2fb70/cenc.mpd';
-
-      // Attempt to load the stream
-      try {
-        document.getElementById('status').textContent = 'loading...';
-        await player.load(manifestUri);
-        document.getElementById('status').textContent = 'playing';
-        console.log('Stream loaded successfully');
-      } catch (err) {
-        document.getElementById('status').textContent = 'error';
-        console.error('Error loading stream', err);
-        alert('Error loading stream: ' + (err && err.message ? err.message : err));
-      }
-
-      // Optional: listen for DRM-related events to debug keys
-      player.addEventListener('drmsessionupdate', (ev) => {
-        console.log('DRM session update', ev);
-      });
-
-      // Debugging: print player configuration
-      console.log('Player config:', player.getConfiguration());
-    })();
-  </script>
-</body>
+// ✅ Share Function  
+    function sharePage() {  
+      if (navigator.share) {  
+        navigator.share({  
+          title: "@Cricinsider365",  
+          text: "Watch Live Cricket Now 🚀",  
+          url: window.location.href  
+        }).catch((err) => console.error("Error sharing:", err));  
+      } else {  
+        alert("Sharing not supported on this browser.");  
+      }  
+    }
+// alert('Join Our Telegram For More Live Links')
+         if (confirm("Join Our Telegram Channel @Cricinsider365") == true) {
+         window.open("https://t.me/+IhSW51QysxU3NzY1", '_blank');
+     } 
+  </script>  </body>  
 </html>
