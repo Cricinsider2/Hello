@@ -18,45 +18,46 @@
       text-align: center;
     }
 
-    /* Header with Glowing Text */
+    /* Header with Blueish Background */
     .header {
-      background: #111;
+      background: linear-gradient(90deg, #1e3c72, #2a5298); /* Blueish gradient */
       padding: 20px;
       border-bottom: 2px solid #333;
       border-radius: 6px;
       margin: 10px;
     }
 
-    .glow-text {
+    /* Optional Glowing Text inside header */
+    .header h1 {
       font-size: 36px;
       font-weight: bold;
       color: #fff;
-      text-align: center;
       text-shadow:
-        0 0 5px #ff4da6,
-        0 0 10px #ff4da6,
-        0 0 20px #ff4da6,
-        0 0 40px #ff4da6,
-        0 0 80px #ff4da6;
+        0 0 5px #00f,
+        0 0 10px #00f,
+        0 0 20px #00f,
+        0 0 40px #00f,
+        0 0 80px #00f;
       animation: glow 1.5s infinite alternate;
+      margin: 0;
     }
 
     @keyframes glow {
       from {
         text-shadow:
-          0 0 5px #ff4da6,
-          0 0 10px #ff4da6,
-          0 0 20px #ff4da6,
-          0 0 40px #ff4da6,
-          0 0 80px #ff4da6;
+          0 0 5px #00f,
+          0 0 10px #00f,
+          0 0 20px #00f,
+          0 0 40px #00f,
+          0 0 80px #00f;
       }
       to {
         text-shadow:
-          0 0 10px #ff80bf,
-          0 0 20px #ff80bf,
-          0 0 30px #ff80bf,
-          0 0 50px #ff80bf,
-          0 0 100px #ff80bf;
+          0 0 10px #00ccff,
+          0 0 20px #00ccff,
+          0 0 30px #00ccff,
+          0 0 50px #00ccff,
+          0 0 100px #00ccff;
       }
     }
 
@@ -128,9 +129,9 @@
 </head>
 
 <body>
-  <!-- Header with Glowing Text -->
+  <!-- Header with Blueish Background -->
   <div class="header">
-    <h1 class="glow-text">@Cricinsider365</h1>
+    <h1>@Cricinsider365</h1>
   </div>
 
   <!-- Video -->
