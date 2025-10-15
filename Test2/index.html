@@ -1,12 +1,21 @@
-<!DOCTYPE html><html lang="en"><head>
-
-
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <!-- Meta & SEO -->
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>TG_@Matcheslinks - Premium Sports Streaming</title>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <meta name="description" content="Watch premium live sports streams in HD. Join our Telegram channel for exclusive match links and updates.">
+    <meta name="theme-color" content="#008fd6">
+    <title>TG_@Matcheslinks – Premium Sports Streaming</title>
+
+    <!-- Fonts & Icons -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+
     <style>
-        /* CSS Variables */
+        /* ===== Root Variables ===== */
         :root {
             --primary: #008fd6;
             --primary-dark: #006bb3;
@@ -19,42 +28,39 @@
             --text: #ffffff;
             --text-secondary: #b0b0c0;
             --success: #4caf50;
-            --border-radius: 16px;
+            --radius: 16px;
             --transition: all 0.3s ease;
             --glow: 0 0 15px rgba(0, 143, 214, 0.5);
         }
 
-        /* Base Styles */
+        /* ===== Reset ===== */
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
         }
 
-        body {
+        html, body {
             font-family: 'Poppins', 'Segoe UI', sans-serif;
             background: linear-gradient(135deg, var(--dark-bg), var(--darker-bg));
             color: var(--text);
             line-height: 1.6;
-            min-height: 100vh;
             overflow-x: hidden;
-            position: relative;
-            padding: 20px;
+            min-height: 100vh;
             display: flex;
             flex-direction: column;
             align-items: center;
             justify-content: center;
+            padding: 1.5rem;
         }
 
-        /* Animated Background */
+        /* ===== Animated Background ===== */
         .bg-animation {
             position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
+            inset: 0;
             z-index: -1;
             opacity: 0.3;
+            overflow: hidden;
         }
 
         .bg-circle {
@@ -65,119 +71,85 @@
         }
 
         .bg-circle:nth-child(1) {
-            width: 300px;
-            height: 300px;
-            top: 10%;
-            left: 5%;
-            animation-delay: 0s;
+            width: 300px; height: 300px; top: 10%; left: 5%;
         }
 
         .bg-circle:nth-child(2) {
-            width: 200px;
-            height: 200px;
-            top: 60%;
-            left: 80%;
-            animation-delay: 5s;
+            width: 200px; height: 200px; top: 60%; left: 80%;
             background: radial-gradient(circle, var(--accent), transparent);
+            animation-delay: 5s;
         }
 
         .bg-circle:nth-child(3) {
-            width: 400px;
-            height: 400px;
-            top: 30%;
-            left: 60%;
+            width: 400px; height: 400px; top: 30%; left: 60%;
             animation-delay: 10s;
         }
 
         @keyframes float {
-            0%, 100% {
-                transform: translateY(0) translateX(0);
-            }
-            25% {
-                transform: translateY(-20px) translateX(10px);
-            }
-            50% {
-                transform: translateY(0) translateX(20px);
-            }
-            75% {
-                transform: translateY(20px) translateX(10px);
-            }
+            0%, 100% { transform: translate(0,0); }
+            25% { transform: translate(10px,-20px); }
+            50% { transform: translate(20px,0); }
+            75% { transform: translate(10px,20px); }
         }
 
-        /* Main Content */
-        .main-content {
-            flex: 1;
+        /* ===== Layout ===== */
+        main {
+            width: 100%;
+            max-width: 1200px;
+            text-align: center;
             display: flex;
             flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            width: 100%;
-            max-width: 1300px;
-            margin: 0 auto;
+            gap: 2rem;
         }
 
-        /* Announcement Banner */
+        /* ===== Announcement Banner ===== */
         .announcement-banner {
             background: linear-gradient(90deg, var(--primary), var(--primary-dark));
-            color: white;
-            padding: 14px 25px;
-            border-radius: var(--border-radius);
-            margin-bottom: 2rem;
-            width: 100%;
+            padding: 14px 24px;
+            border-radius: var(--radius);
             display: flex;
             align-items: center;
             justify-content: center;
-            gap: 12px;
+            gap: 10px;
+            color: #fff;
             box-shadow: 0 5px 20px rgba(0, 143, 214, 0.4);
-            position: relative;
             overflow: hidden;
-            border: 1px solid rgba(255, 255, 255, 0.1);
+            position: relative;
         }
 
         .announcement-banner::before {
-            content: '';
+            content: "";
             position: absolute;
-            top: 0;
-            left: -100%;
-            width: 100%;
-            height: 100%;
-            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+            top: 0; left: -100%;
+            width: 100%; height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
             transition: left 0.7s;
         }
 
-        .announcement-banner:hover::before {
-            left: 100%;
-        }
-
-        .announcement-banner i {
-            font-size: 1.3rem;
-            animation: pulse 2s infinite;
-        }
+        .announcement-banner:hover::before { left: 100%; }
+        .announcement-banner i { animation: pulse 2s infinite; }
 
         @keyframes pulse {
-            0%, 100% { transform: scale(1); }
+            0%,100% { transform: scale(1); }
             50% { transform: scale(1.1); }
         }
 
-        /* Video Player Section */
+        /* ===== Video Player ===== */
         .player-container {
-            width: 100%;
-            margin: 0 auto 2.5rem;
-            border-radius: var(--border-radius);
-            overflow: hidden;
-            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.5);
             background: var(--card-bg);
-            position: relative;
+            border-radius: var(--radius);
+            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
             border: 1px solid var(--card-border);
+            overflow: hidden;
             backdrop-filter: blur(10px);
         }
 
         .player-header {
-            padding: 1.2rem 1.8rem;
-            background: rgba(0, 0, 0, 0.4);
+            background: rgba(0,0,0,0.4);
+            padding: 1rem 1.5rem;
             display: flex;
-            justify-content: space-between;
             align-items: center;
+            justify-content: space-between;
             border-bottom: 1px solid var(--card-border);
         }
 
@@ -188,236 +160,177 @@
         }
 
         .channel-logo {
-            width: 46px;
-            height: 46px;
-            background: linear-gradient(135deg, var(--accent), #ff9900);
+            width: 46px; height: 46px;
             border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-weight: bold;
-            color: #000;
+            background: linear-gradient(135deg, var(--accent), #ff9900);
+            display: flex; align-items: center; justify-content: center;
+            font-weight: bold; color: #000;
             box-shadow: 0 0 15px var(--accent-glow);
         }
 
-        .channel-name {
-            font-weight: 700;
-            font-size: 1.2rem;
-        }
+        .channel-name { font-weight: 700; font-size: 1.2rem; }
 
         .live-indicator {
             display: flex;
             align-items: center;
-            gap: 8px;
-            background: rgba(255, 0, 0, 0.2);
-            padding: 5px 12px;
+            gap: 6px;
+            background: rgba(255,0,0,0.15);
             border-radius: 20px;
-            border: 1px solid rgba(255, 0, 0, 0.3);
+            padding: 4px 10px;
+            border: 1px solid rgba(255,0,0,0.3);
         }
 
         .live-dot {
-            width: 10px;
-            height: 10px;
-            background: #ff3333;
+            width: 10px; height: 10px;
             border-radius: 50%;
-            animation: live-pulse 1.5s infinite;
+            background: #ff3333;
+            animation: blink 1.5s infinite;
         }
 
-        @keyframes live-pulse {
-            0%, 100% { opacity: 1; }
-            50% { opacity: 0.5; }
+        @keyframes blink {
+            0%,100% { opacity: 1; }
+            50% { opacity: 0.4; }
         }
 
         .player-wrapper {
             position: relative;
-            padding-bottom: 56.25%; /* 16:9 Aspect Ratio */
+            padding-bottom: 56.25%;
             height: 0;
-            overflow: hidden;
         }
 
         .player-wrapper iframe {
             position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
+            inset: 0;
+            width: 100%; height: 100%;
             border: none;
         }
 
-        /* Share Section */
+        /* ===== Share Buttons ===== */
         .share-section {
             background: var(--card-bg);
-            border-radius: var(--border-radius);
-            padding: 2rem;
-            margin-bottom: 2.5rem;
-            width: 100%;
-            text-align: center;
-            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.3);
+            border-radius: var(--radius);
+            padding: 2rem 1.5rem;
             border: 1px solid var(--card-border);
             backdrop-filter: blur(10px);
+            box-shadow: 0 8px 25px rgba(0,0,0,0.3);
         }
 
         .section-title {
-            font-size: 1.5rem;
-            margin-bottom: 1.5rem;
+            font-size: 1.6rem;
             background: linear-gradient(to right, var(--primary), var(--accent));
             -webkit-background-clip: text;
-            background-clip: text;
             color: transparent;
-            display: inline-block;
+            margin-bottom: 1.5rem;
         }
 
         .share-buttons {
             display: flex;
             justify-content: center;
-            gap: 20px;
             flex-wrap: wrap;
+            gap: 15px;
         }
 
         .share-btn {
-            padding: 12px 25px;
-            border-radius: 50px;
-            border: none;
-            background: rgba(255, 255, 255, 0.1);
-            color: white;
-            font-weight: 600;
-            cursor: pointer;
-            transition: var(--transition);
             display: flex;
             align-items: center;
             gap: 10px;
+            padding: 12px 25px;
+            font-weight: 600;
+            border-radius: 50px;
             border: 1px solid var(--card-border);
-            backdrop-filter: blur(5px);
+            color: white;
+            background: rgba(255,255,255,0.1);
+            cursor: pointer;
+            transition: var(--transition);
         }
 
         .share-btn:hover {
-            background: rgba(255, 255, 255, 0.2);
             transform: translateY(-5px);
             box-shadow: var(--glow);
         }
 
-        .share-btn.whatsapp:hover {
-            background: #25D366;
-        }
+        .share-btn.whatsapp:hover { background: #25D366; }
+        .share-btn.telegram:hover { background: #0088cc; }
+        .share-btn.twitter:hover { background: #1DA1F2; }
+        .share-btn.copy:hover { background: var(--success); }
 
-        .share-btn.telegram:hover {
-            background: #0088cc;
-        }
-
-        .share-btn.twitter:hover {
-            background: #1DA1F2;
-        }
-
-        .share-btn.copy:hover {
-            background: var(--success);
-        }
-
-        /* Telegram Section */
+        /* ===== Telegram Section ===== */
         .telegram-section {
             background: var(--card-bg);
-            border-radius: var(--border-radius);
-            padding: 2.5rem;
-            width: 100%;
-            text-align: center;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
-            margin-bottom: 2.5rem;
+            border-radius: var(--radius);
+            padding: 2.5rem 1.5rem;
             border: 1px solid var(--card-border);
-            backdrop-filter: blur(10px);
+            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
             position: relative;
             overflow: hidden;
-        }
-
-        .telegram-section::before {
-            content: '';
-            position: absolute;
-            top: -50%;
-            left: -50%;
-            width: 200%;
-            height: 200%;
-            background: radial-gradient(circle, rgba(0, 143, 214, 0.1), transparent 70%);
-            z-index: -1;
+            backdrop-filter: blur(10px);
         }
 
         .telegram-icon {
             font-size: 4rem;
             color: var(--primary);
+            animation: float 4s ease-in-out infinite;
+            text-shadow: 0 0 20px rgba(0,143,214,0.5);
             margin-bottom: 1.5rem;
-            text-shadow: 0 0 20px rgba(0, 143, 214, 0.5);
-            animation: float-icon 4s ease-in-out infinite;
-        }
-
-        @keyframes float-icon {
-            0%, 100% { transform: translateY(0); }
-            50% { transform: translateY(-10px); }
         }
 
         .telegram-title {
             font-size: 2rem;
-            margin-bottom: 1rem;
             font-weight: 700;
+            margin-bottom: 1rem;
         }
 
         .telegram-description {
             color: var(--text-secondary);
+            font-size: 1.1rem;
             margin-bottom: 2rem;
             max-width: 600px;
-            margin-left: auto;
-            margin-right: auto;
-            font-size: 1.1rem;
-            line-height: 1.7;
+            margin-inline: auto;
         }
 
         .join-telegram-btn {
             padding: 16px 40px;
-            font-size: 1.2rem;
-            font-weight: bold;
-            color: white;
-            background: linear-gradient(135deg, var(--primary), var(--primary-dark));
             border: none;
             border-radius: 50px;
+            color: #fff;
+            font-weight: bold;
+            font-size: 1.1rem;
+            background: linear-gradient(135deg, var(--primary), var(--primary-dark));
             cursor: pointer;
             transition: var(--transition);
             display: inline-flex;
             align-items: center;
-            gap: 12px;
-            box-shadow: 0 8px 25px rgba(0, 143, 214, 0.5);
-            position: relative;
+            gap: 10px;
+            box-shadow: 0 8px 25px rgba(0,143,214,0.5);
             overflow: hidden;
+            position: relative;
         }
 
         .join-telegram-btn::before {
-            content: '';
+            content: "";
             position: absolute;
-            top: 0;
-            left: -100%;
-            width: 100%;
-            height: 100%;
-            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+            top: 0; left: -100%;
+            width: 100%; height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.25), transparent);
             transition: left 0.7s;
         }
 
-        .join-telegram-btn:hover::before {
-            left: 100%;
-        }
+        .join-telegram-btn:hover::before { left: 100%; }
+        .join-telegram-btn:hover { transform: translateY(-5px); }
 
-        .join-telegram-btn:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 12px 30px rgba(0, 143, 214, 0.7);
-        }
-
-        /* Footer */
-        .footer {
-            background: rgba(9, 9, 18, 0.9);
-            padding: 2rem;
+        /* ===== Footer ===== */
+        footer {
+            background: rgba(9,9,18,0.9);
+            border-top: 1px solid var(--card-border);
+            border-radius: var(--radius);
+            padding: 1.8rem 1rem;
             text-align: center;
             color: var(--text-secondary);
-            font-size: 0.95rem;
-            margin-top: auto;
-            border-top: 1px solid var(--card-border);
-            backdrop-filter: blur(10px);
-            border-radius: var(--border-radius);
+            font-size: 0.9rem;
             width: 100%;
-            max-width: 1300px;
+            max-width: 1200px;
+            margin-top: auto;
+            backdrop-filter: blur(10px);
         }
 
         .footer-links {
@@ -433,131 +346,106 @@
             transition: var(--transition);
         }
 
-        .footer-link:hover {
-            color: var(--primary);
-        }
+        .footer-link:hover { color: var(--primary); }
 
-        /* Responsive Design */
+        /* ===== Responsive ===== */
         @media (max-width: 768px) {
-            body {
-                padding: 10px;
-            }
-            
-            .player-header {
-                justify-content: center;
-                text-align: center;
-            }
-            
-            .share-buttons {
-                flex-direction: column;
-                align-items: center;
-            }
-            
-            .share-btn {
-                width: 100%;
-                max-width: 280px;
-                justify-content: center;
-            }
-            
-            .telegram-section {
-                padding: 1.5rem;
-            }
-            
-            .telegram-title {
-                font-size: 1.7rem;
-            }
+            .telegram-title { font-size: 1.6rem; }
+            .share-btn { width: 100%; justify-content: center; }
+            .player-header { flex-direction: column; gap: 8px; }
         }
     </style>
-<style type="text/css">* {user-select: auto !important; -webkit-user-select: auto !important;}</style><input type="hidden" id="inject_idm_text_selection"></head>
+</head>
 <body>
-    
+
     <div class="bg-animation">
         <div class="bg-circle"></div>
         <div class="bg-circle"></div>
         <div class="bg-circle"></div>
     </div>
 
-    
-    <main class="main-content">
-        
+    <main>
         <div class="announcement-banner">
             <i class="fas fa-bullhorn"></i>
-            <span>Share The Links With Your Friends &amp; Enjoy Premium Sports Streaming</span>
+            <span>Share the links with your friends & enjoy premium sports streaming</span>
         </div>
 
-        
-        <div class="player-container">
+        <section class="player-container" aria-label="Live Sports Stream">
             <div class="player-header">
                 <div class="channel-info">
                     <div class="channel-logo">S1</div>
                     <div>
                         <div class="channel-name">Star Hindi HD</div>
                         <div class="live-indicator">
-                            <div class="live-dot"></div>
-                            <span>LIVE</span>
+                            <div class="live-dot"></div><span>LIVE</span>
                         </div>
                     </div>
                 </div>
             </div>
             <div class="player-wrapper">
-                <iframe id="contentFrame" sandbox="allow-forms allow-pointer-lock allow-same-origin allow-scripts allow-top-navigation" frameborder="0" gesture="media" allow="encrypted-media" allowfullscreen="true" scrolling="no" src="https://tvgo.neocities.org/APPTV/jspo?id=Star1%20Hindi%20HD">
-                </iframe>
+                <iframe id="contentFrame" src="https://tvgo.neocities.org/APPTV/jspo?id=Star1%20Hindi%20HD"
+                    allowfullscreen allow="encrypted-media" loading="lazy"></iframe>
             </div>
-        </div>
+        </section>
 
-        
-        <div class="share-section">
+        <section class="share-section">
             <h2 class="section-title">Share This Stream</h2>
             <div class="share-buttons">
-                <button class="share-btn whatsapp" onclick="shareLink('whatsapp')">
-                    <i class="fab fa-whatsapp"></i>
-                    WhatsApp
-                </button>
-                <button class="share-btn telegram" onclick="shareLink('telegram')">
-                    <i class="fab fa-telegram"></i>
-                    Telegram
-                </button>
-                <button class="share-btn twitter" onclick="shareLink('twitter')">
-                    <i class="fab fa-twitter"></i>
-                    Twitter
-                </button>
-                <button class="share-btn copy" onclick="copyLink()">
-                    <i class="fas fa-copy"></i>
-                    Copy Link
-                </button>
+                <button class="share-btn whatsapp" onclick="shareLink('whatsapp')"><i class="fab fa-whatsapp"></i>WhatsApp</button>
+                <button class="share-btn telegram" onclick="shareLink('telegram')"><i class="fab fa-telegram"></i>Telegram</button>
+                <button class="share-btn twitter" onclick="shareLink('twitter')"><i class="fab fa-twitter"></i>Twitter</button>
+                <button class="share-btn copy" onclick="copyLink()"><i class="fas fa-copy"></i>Copy Link</button>
             </div>
-        </div>
+        </section>
 
-        
-        <div class="telegram-section">
-            <div class="telegram-icon">
-                <i class="fab fa-telegram"></i>
-            </div>
+        <section class="telegram-section">
+            <div class="telegram-icon"><i class="fab fa-telegram"></i></div>
             <h2 class="telegram-title">Join Our Telegram Channel</h2>
-            <p class="telegram-description">
-                Get instant access to premium sports streams, match highlights, and exclusive content. 
-                Join thousands of sports enthusiasts in our Telegram community!
-            </p>
-            <button class="join-telegram-btn" onclick="joinTelegram()">
-                <i class="fab fa-telegram"></i>
-                Join @Matcheslinks
-            </button>
-        </div>
+            <p class="telegram-description">Get instant access to premium sports streams, match highlights, and exclusive updates. Join thousands of sports fans today!</p>
+            <button class="join-telegram-btn" onclick="joinTelegram()"><i class="fab fa-telegram"></i>Join @Matcheslinks</button>
+        </section>
     </main>
 
-    
-    <footer class="footer">
+    <footer>
         <div class="footer-links">
             <a href="#" class="footer-link">Home</a>
             <a href="#" class="footer-link">About</a>
             <a href="#" class="footer-link">Contact</a>
-            <a href="#" class="footer-link">Privacy Policy</a>
+            <a href="#" class="footer-link">Privacy</a>
         </div>
-        <p>© 2023 TG_@Matcheslinks - Premium Sports Streaming Platform</p>
+        <p>© 2025 TG_@Matcheslinks – Premium Sports Streaming</p>
         <p>For entertainment purposes only</p>
     </footer>
 
-    
+    <script>
+        const currentURL = window.location.href;
+        function shareLink(platform) {
+            const encodedURL = encodeURIComponent(currentURL);
+            const text = encodeURIComponent("Watch live sports on TG_@Matcheslinks: ");
+            let shareURL = "";
 
+            switch(platform) {
+                case "whatsapp":
+                    shareURL = `https://wa.me/?text=${text}${encodedURL}`;
+                    break;
+                case "telegram":
+                    shareURL = `https://t.me/share/url?url=${encodedURL}&text=${text}`;
+                    break;
+                case "twitter":
+                    shareURL = `https://twitter.com/intent/tweet?url=${encodedURL}&text=${text}`;
+                    break;
+            }
+            window.open(shareURL, "_blank");
+        }
 
-</body></html>
+        function copyLink() {
+            navigator.clipboard.writeText(currentURL);
+            alert("✅ Link copied to clipboard!");
+        }
+
+        function joinTelegram() {
+            window.open("https://t.me/matcheslinks", "_blank");
+        }
+    </script>
+</body>
+</html>
