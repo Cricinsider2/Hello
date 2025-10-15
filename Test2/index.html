@@ -1,203 +1,120 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <!-- Meta & SEO -->
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="Watch premium live sports streams in HD.">
-    <meta name="theme-color" content="#008fd6">
-    <title>TG_@Matcheslinks – Premium Sports Streaming</title>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+  <meta name="referrer" content="no-referrer" />
+  <title>Premium Sports Streaming</title>
 
-    <!-- Fonts & Icons -->
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+  <!-- Plyr Player -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/plyr@3.7.8/dist/plyr.css" />
+  <script src="https://cdn.jsdelivr.net/npm/hls.js@latest"></script>
+  <script src="https://cdn.jsdelivr.net/npm/plyr@3.7.8/dist/plyr.polyfilled.min.js"></script>
 
-    <style>
-        :root {
-            --primary: #008fd6;
-            --primary-dark: #006bb3;
-            --accent: #ffcc00;
-            --accent-glow: rgba(255, 204, 0, 0.5);
-            --dark-bg: #0f0f1a;
-            --darker-bg: #090912;
-            --card-bg: rgba(30, 30, 46, 0.7);
-            --card-border: rgba(255, 255, 255, 0.1);
-            --text: #ffffff;
-            --text-secondary: #b0b0c0;
-            --success: #4caf50;
-            --radius: 16px;
-            --transition: all 0.3s ease;
-            --glow: 0 0 15px rgba(0, 143, 214, 0.5);
-        }
+  <style>
+    body {
+      margin: 0;
+      padding: 0;
+      font-family: 'Poppins', sans-serif;
+      background-color: #0b0e17;
+      color: white;
+      overflow-x: hidden;
+    }
 
-        * { margin: 0; padding: 0; box-sizing: border-box; }
+    .container {
+      max-width: 900px;
+      margin: auto;
+      padding: 16px;
+    }
 
-        html, body {
-            font-family: 'Poppins', sans-serif;
-            background: linear-gradient(135deg, var(--dark-bg), var(--darker-bg));
-            color: var(--text);
-            overflow-x: hidden;
-            min-height: 100vh;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            padding: 1.5rem;
-        }
+    /* Video player */
+    .video-container {
+      width: 100%;
+      height: 80vh;
+      max-height: 700px;
+      background-color: #000;
+      border-radius: 16px;
+      overflow: hidden;
+      box-shadow: 0 0 20px rgba(0,0,0,0.5);
+    }
 
-        .bg-animation {
-            position: fixed;
-            inset: 0;
-            z-index: -1;
-            opacity: 0.3;
-            overflow: hidden;
-        }
+    video {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
 
-        .bg-circle {
-            position: absolute;
-            border-radius: 50%;
-            background: radial-gradient(circle, var(--primary), transparent);
-            animation: float 15s infinite linear;
-        }
+    /* Share section */
+    .share-section {
+      background: #121522;
+      margin-top: 20px;
+      padding: 20px;
+      border-radius: 16px;
+      text-align: center;
+    }
 
-        .bg-circle:nth-child(1) { width: 300px; height: 300px; top: 10%; left: 5%; }
-        .bg-circle:nth-child(2) { width: 200px; height: 200px; top: 60%; left: 80%; background: radial-gradient(circle, var(--accent), transparent); animation-delay: 5s; }
-        .bg-circle:nth-child(3) { width: 400px; height: 400px; top: 30%; left: 60%; animation-delay: 10s; }
+    .share-section h2 {
+      background: linear-gradient(90deg, #00ffcc, #00b4ff);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      font-size: 22px;
+      margin-bottom: 12px;
+    }
 
-        @keyframes float {
-            0%,100%{transform:translate(0,0);}
-            25%{transform:translate(10px,-20px);}
-            50%{transform:translate(20px,0);}
-            75%{transform:translate(10px,20px);}
-        }
+    .share-section a {
+      display: inline-block;
+      background-color: #25d366;
+      color: white;
+      text-decoration: none;
+      font-weight: 600;
+      padding: 12px 24px;
+      border-radius: 30px;
+      transition: all 0.3s ease;
+    }
 
-        main { width: 100%; max-width: 1200px; text-align: center; display: flex; flex-direction: column; gap: 2rem; }
-
-        .player-container {
-            background: var(--card-bg);
-            border-radius: var(--radius);
-            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
-            border: 1px solid var(--card-border);
-            overflow: hidden;
-            backdrop-filter: blur(10px);
-        }
-
-        .player-wrapper {
-            position: relative;
-            padding-bottom: 56.25%;
-            height: 0;
-        }
-
-        .player-wrapper iframe {
-            position: absolute;
-            inset: 0;
-            width: 100%;
-            height: 100%;
-            border: none;
-        }
-
-        .share-section {
-            background: var(--card-bg);
-            border-radius: var(--radius);
-            padding: 2rem 1.5rem;
-            border: 1px solid var(--card-border);
-            backdrop-filter: blur(10px);
-            box-shadow: 0 8px 25px rgba(0,0,0,0.3);
-        }
-
-        .section-title {
-            font-size: 1.6rem;
-            background: linear-gradient(to right, var(--primary), var(--accent));
-            -webkit-background-clip: text;
-            color: transparent;
-            margin-bottom: 1.5rem;
-        }
-
-        .share-buttons {
-            display: flex;
-            justify-content: center;
-            flex-wrap: wrap;
-            gap: 15px;
-        }
-
-        .share-btn {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            padding: 12px 25px;
-            font-weight: 600;
-            border-radius: 50px;
-            border: 1px solid var(--card-border);
-            color: white;
-            background: rgba(255,255,255,0.1);
-            cursor: pointer;
-            transition: var(--transition);
-        }
-
-        .share-btn:hover {
-            transform: translateY(-5px);
-            box-shadow: var(--glow);
-        }
-
-        .share-btn.whatsapp:hover { background: #25D366; }
-        .share-btn.telegram:hover { background: #0088cc; }
-        .share-btn.twitter:hover { background: #1DA1F2; }
-        .share-btn.copy:hover { background: var(--success); }
-
-        @media (max-width:768px) {
-            .share-btn { width: 100%; justify-content: center; }
-        }
-    </style>
+    .share-section a:hover {
+      background-color: #1ebc57;
+    }
+  </style>
 </head>
-<body>
 
-    <div class="bg-animation">
-        <div class="bg-circle"></div>
-        <div class="bg-circle"></div>
-        <div class="bg-circle"></div>
+<body>
+  <div class="container">
+    <!-- Video Player Section -->
+    <div class="video-container">
+      <video id="player" controls playsinline></video>
     </div>
 
-    <main>
-        <!-- Removed Announcement Banner -->
-        <section class="player-container" aria-label="Live Sports Stream">
-            <!-- Removed Player Header -->
-            <div class="player-wrapper">
-                <iframe id="contentFrame" src="https://tvgo.neocities.org/APPTV/jspo?id=Star1%20Hindi%20HD"
-                    allowfullscreen allow="encrypted-media" loading="lazy"></iframe>
-            </div>
-        </section>
+    <!-- Share Stream Section -->
+    <div class="share-section">
+      <h2>Share This Stream</h2>
+      <a href="https://wa.me/?text=Watch%20Live%20Sports%20Now!%20insiderlivehd.pages.dev" target="_blank">
+        WhatsApp
+      </a>
+    </div>
+  </div>
 
-        <section class="share-section">
-            <h2 class="section-title">Share This Stream</h2>
-            <div class="share-buttons">
-                <button class="share-btn whatsapp" onclick="shareLink('whatsapp')"><i class="fab fa-whatsapp"></i>WhatsApp</button>
-                <button class="share-btn telegram" onclick="shareLink('telegram')"><i class="fab fa-telegram"></i>Telegram</button>
-                <button class="share-btn twitter" onclick="shareLink('twitter')"><i class="fab fa-twitter"></i>Twitter</button>
-                <button class="share-btn copy" onclick="copyLink()"><i class="fas fa-copy"></i>Copy Link</button>
-            </div>
-        </section>
-    </main>
+  <script>
+    document.addEventListener("DOMContentLoaded", () => {
+      const video = document.getElementById("player");
+      const videoSrc = "https://example.com/live/stream.m3u8"; // Replace with your HLS link
 
-    <script>
-        const currentURL = window.location.href;
-        function shareLink(platform) {
-            const encodedURL = encodeURIComponent(currentURL);
-            const text = encodeURIComponent("Watch live sports on TG_@Matcheslinks: ");
-            let shareURL = "";
-            switch(platform) {
-                case "whatsapp": shareURL = `https://wa.me/?text=${text}${encodedURL}`; break;
-                case "telegram": shareURL = `https://t.me/share/url?url=${encodedURL}&text=${text}`; break;
-                case "twitter": shareURL = `https://twitter.com/intent/tweet?url=${encodedURL}&text=${text}`; break;
-            }
-            window.open(shareURL, "_blank");
-        }
+      if (Hls.isSupported()) {
+        const hls = new Hls();
+        hls.loadSource(videoSrc);
+        hls.attachMedia(video);
+        hls.on(Hls.Events.MANIFEST_PARSED, () => {
+          video.play();
+        });
+      } else if (video.canPlayType('application/vnd.apple.mpegurl')) {
+        video.src = videoSrc;
+        video.addEventListener('loadedmetadata', () => {
+          video.play();
+        });
+      }
 
-        function copyLink() {
-            navigator.clipboard.writeText(currentURL);
-            alert("✅ Link copied to clipboard!");
-        }
-    </script>
+      const player = new Plyr(video, { controls: ['play', 'progress', 'current-time', 'mute', 'volume', 'fullscreen'] });
+    });
+  </script>
 </body>
 </html>
