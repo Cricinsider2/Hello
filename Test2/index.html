@@ -6,7 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="description" content="Watch premium live sports streams in HD.">
     <meta name="theme-color" content="#008fd6">
-    <title>Premium Sports Streaming</title>
+    <title>TG_@Matcheslinks – Premium Sports Streaming</title>
 
     <!-- Fonts & Icons -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -15,7 +15,6 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
 
     <style>
-        /* ===== Root Variables ===== */
         :root {
             --primary: #008fd6;
             --primary-dark: #006bb3;
@@ -33,18 +32,12 @@
             --glow: 0 0 15px rgba(0, 143, 214, 0.5);
         }
 
-        /* ===== Reset ===== */
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
 
         html, body {
-            font-family: 'Poppins', 'Segoe UI', sans-serif;
+            font-family: 'Poppins', sans-serif;
             background: linear-gradient(135deg, var(--dark-bg), var(--darker-bg));
             color: var(--text);
-            line-height: 1.6;
             overflow-x: hidden;
             min-height: 100vh;
             display: flex;
@@ -54,7 +47,6 @@
             padding: 1.5rem;
         }
 
-        /* ===== Animated Background ===== */
         .bg-animation {
             position: fixed;
             inset: 0;
@@ -70,71 +62,19 @@
             animation: float 15s infinite linear;
         }
 
-        .bg-circle:nth-child(1) {
-            width: 300px; height: 300px; top: 10%; left: 5%;
-        }
-
-        .bg-circle:nth-child(2) {
-            width: 200px; height: 200px; top: 60%; left: 80%;
-            background: radial-gradient(circle, var(--accent), transparent);
-            animation-delay: 5s;
-        }
-
-        .bg-circle:nth-child(3) {
-            width: 400px; height: 400px; top: 30%; left: 60%;
-            animation-delay: 10s;
-        }
+        .bg-circle:nth-child(1) { width: 300px; height: 300px; top: 10%; left: 5%; }
+        .bg-circle:nth-child(2) { width: 200px; height: 200px; top: 60%; left: 80%; background: radial-gradient(circle, var(--accent), transparent); animation-delay: 5s; }
+        .bg-circle:nth-child(3) { width: 400px; height: 400px; top: 30%; left: 60%; animation-delay: 10s; }
 
         @keyframes float {
-            0%, 100% { transform: translate(0,0); }
-            25% { transform: translate(10px,-20px); }
-            50% { transform: translate(20px,0); }
-            75% { transform: translate(10px,20px); }
+            0%,100%{transform:translate(0,0);}
+            25%{transform:translate(10px,-20px);}
+            50%{transform:translate(20px,0);}
+            75%{transform:translate(10px,20px);}
         }
 
-        /* ===== Layout ===== */
-        main {
-            width: 100%;
-            max-width: 1200px;
-            text-align: center;
-            display: flex;
-            flex-direction: column;
-            gap: 2rem;
-        }
+        main { width: 100%; max-width: 1200px; text-align: center; display: flex; flex-direction: column; gap: 2rem; }
 
-        /* ===== Announcement Banner ===== */
-        .announcement-banner {
-            background: linear-gradient(90deg, var(--primary), var(--primary-dark));
-            padding: 14px 24px;
-            border-radius: var(--radius);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 10px;
-            color: #fff;
-            box-shadow: 0 5px 20px rgba(0, 143, 214, 0.4);
-            overflow: hidden;
-            position: relative;
-        }
-
-        .announcement-banner::before {
-            content: "";
-            position: absolute;
-            top: 0; left: -100%;
-            width: 100%; height: 100%;
-            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
-            transition: left 0.7s;
-        }
-
-        .announcement-banner:hover::before { left: 100%; }
-        .announcement-banner i { animation: pulse 2s infinite; }
-
-        @keyframes pulse {
-            0%,100% { transform: scale(1); }
-            50% { transform: scale(1.1); }
-        }
-
-        /* ===== Video Player ===== */
         .player-container {
             background: var(--card-bg);
             border-radius: var(--radius);
@@ -142,54 +82,6 @@
             border: 1px solid var(--card-border);
             overflow: hidden;
             backdrop-filter: blur(10px);
-        }
-
-        .player-header {
-            background: rgba(0,0,0,0.4);
-            padding: 1rem 1.5rem;
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            border-bottom: 1px solid var(--card-border);
-        }
-
-        .channel-info {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-        }
-
-        .channel-logo {
-            width: 46px; height: 46px;
-            border-radius: 50%;
-            background: linear-gradient(135deg, var(--accent), #ff9900);
-            display: flex; align-items: center; justify-content: center;
-            font-weight: bold; color: #000;
-            box-shadow: 0 0 15px var(--accent-glow);
-        }
-
-        .channel-name { font-weight: 700; font-size: 1.2rem; }
-
-        .live-indicator {
-            display: flex;
-            align-items: center;
-            gap: 6px;
-            background: rgba(255,0,0,0.15);
-            border-radius: 20px;
-            padding: 4px 10px;
-            border: 1px solid rgba(255,0,0,0.3);
-        }
-
-        .live-dot {
-            width: 10px; height: 10px;
-            border-radius: 50%;
-            background: #ff3333;
-            animation: blink 1.5s infinite;
-        }
-
-        @keyframes blink {
-            0%,100% { opacity: 1; }
-            50% { opacity: 0.4; }
         }
 
         .player-wrapper {
@@ -201,11 +93,11 @@
         .player-wrapper iframe {
             position: absolute;
             inset: 0;
-            width: 100%; height: 100%;
+            width: 100%;
+            height: 100%;
             border: none;
         }
 
-        /* ===== Share Buttons ===== */
         .share-section {
             background: var(--card-bg);
             border-radius: var(--radius);
@@ -254,10 +146,8 @@
         .share-btn.twitter:hover { background: #1DA1F2; }
         .share-btn.copy:hover { background: var(--success); }
 
-        /* ===== Responsive ===== */
-        @media (max-width: 768px) {
+        @media (max-width:768px) {
             .share-btn { width: 100%; justify-content: center; }
-            .player-header { flex-direction: column; gap: 8px; }
         }
     </style>
 </head>
@@ -270,23 +160,9 @@
     </div>
 
     <main>
-        <div class="announcement-banner">
-            <i class="fas fa-bullhorn"></i>
-            <span>Share the links with your friends & enjoy premium sports streaming</span>
-        </div>
-
+        <!-- Removed Announcement Banner -->
         <section class="player-container" aria-label="Live Sports Stream">
-            <div class="player-header">
-                <div class="channel-info">
-                    <div class="channel-logo">S1</div>
-                    <div>
-                        <div class="channel-name">Star Hindi HD</div>
-                        <div class="live-indicator">
-                            <div class="live-dot"></div><span>LIVE</span>
-                        </div>
-                    </div>
-                </div>
-            </div>
+            <!-- Removed Player Header -->
             <div class="player-wrapper">
                 <iframe id="contentFrame" src="https://tvgo.neocities.org/APPTV/jspo?id=Star1%20Hindi%20HD"
                     allowfullscreen allow="encrypted-media" loading="lazy"></iframe>
@@ -308,19 +184,12 @@
         const currentURL = window.location.href;
         function shareLink(platform) {
             const encodedURL = encodeURIComponent(currentURL);
-            const text = encodeURIComponent("Watch live sports here: ");
+            const text = encodeURIComponent("Watch live sports on TG_@Matcheslinks: ");
             let shareURL = "";
-
             switch(platform) {
-                case "whatsapp":
-                    shareURL = `https://wa.me/?text=${text}${encodedURL}`;
-                    break;
-                case "telegram":
-                    shareURL = `https://t.me/share/url?url=${encodedURL}&text=${text}`;
-                    break;
-                case "twitter":
-                    shareURL = `https://twitter.com/intent/tweet?url=${encodedURL}&text=${text}`;
-                    break;
+                case "whatsapp": shareURL = `https://wa.me/?text=${text}${encodedURL}`; break;
+                case "telegram": shareURL = `https://t.me/share/url?url=${encodedURL}&text=${text}`; break;
+                case "twitter": shareURL = `https://twitter.com/intent/tweet?url=${encodedURL}&text=${text}`; break;
             }
             window.open(shareURL, "_blank");
         }
