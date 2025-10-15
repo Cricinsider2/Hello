@@ -73,7 +73,14 @@
             75%{transform:translate(10px,20px);}
         }
 
-        main { width: 100%; max-width: 1200px; text-align: center; display: flex; flex-direction: column; gap: 2rem; }
+        main {
+            width: 100%;
+            max-width: 1300px; /* Pehle 1200 tha - ab aur wide */
+            text-align: center;
+            display: flex;
+            flex-direction: column;
+            gap: 2rem;
+        }
 
         .player-container {
             background: var(--card-bg);
@@ -82,11 +89,13 @@
             border: 1px solid var(--card-border);
             overflow: hidden;
             backdrop-filter: blur(10px);
+            width: 95%; /* screen ke almost full width tak */
+            margin: 0 auto;
         }
 
         .player-wrapper {
             position: relative;
-            padding-bottom: 50%; /* Thoda chauda banane ke liye */
+            padding-bottom: 56.25%; /* 16:9 perfect video aspect ratio */
             height: 0;
         }
 
@@ -105,6 +114,8 @@
             border: 1px solid var(--card-border);
             backdrop-filter: blur(10px);
             box-shadow: 0 8px 25px rgba(0,0,0,0.3);
+            width: 90%;
+            margin: 0 auto;
         }
 
         .section-title {
@@ -147,6 +158,8 @@
         .share-btn.copy:hover { background: var(--success); }
 
         @media (max-width:768px) {
+            main { max-width: 100%; }
+            .player-container, .share-section { width: 100%; }
             .share-btn { width: 100%; justify-content: center; }
         }
     </style>
