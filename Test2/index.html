@@ -5,7 +5,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="description" content="Watch premium live sports streams in HD.">
-    <meta name="theme-color" content="#008fd6">
+    <meta name="theme-color" content="#000000">
     <title>TG_@Matcheslinks – Premium Sports Streaming</title>
 
     <!-- Fonts & Icons -->
@@ -16,20 +16,14 @@
 
     <style>
         :root {
-            --primary: #008fd6;
-            --primary-dark: #006bb3;
-            --accent: #ffcc00;
-            --accent-glow: rgba(255, 204, 0, 0.5);
             --dark-bg: #0f0f1a;
             --darker-bg: #090912;
             --card-bg: rgba(30, 30, 46, 0.7);
             --card-border: rgba(255, 255, 255, 0.1);
             --text: #ffffff;
             --text-secondary: #b0b0c0;
-            --success: #4caf50;
             --radius: 16px;
             --transition: all 0.3s ease;
-            --glow: 0 0 15px rgba(0, 143, 214, 0.5);
         }
 
         * { margin: 0; padding: 0; box-sizing: border-box; }
@@ -47,35 +41,9 @@
             padding: 1.5rem;
         }
 
-        .bg-animation {
-            position: fixed;
-            inset: 0;
-            z-index: -1;
-            opacity: 0.3;
-            overflow: hidden;
-        }
-
-        .bg-circle {
-            position: absolute;
-            border-radius: 50%;
-            background: radial-gradient(circle, var(--primary), transparent);
-            animation: float 15s infinite linear;
-        }
-
-        .bg-circle:nth-child(1) { width: 300px; height: 300px; top: 10%; left: 5%; }
-        .bg-circle:nth-child(2) { width: 200px; height: 200px; top: 60%; left: 80%; background: radial-gradient(circle, var(--accent), transparent); animation-delay: 5s; }
-        .bg-circle:nth-child(3) { width: 400px; height: 400px; top: 30%; left: 60%; animation-delay: 10s; }
-
-        @keyframes float {
-            0%,100%{transform:translate(0,0);}
-            25%{transform:translate(10px,-20px);}
-            50%{transform:translate(20px,0);}
-            75%{transform:translate(10px,20px);}
-        }
-
         main {
             width: 100%;
-            max-width: 1300px; /* Pehle 1200 tha - ab aur wide */
+            max-width: 1300px;
             text-align: center;
             display: flex;
             flex-direction: column;
@@ -89,13 +57,13 @@
             border: 1px solid var(--card-border);
             overflow: hidden;
             backdrop-filter: blur(10px);
-            width: 95%; /* screen ke almost full width tak */
+            width: 95%;
             margin: 0 auto;
         }
 
         .player-wrapper {
             position: relative;
-            padding-bottom: 56.25%; /* 16:9 perfect video aspect ratio */
+            padding-bottom: 56.25%; /* 16:9 ratio */
             height: 0;
         }
 
@@ -120,9 +88,7 @@
 
         .section-title {
             font-size: 1.6rem;
-            background: linear-gradient(to right, var(--primary), var(--accent));
-            -webkit-background-clip: text;
-            color: transparent;
+            color: #ffffff;
             margin-bottom: 1.5rem;
         }
 
@@ -140,22 +106,18 @@
             padding: 12px 25px;
             font-weight: 600;
             border-radius: 50px;
-            border: 1px solid var(--card-border);
-            color: white;
-            background: rgba(255,255,255,0.1);
+            border: 1px solid #fff;
+            color: #fff;
+            background: #000;
             cursor: pointer;
             transition: var(--transition);
         }
 
         .share-btn:hover {
-            transform: translateY(-5px);
-            box-shadow: var(--glow);
+            transform: translateY(-4px);
+            background: #fff;
+            color: #000;
         }
-
-        .share-btn.whatsapp:hover { background: #25D366; }
-        .share-btn.telegram:hover { background: #0088cc; }
-        .share-btn.twitter:hover { background: #1DA1F2; }
-        .share-btn.copy:hover { background: var(--success); }
 
         @media (max-width:768px) {
             main { max-width: 100%; }
@@ -165,12 +127,6 @@
     </style>
 </head>
 <body>
-
-    <div class="bg-animation">
-        <div class="bg-circle"></div>
-        <div class="bg-circle"></div>
-        <div class="bg-circle"></div>
-    </div>
 
     <main>
         <section class="player-container" aria-label="Live Sports Stream">
