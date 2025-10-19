@@ -3,222 +3,99 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>TG_@Cricinsider365</title>
+    <title>Button Layout Example</title>
     <style>
+        /* CSS for the container and general look */
         body {
-            font-family: 'Arial', sans-serif;
-            margin: 0;
-            padding: 0;
-            background: #000; /* Pure black */
-            color: #fff;
+            font-family: Arial, sans-serif;
             display: flex;
             flex-direction: column;
             align-items: center;
             justify-content: center;
             min-height: 100vh;
-            text-align: center;
+            background-color: #f0f0f0; /* Light background for contrast */
+            padding: 20px;
         }
 
-        .loading-message {
-            font-size: 18px;
-            font-weight: bold;
-            color: #ffcc00;
-            margin-bottom: 10px;
-            padding: 10px 20px;
-            border-radius: 10px;
-            background: rgba(255, 255, 255, 0.05);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            text-align: center;
-            box-shadow: 0 0 10px #ffcc00, 0 0 20px #ffcc00, 0 0 30px #ffcc00;
-            animation: glow 1.5s infinite alternate;
-        }
-
-        @keyframes glow {
-            0% { box-shadow: 0 0 10px #ffcc00, 0 0 20px #ffcc00; }
-            100% { box-shadow: 0 0 20px #ffcc00, 0 0 30px #ffcc00; }
-        }
-
-        .player-container {
-            width: 95%;
-            max-width: 1200px;
-            margin: 20px auto;
-            box-shadow: 0 6px 25px rgba(255, 255, 255, 0.1);
-            border-radius: 15px;
-            overflow: hidden;
-            background: #000;
-            position: relative;
-        }
-
-        .player-container iframe {
-            border-radius: 15px;
-            width: 100%;
-            height: 100%;
-        }
-
-        .join-telegram-container {
-            margin-top: 20px;
-        }
-
-        .join-telegram-btn {
-            padding: 10px 20px;
-            font-size: 16px;
-            font-weight: bold;
+        /* --- STYLES FOR THE JOIN TELEGRAM BUTTON (Placeholder) --- */
+        .telegram-button {
+            display: block;
+            width: 300px; /* Adjust width as needed */
+            padding: 15px 20px;
+            margin-bottom: 20px; /* Space between the two buttons */
+            background-color: #0088cc; /* Telegram Blue */
             color: white;
-            background-color: #008fd6;
+            text-align: center;
+            text-decoration: none;
             border: none;
             border-radius: 5px;
-            cursor: pointer;
-            box-shadow: 0 4px 15px rgba(255, 255, 255, 0.2);
-            transition: background 0.3s ease;
-        }
-
-        .join-telegram-btn:hover {
-            background-color: #006bb3;
-        }
-
-        /* --- New styles for "Follow us for Updates!" section --- */
-
-        .follow-us-container {
-            margin-top: 30px;
-            background: linear-gradient(135deg, #0f003a, #001a70); /* Dark blue gradient */
-            padding: 25px 30px;
-            border-radius: 15px;
-            box-shadow: 0 8px 30px rgba(0, 0, 0, 0.5);
-            width: 90%;
-            max-width: 600px;
-            border: 1px solid rgba(255, 255, 255, 0.15);
-            /* Add an outer white glow/border similar to the image */
-            box-shadow: 0 0 15px rgba(255, 255, 255, 0.3), 0 8px 30px rgba(0, 0, 0, 0.5);
-        }
-
-        .follow-us-header {
-            font-size: 24px;
+            font-size: 16px;
             font-weight: bold;
-            color: #ffffff;
-            margin-bottom: 20px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+        .telegram-button:hover {
+            background-color: #0077b3;
+        }
+
+        /* --- STYLES FOR THE NEW BUTTON (Matching your image) --- */
+        .important-header {
+            background-color: #000000;
+            color: #ff4d4d;
+            padding: 10px 20px;
+            font-size: 20px;
+            font-weight: bold;
+            margin-bottom: 10px;
+            text-align: center;
+            border-radius: 5px;
+        }
+        
+        .chrome-link-button {
+            display: block;
+            width: 300px; /* Match the width of the Telegram button or adjust */
+            height: 100px; /* Added height for a bigger button */
+            padding: 15px 30px;
+            
+            /* Styles to match the image: Red background, White text, Rounded corners */
+            background-color: #ff0000; /* Bright Red */
+            color: #ffffff; /* White text */
+            text-align: center;
+            text-decoration: none;
+            border: 4px solid #ff0000; /* Solid border to create the rounded outline effect */
+            border-radius: 10px; /* Larger radius for a more prominent pill shape */
+            
+            font-size: 20px;
+            font-weight: bold;
+            cursor: pointer;
+            
+            /* Center the text vertically and horizontally */
             display: flex;
             align-items: center;
             justify-content: center;
+            line-height: 1.3;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
         }
 
-        .megaphone-icon {
-            font-size: 28px;
-            margin-right: 10px;
-            /* Adjust the megaphone icon (using an emoji here) */
-            filter: drop-shadow(0 0 5px rgba(255, 204, 0, 0.7)); 
+        .chrome-link-button:hover {
+            background-color: #cc0000; /* Darker red on hover */
+            border-color: #cc0000;
         }
-
-        .follow-buttons {
-            display: flex;
-            gap: 20px;
-            justify-content: center;
-            flex-wrap: wrap;
-        }
-
-        .social-btn {
-            padding: 12px 25px;
-            font-size: 18px;
-            font-weight: bold;
-            border: none; /* No default border, using background */
-            border-radius: 10px;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            min-width: 160px;
-            color: white; /* Ensure text is white */
-        }
-
-        .social-btn .icon {
-            margin-right: 10px;
-            font-size: 22px;
-        }
-
-        .telegram-btn {
-            background-color: #008fd6; /* Telegram blue */
-            box-shadow: 0 4px 15px rgba(0, 143, 214, 0.4);
-        }
-
-        .telegram-btn:hover {
-            background-color: #006bb3;
-            transform: translateY(-2px);
-            box-shadow: 0 6px 20px rgba(0, 143, 214, 0.6);
-        }
-
-        .instagram-btn {
-            /* Instagram gradient */
-            background: linear-gradient(45deg, #f09433 0%, #e6683c 25%, #dc2743 50%, #cc2366 75%, #bc1888 100%); 
-            box-shadow: 0 4px 15px rgba(220, 39, 67, 0.4);
-        }
-
-        .instagram-btn:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 6px 20px rgba(220, 39, 67, 0.6);
-        }
-
-        /* Responsive adjustments */
-        @media (max-width: 768px) {
-            .follow-us-header {
-                font-size: 20px;
-            }
-            .social-btn {
-                font-size: 16px;
-                padding: 10px 20px;
-                min-width: 140px;
-            }
-            .follow-buttons {
-                flex-direction: column;
-                gap: 15px;
-            }
-            .follow-us-container {
-                padding: 20px;
-            }
-        }
-
+        
     </style>
 </head>
 <body>
 
-    <div class="loading-message">Share The Links With Your Friends</div>
+    <a href="YOUR_TELEGRAM_LINK_HERE" class="telegram-button" target="_blank">
+        JOIN TELEGRAM CHANNEL
+    </a>
 
-    <div class="player-container">
-        <div style="padding:56.25% 0 0 0;position:relative;">
-            <iframe id="contentFrame"
-                src="https://tvgo.neocities.org/APPTV/jspo?id=Star1%20Hindi%20HD"
-                style="position:absolute;top:0;left:0;width:100%;height:100%;"
-                frameborder="0"
-                allow="autoplay; fullscreen; encrypted-media; picture-in-picture"
-                allowfullscreen>
-            </iframe>
-        </div>
+    <div class="important-header">
+        ! IMPORTANT
     </div>
-
-    <div class="join-telegram-container">
-        <button class="join-telegram-btn" onclick="window.open('https://t.me/+IhSW51QysxU3NzY1', '_blank')">
-            Join Telegram Channel
-        </button>
-    </div>
-
-    <div class="follow-us-container">
-        <div class="follow-us-header">
-            <span class="megaphone-icon">📢</span> Follow us for Updates!
-        </div>
-        <div class="follow-buttons">
-            <button class="social-btn telegram-btn" onclick="window.open('https://t.me/YourTelegramChannelLink', '_blank')">
-                <span class="icon">✈️</span> Telegram
-            </button>
-            <button class="social-btn instagram-btn" onclick="window.open('https://www.instagram.com/YourInstagramPageLink', '_blank')">
-                <span class="icon">📸</span> Instagram
-            </button>
-        </div>
-    </div>
-    <script>
-        // The existing pop-up script
-        if (confirm("Join Our Telegram Channel @Cricinsider365") == true) {
-            window.open("https://t.me/+IhSW51QysxU3NzY1", '_blank');
-        }
-    </script>
-
-</body>
+    
+    <button class="chrome-link-button" onclick="alert('Link Copied/Opened!')">
+        Copy Link & Use in Chrome Browser Only
+    </button>
+    
+    </body>
 </html>
