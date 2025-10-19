@@ -1,109 +1,182 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>TG_@Cricinsider365</title>
-    <style>
-        body {
-            font-family: 'Arial', sans-serif;
-            margin: 0;
-            padding: 0;
-            background: #000; /* Pure black */
-            color: #fff;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            min-height: 100vh;
-            text-align: center;
-        }
+<head>  
+  <meta charset="UTF-8">  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">  
+  <title>Shaka Player YouTube Theme</title>
 
-        .loading-message {
-            font-size: 18px;
-            font-weight: bold;
-            color: #ffcc00;
-            margin-bottom: 10px;
-            padding: 10px 20px;
-            border-radius: 10px;
-            background: rgba(255, 255, 255, 0.05);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            text-align: center;
-            box-shadow: 0 0 10px #ffcc00, 0 0 20px #ffcc00, 0 0 30px #ffcc00;
-            animation: glow 1.5s infinite alternate;
-        }
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/shaka-player/4.6.0/shaka-player.ui.min.js"></script>  
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/shaka-player/4.6.0/controls.min.css">  
+  <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons+Sharp">  
 
-        @keyframes glow {
-            0% { box-shadow: 0 0 10px #ffcc00, 0 0 20px #ffcc00; }
-            100% { box-shadow: 0 0 20px #ffcc00, 0 0 30px #ffcc00; }
-        }
-
-        .player-container {
-            width: 95%;
-            max-width: 1200px;
-            margin: 20px auto;
-            box-shadow: 0 6px 25px rgba(255, 255, 255, 0.1);
-            border-radius: 15px;
-            overflow: hidden;
-            background: #000;
-            position: relative;
-        }
-
-        .player-container iframe {
-            border-radius: 15px;
-            width: 100%;
-            height: 100%;
-        }
-
-        .join-telegram-container {
-            margin-top: 20px;
-        }
-
-        .join-telegram-btn {
-            padding: 10px 20px;
-            font-size: 16px;
-            font-weight: bold;
-            color: white;
-            background-color: #008fd6;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
-            box-shadow: 0 4px 15px rgba(255, 255, 255, 0.2);
-            transition: background 0.3s ease;
-        }
-
-        .join-telegram-btn:hover {
-            background-color: #006bb3;
-        }
-    </style>
+  <style>
+    * {margin:0; padding:0; box-sizing:border-box;}
+    html, body {
+      background:#000;
+      height:100vh;
+      width:100vw;
+      overflow:hidden;
+      font-family: system-ui, sans-serif;
+    }
+    .shaka-video-container {
+      position:absolute;
+      inset:0;
+      width:100%;
+      height:100%;
+    }
+    video {
+      width:100%;
+      height:100%;
+      background:#000;
+      object-fit:contain;
+    }
+    #myLogo {
+      width:60px;
+      height:40px;
+      position:absolute;
+      right:5px;
+      top:10px;
+      z-index:2001;
+    }
+    .manual-play-button {
+      position:absolute;
+      top:50%;
+      left:50%;
+      transform:translate(-50%,-50%);
+      background:rgba(0,0,0,0.8);
+      color:white;
+      padding:18px 30px;
+      border-radius:8px;
+      cursor:pointer;
+      font-size:18px;
+      border:2px solid #ff0000;
+      display:none;
+      transition:all 0.3s ease;
+      z-index:2000;
+    }
+    .manual-play-button:hover {
+      background:rgba(255,0,0,0.8);
+      transform:translate(-50%,-50%) scale(1.05);
+    }
+  </style>
 </head>
+
 <body>
+  <div class="shaka-video-container youtube-theme" data-shaka-player-container shaka-controls="true">
+    <video class="shaka-video" poster="https://blogger.googleusercontent.com/img/a/AVvXsEiGqaZeRBZ6Y7yV5ZYSRiNRhBa5q9_EMx7R5TJcHd3XJwwHh2YhNOGt76Y4vEcUIjvIaA7W-Tw1RyMLP-4WZwVHA4mk18zwXl7HdSL5WabprIasDOWJO7jpL0zTQB4p_y7X0Rv0xwe-cJ-GvxofAgeRp2FIiNgB90n_b8Cqw0sAaZqVhJg_fi9UyfSO8KY" playsinline></video>
+    <img id="myLogo" src="https://blogger.googleusercontent.com/img/a/AVvXsEiQ92h-ekVYskxW9qCgLvpQVMpAs4tqUQXnH9nDi37JW5B95V7Cq2Rz_mlGO68vTZmA2H5Qp4p8B0I9EUlW-6W1aVOZgITWN3xyE65Hd6G5G_D6HJFxiuXJaK-wMfYD0PiiUR9EBodkzuPH0-ubAMJQK_3F3rpDMEIJKCxlEzNZucpRzsumlBFXWqinGOw=s885">
+    <div class="manual-play-button" id="manualPlayButton">▶ Click to Play</div>
+  </div>
 
-    <div class="loading-message">Share The Links With Your Friends</div>
+  <script>
+    document.addEventListener('DOMContentLoaded', async () => {
+      const params = new URLSearchParams(window.location.search);
+      const streamUrl = params.get('url');
+      const keyId = params.get('keyId');
+      const key = params.get('key');
 
-    <div class="player-container">
-        <div style="padding:56.25% 0 0 0;position:relative;">
-            <iframe id="contentFrame"
-                src="https://scoobystream.pages.dev/ok?id=hindi"
-                style="position:absolute;top:0;left:0;width:100%;height:100%;"
-                frameborder="0"
-                allow="autoplay; fullscreen; encrypted-media; picture-in-picture"
-                allowfullscreen>
-            </iframe>
-        </div>
-    </div>
+      if (!streamUrl) {
+        alert('No URL provided! Use ?url=yourStream.mpd&keyId=...&key=...');
+        return;
+      }
 
-    <div class="join-telegram-container">
-        <button class="join-telegram-btn" onclick="window.open('https://t.me/+IhSW51QysxU3NzY1', '_blank')">
-            Join Telegram Channel
-        </button>
-    </div>
+      shaka.polyfill.installAll();
+      if (!shaka.Player.isBrowserSupported()) {
+        console.error('Browser not supported');
+        return;
+      }
 
-    <script>
-        if (confirm("Join Our Telegram Channel @Cricinsider365") == true) {
-            window.open("https://t.me/+IhSW51QysxU3NzY1", '_blank');
+      const video = document.querySelector('video');
+      const player = new shaka.Player(video);
+      const container = document.querySelector('.shaka-video-container');
+      const ui = new shaka.ui.Overlay(player, container, video);
+
+      // Controls layout
+      ui.configure({
+        controlPanelElements: [
+          'play_pause', 'time_and_duration', 'mute', 'volume', 'spacer',
+          'captions', 'quality', 'language', 'picture_in_picture',
+          'fullscreen', 'overflow_menu'
+        ]
+      });
+
+      // DRM Config (ClearKey)
+      if (keyId && key) {
+        player.configure({
+          drm: { clearKeys: { [keyId]: key } }
+        });
+      }
+
+      // Networking headers
+      player.getNetworkingEngine().registerRequestFilter((type, request) => {
+        request.headers['Referer'] = 'https://www.jiotv.com/';
+        request.headers['User-Agent'] = "plaYtv/7.1.5 (Linux;Android 13) ExoPlayerLib/2.11.6";
+      });
+
+      // Manual Play Button
+      const manualPlayButton = document.getElementById('manualPlayButton');
+      manualPlayButton.addEventListener('click', async () => {
+        manualPlayButton.style.display = 'none';
+        try {
+          await video.play();
+        } catch (err) {
+          console.error('Manual play failed:', err);
         }
-    </script>
+      });
 
+      // Try to load stream
+      try {
+        await player.load(streamUrl);
+        console.log('Stream loaded:', streamUrl);
+      } catch (err) {
+        console.error('Error loading stream:', err);
+      }
+
+      // Autoplay Logic
+      const tryAutoplay = async () => {
+        try {
+          video.muted = false;
+          await video.play();
+          console.log('Autoplay with sound succeeded');
+        } catch (e1) {
+          console.warn('Autoplay with sound failed:', e1.message);
+          try {
+            video.muted = true;
+            await video.play();
+            console.log('Autoplay muted succeeded');
+          } catch (e2) {
+            console.warn('Autoplay muted failed:', e2.message);
+            manualPlayButton.style.display = 'block';
+          }
+        }
+      };
+
+      await tryAutoplay();
+
+      // Auto fullscreen for mobile
+      video.addEventListener('play', () => {
+        if (!document.fullscreenElement && window.innerWidth <= 768) {
+          container.requestFullscreen().catch(() => {});
+        }
+      }, { once: true });
+
+      // Enable sound on first interaction
+      let soundEnabled = false;
+      const enableSound = () => {
+        if (!soundEnabled && video.muted) {
+          video.muted = false;
+          soundEnabled = true;
+        }
+      };
+      ['click','touchstart','keydown'].forEach(evt =>
+        document.addEventListener(evt, enableSound, { once: true })
+      );
+
+      // Resume playback when tab visible again
+      document.addEventListener('visibilitychange', () => {
+        if (!document.hidden && video.paused) tryAutoplay();
+      });
+    });
+  </script>
 </body>
 </html>
