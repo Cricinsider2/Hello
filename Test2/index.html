@@ -18,61 +18,71 @@ video{width:100%;height:100%;object-fit:contain;background:#000}
 <script>
 const M3U_URL = "https://raw.githubusercontent.com/alex8875/m3u/refs/heads/main/jstar.m3u";
 
+// fetch text, using proxy if GitHub blocks it
 async function fetchText(url){
-  let r = await fetch(url);
-  if(!r.ok){
-    const prox = 'https://api.allorigins.win/get?url='+encodeURIComponent(url);
-    const p = await fetch(prox);
+  try{
+    const r = await fetch(url);
+    if(!r.ok) throw new Error();
+    return await r.text();
+  }catch{
+    const proxy = "https://api.allorigins.win/get?url=" + encodeURIComponent(url);
+    const p = await fetch(proxy);
     const j = await p.json();
     return j.contents;
   }
-  return await r.text();
 }
 
-// very simple parser: grabs the first http(s) line
-function parseM3U(txt){
-  const lines = txt.split(/\r?\n/).map(l=>l.trim()).filter(l=>l && !l.startsWith("#"));
-  return lines[0];
+// parse .m3u: take first non-comment line (the stream URL)
+function parseM3U(text){
+  const lines = text.split(/\r?\n/).map(l=>l.trim()).filter(l=>l && !l.startsWith("#"));
+  const first = lines[0];
+  // check for key/token style | separators
+  const parts = first.split("|");
+  return {
+    url: parts[0],
+    extras: parts.slice(1)
+  };
 }
 
 async function init(){
   const loading = document.getElementById("loading");
   const video = document.getElementById("video");
-
   if(!shaka.Player.isBrowserSupported()){
-    loading.textContent = "Browser not supported";
+    loading.textContent="Browser not supported";
     return;
   }
   shaka.polyfill.installAll();
   const player = new shaka.Player(video);
   new shaka.ui.Overlay(player, document.body, video);
-
-  player.addEventListener('error', e=>{
-    console.error("Shaka error:", e.detail);
-    loading.textContent = "Playback error";
+  player.addEventListener("error",e=>{
+    console.error("Shaka error:",e.detail);
+    loading.textContent="Playback error";
   });
 
   try{
     const txt = await fetchText(M3U_URL);
-    const stream = parseM3U(txt);
-    if(!stream) throw new Error("No stream URL found");
-    await player.load(stream);
+    const {url} = parseM3U(txt);
+    if(!url) throw new Error("No stream URL found in M3U");
+    await player.load(url);
     loading.remove();
 
-    // one-time tap to request fullscreen
+    // one-time tap/click for fullscreen
     const goFull = ()=>{
       if(!document.fullscreenElement){
         document.documentElement.requestFullscreen().catch(()=>{});
       }
       video.play();
       window.removeEventListener("click",goFull);
+      window.removeEventListener("touchstart",goFull);
     };
     window.addEventListener("click",goFull,{once:true});
-  }catch(e){
-    console.error(e);
-    loading.textContent = "Failed: "+e.message;
+    window.addEventListener("touchstart",goFull,{once:true});
+  }catch(err){
+    console.error(err);
+    loading.textContent="Failed: "+err.message;
   }
 }
+
 document.addEventListener("DOMContentLoaded",init);
 </script>
 </body>
