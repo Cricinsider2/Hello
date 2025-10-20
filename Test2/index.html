@@ -1,89 +1,320 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width,initial-scale=1.0">
-<title>Auto M3U Player</title>
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/shaka-player/4.6.0/controls.min.css">
-<script src="https://cdnjs.cloudflare.com/ajax/libs/shaka-player/4.6.0/shaka-player.ui.min.js"></script>
-<style>
-html,body{margin:0;padding:0;height:100%;background:#000}
-video{width:100%;height:100%;object-fit:contain;background:#000}
-.loading{position:fixed;inset:0;display:flex;align-items:center;justify-content:center;color:#fff;background:#000}
-</style>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Star Hindi</title>
+
+  <!-- Shaka Player -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/shaka-player/4.7.11/shaka-player.ui.min.js" crossorigin="anonymous"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/shaka-player/4.7.11/controls.min.css" crossorigin="anonymous" />
+
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      user-select: auto !important;
+      -webkit-user-select: auto !important;
+    }
+
+    html, body {
+      height: 100vh;
+      width: 100vw;
+      overflow: hidden;
+      background: #000;
+      font-family: system-ui, -apple-system, sans-serif;
+    }
+
+    .shaka-video-container {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+    }
+
+    video {
+      width: 100%;
+      height: 100%;
+      background: #000;
+      object-fit: contain;
+    }
+
+    /* Hide spinner */
+    .shaka-spinner-container,
+    .shaka-spinner,
+    .shaka-spinner-svg {
+      display: none !important;
+      visibility: hidden !important;
+      opacity: 0 !important;
+    }
+
+    /* Modal Styling */
+    .modal {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      backdrop-filter: blur(6px);
+      background: rgba(0, 0, 0, 0.4);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      z-index: 9999;
+      animation: fadeIn 0.5s ease;
+    }
+
+    .modal.hidden {
+      display: none !important;
+    }
+
+    .modal-content {
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      border-radius: 20px;
+      padding: 30px 25px;
+      width: 90%;
+      max-width: 400px;
+      text-align: center;
+      color: #f3f4f6;
+      box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4);
+      backdrop-filter: blur(12px);
+      transform: scale(0.95);
+      animation: scaleIn 0.4s ease forwards;
+    }
+
+    .modal-content h2 {
+      font-size: 24px;
+      font-weight: 700;
+      color: #facc15;
+      margin-bottom: 16px;
+    }
+
+    .modal-content p {
+      font-size: 16px;
+      color: #d1d5db;
+      margin-bottom: 24px;
+      line-height: 1.5;
+    }
+
+    .modal-content strong {
+      color: #fff;
+    }
+
+    .modal-content .btn {
+      width: 100%;
+      padding: 12px;
+      font-size: 16px;
+      border: none;
+      border-radius: 12px;
+      margin-bottom: 12px;
+      cursor: pointer;
+      transition: 0.3s;
+      display: inline-block;
+    }
+
+    #joinButton {
+      background: linear-gradient(to right, #3b82f6, #06b6d4);
+      color: #fff;
+      font-weight: 500;
+    }
+
+    #joinButton:hover {
+      background: linear-gradient(to right, #2563eb, #0891b2);
+      transform: scale(1.02);
+    }
+
+    #closeButton {
+      background: rgba(255, 255, 255, 0.1);
+      color: #f3f4f6;
+    }
+
+    #closeButton:hover {
+      background: rgba(255, 255, 255, 0.15);
+      transform: scale(1.02);
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; }
+      to { opacity: 1; }
+    }
+
+    @keyframes scaleIn {
+      to { transform: scale(1); opacity: 1; }
+    }
+
+    /* Chrome Modal */
+    #chromeModal .modal-content {
+      background: rgba(255, 0, 0, 0.1);
+      border: 1px solid rgba(255, 0, 0, 0.3);
+    }
+
+    #chromeModal h2 {
+      color: #f87171;
+    }
+  </style>
 </head>
+
 <body>
-<div class="loading" id="loading">Loading…</div>
-<video id="video" autoplay muted playsinline></video>
-<script>
-const M3U_URL = "https://raw.githubusercontent.com/alex8875/m3u/refs/heads/main/jstar.m3u";
+  <!-- Telegram Modal -->
+  <div id="telegramModal" class="modal hidden" aria-hidden="true">
+    <div class="modal-content">
+      <h2>Join our Telegram</h2>
+      <p>Stay updated with the latest <strong>Live Match Links</strong> and updates. Click below to join our official Telegram channel.</p>
+      <a id="joinLink" href="https://t.me/+e3-eAje291cxNGNl" target="_blank" rel="noopener noreferrer" style="text-decoration:none;display:block">
+        <button id="joinButton" class="btn" type="button">Join Telegram</button>
+      </a>
+      <button id="closeButton" class="btn" type="button">Maybe Later</button>
+    </div>
+  </div>
 
-// fetch text, using proxy if GitHub blocks it
-async function fetchText(url){
-  try{
-    const r = await fetch(url);
-    if(!r.ok) throw new Error();
-    return await r.text();
-  }catch{
-    const proxy = "https://api.allorigins.win/get?url=" + encodeURIComponent(url);
-    const p = await fetch(proxy);
-    const j = await p.json();
-    return j.contents;
-  }
-}
+  <!-- Chrome Modal -->
+  <div id="chromeModal" class="modal hidden">
+    <div class="modal-content">
+      <h2>Please Open in Chrome</h2>
+      <p>This site is optimized for <strong>Google Chrome</strong>. Please open the link in Chrome browser for the best experience.</p>
+    </div>
+  </div>
 
-// parse .m3u: take first non-comment line (the stream URL)
-function parseM3U(text){
-  const lines = text.split(/\r?\n/).map(l=>l.trim()).filter(l=>l && !l.startsWith("#"));
-  const first = lines[0];
-  // check for key/token style | separators
-  const parts = first.split("|");
-  return {
-    url: parts[0],
-    extras: parts.slice(1)
-  };
-}
+  <!-- Video Container -->
+  <div class="shaka-video-container" shaka-controls="true">
+    <video autoplay playsinline preload="metadata" class="shaka-video"></video>
+  </div>
 
-async function init(){
-  const loading = document.getElementById("loading");
-  const video = document.getElementById("video");
-  if(!shaka.Player.isBrowserSupported()){
-    loading.textContent="Browser not supported";
-    return;
-  }
-  shaka.polyfill.installAll();
-  const player = new shaka.Player(video);
-  new shaka.ui.Overlay(player, document.body, video);
-  player.addEventListener("error",e=>{
-    console.error("Shaka error:",e.detail);
-    loading.textContent="Playback error";
-  });
+  <script>
+    document.addEventListener("DOMContentLoaded", async () => {
 
-  try{
-    const txt = await fetchText(M3U_URL);
-    const {url} = parseM3U(txt);
-    if(!url) throw new Error("No stream URL found in M3U");
-    await player.load(url);
-    loading.remove();
-
-    // one-time tap/click for fullscreen
-    const goFull = ()=>{
-      if(!document.fullscreenElement){
-        document.documentElement.requestFullscreen().catch(()=>{});
+      /* ✅ Chrome Check */
+      const isChrome = /Chrome/.test(navigator.userAgent) && /Google Inc/.test(navigator.vendor);
+      if (!isChrome) {
+        const chromeModal = document.getElementById("chromeModal");
+        chromeModal.classList.remove("hidden");
+        chromeModal.setAttribute("aria-hidden", "false");
+        return;
       }
-      video.play();
-      window.removeEventListener("click",goFull);
-      window.removeEventListener("touchstart",goFull);
-    };
-    window.addEventListener("click",goFull,{once:true});
-    window.addEventListener("touchstart",goFull,{once:true});
-  }catch(err){
-    console.error(err);
-    loading.textContent="Failed: "+err.message;
-  }
-}
 
-document.addEventListener("DOMContentLoaded",init);
-</script>
+      /* ✅ HDNEA Cookie Management */
+      const COOKIE_URL = "https://raw.githubusercontent.com/Sarcastic-GOD/m3u-stuff/refs/heads/main/cookie.txt";
+      const COOKIE_REFRESH_INTERVAL = 5 * 60 * 1000; // 5 minutes
+      let cookieHeader = "";
+
+      async function fetchAndUpdateCookie() {
+        try {
+          console.log("Fetching HDNEA...");
+          const res = await fetch(COOKIE_URL + "?t=" + Date.now());
+          if (!res.ok) throw new Error("Failed to fetch cookie: " + res.status);
+          cookieHeader = (await res.text()).trim();
+          console.log("HDNEA updated:", cookieHeader);
+          return cookieHeader;
+        } catch (err) {
+          console.error("Error fetching HDNEA:", err);
+          if (cookieHeader) return cookieHeader;
+          throw err;
+        }
+      }
+
+      setInterval(fetchAndUpdateCookie, COOKIE_REFRESH_INTERVAL);
+
+      /* ✅ Shaka Player Setup */
+      shaka.polyfill.installAll();
+
+      if (!shaka.Player.isBrowserSupported()) {
+        console.error("Browser not supported");
+        return;
+      }
+
+      const video = document.querySelector("video");
+      const player = new shaka.Player(video);
+      const container = document.querySelector(".shaka-video-container");
+      const ui = new shaka.ui.Overlay(player, container, video);
+
+      ui.configure({
+        controlPanelElements: [
+          "play_pause", "time_and_duration", "mute", "volume",
+          "spacer", "language", "captions", "picture_in_picture",
+          "quality", "fullscreen"
+        ],
+        volumeBarColors: {
+          base: "rgba(63,187,1,1)",
+          level: "rgb(255,69,0)"
+        },
+        seekBarColors: {
+          base: "rgb(41,41,163)",
+          buffered: "rgb(35,99,3)",
+          played: "rgba(63,187,1,1)"
+        }
+      });
+
+      const drmConfig = {
+        clearKeys: {
+          "400131994b445d8c8817202248760fda": "2d56cb6f07a75b9aff165d534ae2bfc4"
+        }
+      };
+
+      const streamUrl = "https://jiotvmblive.cdn.jio.com/bpk-tv/Star_Sports_HD1_Hindi_BTS/output/index.mpd";
+
+      try {
+        await fetchAndUpdateCookie();
+      } catch (e) {
+        console.error("Failed to fetch initial cookie:", e);
+      }
+
+      player.configure({
+        drm: drmConfig,
+        streaming: {
+          lowLatencyMode: true,
+          bufferingGoal: 15,
+          rebufferingGoal: 2,
+          bufferBehind: 15,
+          retryParameters: { timeout: 10000, maxAttempts: 5 },
+          segmentRequestTimeout: 8000,
+          useNativeHlsOnSafari: true
+        },
+        manifest: { retryParameters: { timeout: 8000, maxAttempts: 3 } }
+      });
+
+      player.getNetworkingEngine().registerRequestFilter((type, request) => {
+        request.headers["Referer"] = "https://www.jiotv.com/";
+        request.headers["User-Agent"] = "plaYtv/7.1.5 (Linux;Android 13) ExoPlayerLib/2.11.6";
+        request.headers["Cookie"] = cookieHeader;
+
+        if (
+          (type === shaka.net.NetworkingEngine.RequestType.MANIFEST ||
+            type === shaka.net.NetworkingEngine.RequestType.SEGMENT) &&
+          request.uris[0] && !request.uris[0].includes("__hdnea__=")
+        ) {
+          const sep = request.uris[0].includes("?") ? "&" : "?";
+          request.uris[0] += sep + cookieHeader;
+        }
+      });
+
+      try {
+        await player.load(streamUrl);
+        console.log("✅ Player loaded successfully");
+      } catch (err) {
+        console.error("❌ Player load error:", err);
+      }
+
+      /* ✅ Telegram Modal Logic */
+      const modal = document.getElementById("telegramModal");
+      const closeButton = document.getElementById("closeButton");
+      const joinLink = document.getElementById("joinLink");
+
+      function hideModal() {
+        if (!modal.classList.contains("hidden")) {
+          modal.classList.add("hidden");
+          modal.setAttribute("aria-hidden", "true");
+        }
+      }
+
+      closeButton.addEventListener("click", e => { e.preventDefault(); hideModal(); });
+      joinLink.addEventListener("click", hideModal);
+      modal.addEventListener("click", e => { if (e.target === modal) hideModal(); });
+      document.addEventListener("keydown", e => { if (e.key === "Escape") hideModal(); });
+
+      setTimeout(() => hideModal(), 10000);
+    });
+  </script>
 </body>
 </html>
