@@ -29,14 +29,12 @@
     .pip-button {
       width:36px; height:36px; border:none; background:transparent;
       cursor:pointer; display:flex; align-items:center; justify-content:center;
-      filter:invert(1); transition:transform 0.2s;
+      filter:invert(1); transition:transform 0.2s ease;
     }
     .pip-button:hover {transform:scale(1.1);}
-    .pip-icon {
-      width:22px; height:22px;
-    }
+    .pip-icon {width:22px; height:22px;}
 
-    /* Modal */
+    /* Modal Styling */
     .modal {
       position:fixed; inset:0;
       backdrop-filter:blur(6px); background:rgba(0,0,0,0.4);
@@ -131,7 +129,7 @@
     const ui = new shaka.ui.Overlay(player, document.querySelector('.shaka-video-container'), video);
 
     ui.configure({
-      controlPanelElements: ['play_pause','time_and_duration','mute','volume','spacer','fullscreen'],
+      controlPanelElements: ['play_pause','time_and_duration','mute','volume','spacer','picture_in_picture','fullscreen'],
       volumeBarColors: {base:'rgba(63,187,1,1)', level:'rgb(255,69,0)'},
       seekBarColors: {base:'rgb(41,41,163)', buffered:'rgb(35,99,3)', played:'rgba(63,187,1,1)'}
     });
@@ -158,25 +156,27 @@
       console.log("Player loaded successfully");
     } catch (e) { console.error("Error loading stream", e); }
 
-    /*** Add Picture-in-Picture Button ***/
-    const controlsContainer = document.querySelector('.shaka-overflow-menu-button').parentNode;
-    const pipButton = document.createElement('button');
-    pipButton.className = 'pip-button';
-    pipButton.innerHTML = `<svg class="pip-icon" xmlns="http://www.w3.org/2000/svg" fill="white" viewBox="0 0 24 24"><path d="M19 7H5c-1.1 0-2 .9-2 2v8h2V9h14v10H9v2h10c1.1 0 2-.9 2-2V9c0-1.1-.9-2-2-2zm-2 7h-6v3h6v-3z"/></svg>`;
-    pipButton.title = "Picture-in-Picture";
+    /*** Add Picture-in-Picture Button beside Fullscreen ***/
+    const fullscreenBtn = document.querySelector('.shaka-fullscreen-button');
+    if (fullscreenBtn) {
+      const pipButton = document.createElement('button');
+      pipButton.className = 'pip-button';
+      pipButton.innerHTML = `<svg class="pip-icon" xmlns="http://www.w3.org/2000/svg" fill="white" viewBox="0 0 24 24"><path d="M19 7H5c-1.1 0-2 .9-2 2v8h2V9h14v10H9v2h10c1.1 0 2-.9 2-2V9c0-1.1-.9-2-2-2zm-2 7h-6v3h6v-3z"/></svg>`;
+      pipButton.title = "Picture-in-Picture";
 
-    pipButton.onclick = async () => {
-      try {
-        if (document.pictureInPictureElement) {
-          await document.exitPictureInPicture();
-        } else if (document.pictureInPictureEnabled) {
-          await video.requestPictureInPicture();
+      pipButton.onclick = async () => {
+        try {
+          if (document.pictureInPictureElement) {
+            await document.exitPictureInPicture();
+          } else if (document.pictureInPictureEnabled) {
+            await video.requestPictureInPicture();
+          }
+        } catch (err) {
+          console.error('PiP Error:', err);
         }
-      } catch (err) {
-        console.error('PiP Error:', err);
-      }
-    };
-    controlsContainer.appendChild(pipButton);
+      };
+      fullscreenBtn.parentNode.insertBefore(pipButton, fullscreenBtn);
+    }
 
     /*** Telegram Modal Logic ***/
     const modal = document.getElementById('telegramModal');
