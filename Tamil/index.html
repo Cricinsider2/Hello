@@ -126,7 +126,7 @@
     });
 
     player.configure({
-      drm:{clearKeys:{"400131994b445d8c8817202248760fda":"2d56cb6f07a75b9aff165d534ae2bfc4"}},
+      drm:{clearKeys:{"d0d750ebd52b5756aa7fb833f61ceece":"4ae62a20c030c918aad24193c1dda229"}},
       streaming:{lowLatencyMode:true, bufferingGoal:15, rebufferingGoal:2},
     });
 
@@ -143,7 +143,7 @@
     });
 
     try {
-      await player.load("https://jiotvmblive.cdn.jio.com/bpk-tv/Star_Sports_HD1_Hindi_BTS/output/index.mpd");
+      await player.load("https://jiotvmblive.cdn.jio.com/bpk-tv/Star_Sports_1_Tamil_BTS/output/index.mpd");
       console.log("Player loaded successfully");
     } catch (e) { console.error("Error loading stream", e); }
 
