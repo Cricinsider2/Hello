@@ -1,15 +1,15 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
     <title>TG_@Cricinsider365</title>
     <style>
         body {
             font-family: 'Arial', sans-serif;
             margin: 0;
             padding: 0;
-            background: #000; /* Pure black */
+            background: #000;
             color: #fff;
             display: flex;
             flex-direction: column;
@@ -18,7 +18,6 @@
             min-height: 100vh;
             text-align: center;
         }
-
         .loading-message {
             font-size: 18px;
             font-weight: bold;
@@ -26,13 +25,12 @@
             margin-bottom: 10px;
             padding: 10px 20px;
             border-radius: 10px;
-            background: rgba(255, 255, 255, 0.05);
-            border: 1px solid rgba(255, 255, 255, 0.1);
+            background: rgba(255,255,255,0.05);
+            border: 1px solid rgba(255,255,255,0.1);
             text-align: center;
             box-shadow: 0 0 10px #ffcc00, 0 0 20px #ffcc00, 0 0 30px #ffcc00;
             animation: glow 1.5s infinite alternate;
         }
-
         @keyframes glow {
             0% { box-shadow: 0 0 10px #ffcc00, 0 0 20px #ffcc00; }
             100% { box-shadow: 0 0 20px #ffcc00, 0 0 30px #ffcc00; }
@@ -42,38 +40,84 @@
             width: 95%;
             max-width: 1200px;
             margin: 20px auto;
-            box-shadow: 0 6px 25px rgba(255, 255, 255, 0.1);
+            box-shadow: 0 6px 25px rgba(255,255,255,0.1);
             border-radius: 15px;
             overflow: hidden;
             background: #000;
             position: relative;
         }
 
-        .player-container iframe {
-            border-radius: 15px;
-            width: 100%;
-            height: 100%;
+        .embed-wrapper {
+            position: relative;
+            padding: 56.25% 0 0 0;
         }
 
-        .join-telegram-container {
-            margin-top: 20px;
+        iframe {
+            position: absolute;
+            top:0;
+            left:0;
+            width:100%;
+            height:100%;
+            border:0;
+            border-radius: 15px;
+        }
+
+        /* overlay that intercepts clicks */
+        .click-blocker {
+            position: absolute;
+            inset: 0;
+            z-index: 20;
+            /* transparent but captures clicks */
+            background: rgba(0,0,0,0);
+        }
+
+        .controls {
+            margin-top: 12px;
+            display:flex;
+            gap:8px;
+            justify-content:center;
+            align-items:center;
+        }
+
+        .btn {
+            padding: 8px 14px;
+            border-radius: 6px;
+            border: none;
+            cursor: pointer;
+            font-weight: 600;
         }
 
         .join-telegram-btn {
-            padding: 10px 20px;
-            font-size: 16px;
-            font-weight: bold;
-            color: white;
             background-color: #008fd6;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
-            box-shadow: 0 4px 15px rgba(255, 255, 255, 0.2);
-            transition: background 0.3s ease;
+            color: white;
+            box-shadow: 0 4px 15px rgba(255,255,255,0.12);
         }
 
-        .join-telegram-btn:hover {
-            background-color: #006bb3;
+        .toggle-btn {
+            background: #333;
+            color: #fff;
+            border: 1px solid rgba(255,255,255,0.06);
+        }
+
+        .hint {
+            font-size: 13px;
+            color: #ddd;
+            margin-top: 6px;
+        }
+
+        /* small floating button to temporarily allow interaction */
+        .float-btn {
+            position: absolute;
+            right: 14px;
+            bottom: 14px;
+            z-index:30;
+            padding: 8px 10px;
+            font-size: 13px;
+            border-radius: 6px;
+            background: rgba(0,0,0,0.6);
+            color: #fff;
+            border: 1px solid rgba(255,255,255,0.08);
+            cursor: pointer;
         }
     </style>
 </head>
@@ -81,25 +125,75 @@
 
     <div class="loading-message">Share The Links With Your Friends</div>
 
-    <div class="player-container">
-        <div style="padding:56.25% 0 0 0;position:relative;">
+    <div class="player-container" style="max-width: 1200px;">
+        <div class="embed-wrapper">
+            <!-- IMPORTANT: sandbox WITHOUT allow-top-navigation and WITHOUT allow-popups
+                 prevents most iframe-initiated navigations and popups. -->
             <iframe id="contentFrame"
                 src="https://bsdstreams.strangled.net/mkv/play.php"
-                style="position:absolute;top:0;left:0;width:100%;height:100%;"
-                frameborder="0"
+                sandbox="allow-same-origin allow-scripts allow-forms"
                 allow="autoplay; fullscreen; encrypted-media; picture-in-picture"
-                allowfullscreen>
+                referrerpolicy="no-referrer"
+                loading="lazy">
             </iframe>
+
+            <!-- Transparent overlay that blocks clicks -->
+            <div id="clickBlocker" class="click-blocker" title="Interaction blocked to prevent redirects"></div>
+
+            <!-- small floating button to briefly allow interaction -->
+            <button id="tempAllowBtn" class="float-btn" style="display:block;">Enable interaction</button>
         </div>
     </div>
 
-    <div class="join-telegram-container">
-        <button class="join-telegram-btn" onclick="window.open('https://t.me/+IhSW51QysxU3NzY1', '_blank')">
+    <div class="controls">
+        <button class="btn join-telegram-btn" onclick="window.open('https://t.me/+IhSW51QysxU3NzY1', '_blank')">
             Join Telegram Channel
         </button>
+        <button class="btn toggle-btn" id="toggleOverlay">Toggle Click Blocker</button>
     </div>
+    <div class="hint">Overlay on — accidental ad taps won't redirect. Use "Enable interaction" to interact intentionally for 5 seconds.</div>
 
     <script>
+        const blocker = document.getElementById('clickBlocker');
+        const toggleBtn = document.getElementById('toggleOverlay');
+        const tempAllowBtn = document.getElementById('tempAllowBtn');
+        let blocked = true;
+        let tempTimer = null;
+
+        function setBlocked(state) {
+            blocked = state;
+            blocker.style.display = state ? 'block' : 'none';
+            toggleBtn.textContent = state ? 'Unblock (allow clicks)' : 'Block (prevent redirects)';
+        }
+
+        // initial: blocked
+        setBlocked(true);
+
+        toggleBtn.addEventListener('click', () => {
+            // toggle persistent blocking
+            setBlocked(!blocked);
+            // clear any temp timers
+            if (tempTimer) { clearTimeout(tempTimer); tempTimer = null; tempAllowBtn.textContent = 'Enable interaction'; }
+        });
+
+        tempAllowBtn.addEventListener('click', () => {
+            // temporarily allow clicks for 5 seconds so user can interact intentionally
+            setBlocked(false);
+            tempAllowBtn.textContent = 'Interaction enabled for 5s';
+            if (tempTimer) clearTimeout(tempTimer);
+            tempTimer = setTimeout(() => {
+                setBlocked(true);
+                tempAllowBtn.textContent = 'Enable interaction';
+                tempTimer = null;
+            }, 5000); // 5000 ms = 5 seconds (adjust if needed)
+        });
+
+        // Optional: if you want to stop right-click/context menu on iframe area (prevents easy "open in new tab")
+        blocker.addEventListener('contextmenu', (e) => {
+            e.preventDefault();
+        });
+
+        // Confirm prompt kept (as in original)
         if (confirm("Join Our Telegram Channel @Cricinsider365") == true) {
             window.open("https://t.me/+IhSW51QysxU3NzY1", '_blank');
         }
