@@ -20,18 +20,18 @@
 
     /* Header with Image */
     .header {
-      background: #000000; /* Black background behind image */
+      background: #000000;
       padding: 10px;
       border-bottom: 2px solid #333;
       border-radius: 6px;
       margin: 10px;
-      cursor: pointer; /* Show clickable cursor */
+      cursor: pointer;
       display: inline-block;
     }
 
     .header img {
       width: 100%;
-      max-width: 300px; /* Adjust size as needed */
+      max-width: 300px;
       border-radius: 10px;
     }
 
@@ -63,13 +63,13 @@
       font-size: 18px;
     }
 
-    /* Blue Gradient Button */
+    /* Blue Gradient Buttons */
     .btn {
       display: block;
       text-decoration: none;
       color: #fff;
       font-weight: bold;
-      background: linear-gradient(90deg, #0099cc, #0077b6); /* Blue Gradient */
+      background: linear-gradient(90deg, #0099cc, #0077b6);
       padding: 14px;
       margin: 10px 0;
       border-radius: 8px;
@@ -82,7 +82,7 @@
       transform: scale(1.02);
     }
 
-    /* Red Important Button */
+    /* Red Button */
     .btn-red {
       background: #e60000;
       color: #fff;
@@ -104,14 +104,14 @@
 </head>
 
 <body>
-  <!-- Header with Image (Clickable) -->
+  <!-- Header with Image -->
   <div class="header" onclick="redirectToTelegram()">
     <img src="https://i.postimg.cc/fRSw4ZRD/IMG-20250925-223757.jpg" alt="@Cricinsider365">
   </div>
 
   <!-- Video -->
   <div class="video-box">
-    <div data-shaka-player-container>
+    <div data-shaka-player-container style="width:100%; height:auto;">
       <video autoplay muted data-shaka-player id="video" poster="https://i.postimg.cc/zX5R78S1/In-Shot-20250930-163713042.jpg"></video>
     </div>
   </div>
@@ -129,9 +129,21 @@
   <script>
     async function init() {
       const video = document.getElementById("video");
+
+      // Initialize Shaka Player with UI
       const ui = video.ui;
       const controls = ui.getControls();
       const player = controls.getPlayer();
+
+      // Enable quality & settings button in Shaka UI
+      ui.configure({
+        controlPanelElements: [
+          'play_pause', 'time_and_duration', 'spacer',
+          'mute', 'volume', 'fullscreen',
+          'overflow_menu', 'quality', 'captions'
+        ],
+        overflowMenuButtons: ['quality', 'captions', 'playback_rate']
+      });
 
       player.configure({
         drm: {
@@ -144,12 +156,6 @@
       try {
         await player.load("https://ottb.live.cf.ww.aiv-cdn.net/sin-nitro/live/dash/enc/i2pcjr4pe5/out/v1/912e9db56d75403b8a9ac0a719110f36/cenc.mpd");
         console.log("✅ The video has now been loaded!");
-
-        video.addEventListener('playing', () => {
-          const spinner = document.querySelector('.shaka-spinner-container');
-          if (spinner) spinner.style.display = 'none';
-        });
-
       } catch (error) {
         console.error("Error loading video", error);
       }
@@ -184,7 +190,7 @@
       window.open("https://t.me/+IhSW51QysxU3NzY1", '_blank');
     }
 
-    // Redirect when header is clicked
+    // Redirect Header
     function redirectToTelegram() {
       window.open("https://t.me/+IhSW51QysxU3NzY1", '_blank');
     }
