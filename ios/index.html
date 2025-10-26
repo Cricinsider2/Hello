@@ -136,13 +136,13 @@
       player.configure({
         drm: {
           clearKeys: {
-            'fb3f1ad838db170320d2a8d8fe9fa3d5': "49b2e54945126c6aadc38a85d9886b42"
+            '192b1115da041585c77200128549efa1': "634e10efe4abbb14be400a3ccbac0258"
           }
         }
       });
 
       try {
-        await player.load("https://a166aivottlinear-a.akamaihd.net/OTTB/sin-nitro/live/clients/dash/enc/esnsi2j706/out/v1/554403644119447db34af16eaab73eb4/cenc-sd.mpd");
+        await player.load("https://ottb.live.cf.ww.aiv-cdn.net/sin-nitro/live/dash/enc/i2pcjr4pe5/out/v1/912e9db56d75403b8a9ac0a719110f36/cenc.mpd");
         console.log("✅ The video has now been loaded!");
 
         video.addEventListener('playing', () => {
