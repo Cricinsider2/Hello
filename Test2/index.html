@@ -11,21 +11,23 @@
 
   <style>
     * {margin:0;padding:0;box-sizing:border-box;}
-    html,body {
+    html, body {
       height:100vh; width:100vw; background:#000; overflow:hidden;
       font-family:system-ui,-apple-system,sans-serif;
     }
     .shaka-video-container {
-      position:absolute; inset:0; width:100%; height:100%;
+      position:fixed; inset:0; width:100%; height:100%;
+      display:flex; justify-content:center; align-items:center;
+      background:#000;
     }
     video {
-      width:100%; height:100%; background:#000; object-fit:contain;
-    }
-    .shaka-spinner-container,.shaka-spinner,.shaka-spinner-svg {
-      display:none !important;
+      width:100%; height:100%; object-fit:contain; background:#000;
     }
 
-    /* PiP Button */
+    /* Hide spinner */
+    .shaka-spinner-container,.shaka-spinner,.shaka-spinner-svg {display:none !important;}
+
+    /* PiP Button styling */
     .pip-button {
       width:36px; height:36px; border:none; background:transparent;
       cursor:pointer; display:flex; align-items:center; justify-content:center;
@@ -125,8 +127,9 @@
     if (!shaka.Player.isBrowserSupported()) { console.error('Browser not supported'); return; }
 
     const video = document.querySelector('video');
+    const container = document.querySelector('.shaka-video-container');
     const player = new shaka.Player(video);
-    const ui = new shaka.ui.Overlay(player, document.querySelector('.shaka-video-container'), video);
+    const ui = new shaka.ui.Overlay(player, container, video);
 
     ui.configure({
       controlPanelElements: ['play_pause','time_and_duration','mute','volume','spacer','picture_in_picture','fullscreen'],
@@ -153,8 +156,8 @@
 
     try {
       await player.load("https://jiotvmblive.cdn.jio.com/bpk-tv/Star_Sports_HD1_Hindi_BTS/output/index.mpd");
-      console.log("Player loaded successfully");
-    } catch (e) { console.error("Error loading stream", e); }
+      console.log("✅ Player loaded successfully");
+    } catch (e) { console.error("❌ Error loading stream", e); }
 
     /*** Add Picture-in-Picture Button beside Fullscreen ***/
     const fullscreenBtn = document.querySelector('.shaka-fullscreen-button');
@@ -171,24 +174,27 @@
           } else if (document.pictureInPictureEnabled) {
             await video.requestPictureInPicture();
           }
-        } catch (err) {
-          console.error('PiP Error:', err);
-        }
+        } catch (err) { console.error('PiP Error:', err); }
       };
       fullscreenBtn.parentNode.insertBefore(pipButton, fullscreenBtn);
     }
+
+    /*** Fix fullscreen shrink issue ***/
+    document.addEventListener('fullscreenchange', () => {
+      setTimeout(() => {
+        container.style.width = '100%';
+        container.style.height = '100vh';
+        video.style.width = '100%';
+        video.style.height = '100%';
+        video.style.objectFit = 'contain';
+      }, 200);
+    });
 
     /*** Telegram Modal Logic ***/
     const modal = document.getElementById('telegramModal');
     document.getElementById('closeButton').onclick = ()=> modal.classList.add('hidden');
     setTimeout(()=> modal.classList.add('hidden'), 10000);
   });
-  </script>
-
-  <script>
-    if (confirm("Join Our Telegram Channel @Cricinsider365") == true) {
-      window.open("https://t.me/+IhSW51QysxU3NzY1", '_blank');
-    }
   </script>
 </body>
 </html>
