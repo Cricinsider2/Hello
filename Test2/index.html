@@ -3,87 +3,189 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>TG_@Cricinsider365</title>
+  <title>Star Hindi</title>
 
   <!-- Shaka Player -->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/shaka-player/4.7.11/shaka-player.ui.min.js" crossorigin="anonymous"></script>
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/shaka-player/4.7.11/controls.min.css" crossorigin="anonymous" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/shaka-player/4.7.11/controls.min.css" crossorigin="anonymous">
 
   <style>
-    * {margin:0;padding:0;box-sizing:border-box;}
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
     html, body {
-      height:100vh; width:100vw; background:#000; overflow:hidden;
-      font-family:system-ui,-apple-system,sans-serif;
+      background: #000;
+      height: 100vh;
+      width: 100vw;
+      overflow: hidden;
+      font-family: system-ui, -apple-system, sans-serif;
+      display: flex;
+      justify-content: center;
+      align-items: center;
     }
+
     .shaka-video-container {
-      position:fixed; inset:0; width:100%; height:100%;
-      display:flex; justify-content:center; align-items:center;
-      background:#000;
+      position: relative;
+      width: 100%;
+      height: 100%;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      background: #000;
     }
+
     video {
-      width:100%; height:100%; object-fit:contain; background:#000;
+      width: 100%;
+      height: 100%;
+      background: #000;
+      object-fit: contain;
     }
 
-    /* Hide spinner */
-    .shaka-spinner-container,.shaka-spinner,.shaka-spinner-svg {display:none !important;}
-
-    /* PiP Button styling */
-    .pip-button {
-      width:36px; height:36px; border:none; background:transparent;
-      cursor:pointer; display:flex; align-items:center; justify-content:center;
-      filter:invert(1); transition:transform 0.2s ease;
+    /* Fix: ensure proper resize after fullscreen exit */
+    video:-webkit-full-screen {
+      width: 100%;
+      height: 100%;
     }
-    .pip-button:hover {transform:scale(1.1);}
-    .pip-icon {width:22px; height:22px;}
 
-    /* Modal Styling */
+    video:fullscreen {
+      width: 100%;
+      height: 100%;
+    }
+
+    .shaka-spinner-container,
+    .shaka-spinner,
+    .shaka-spinner-svg {
+      display: none !important;
+      visibility: hidden !important;
+      opacity: 0 !important;
+    }
+
+    /* Modal Styles */
     .modal {
-      position:fixed; inset:0;
-      backdrop-filter:blur(6px); background:rgba(0,0,0,0.4);
-      display:flex; justify-content:center; align-items:center;
-      z-index:9999; animation:fadeIn .5s ease;
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      backdrop-filter: blur(6px);
+      background: rgba(0, 0, 0, 0.4);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      z-index: 9999;
+      animation: fadeIn 0.5s ease;
     }
-    .modal.hidden {display:none!important;}
+
+    .modal.hidden {
+      display: none !important;
+    }
+
     .modal-content {
-      background:rgba(255,255,255,0.05);
-      border:1px solid rgba(255,255,255,0.1);
-      border-radius:20px; padding:30px 25px;
-      color:#f3f4f6; width:90%; max-width:400px; text-align:center;
-      backdrop-filter:blur(12px); box-shadow:0 8px 32px rgba(0,0,0,0.4);
-      transform:scale(.95); animation:scaleIn .4s ease forwards;
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      border-radius: 20px;
+      padding: 30px 25px;
+      width: 90%;
+      max-width: 400px;
+      text-align: center;
+      color: #f3f4f6;
+      box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4);
+      backdrop-filter: blur(12px);
+      transform: scale(0.95);
+      animation: scaleIn 0.4s ease forwards;
     }
-    .modal-content h2 {font-size:24px;color:#facc15;margin-bottom:16px;}
-    .modal-content p {font-size:16px;color:#d1d5db;margin-bottom:24px;}
+
+    .modal-content h2 {
+      font-size: 24px;
+      font-weight: 700;
+      color: #facc15;
+      margin-bottom: 16px;
+    }
+
+    .modal-content p {
+      font-size: 16px;
+      color: #d1d5db;
+      margin-bottom: 24px;
+      line-height: 1.5;
+    }
+
+    .modal-content strong {
+      color: #fff;
+    }
+
     .modal-content .btn {
-      width:100%; padding:12px; border:none; border-radius:12px;
-      font-size:16px; cursor:pointer; transition:.3s;
+      width: 100%;
+      padding: 12px;
+      font-size: 16px;
+      border: none;
+      border-radius: 12px;
+      margin-bottom: 12px;
+      cursor: pointer;
+      transition: 0.3s;
+      display: inline-block;
     }
+
     #joinButton {
-      background:linear-gradient(to right,#3b82f6,#06b6d4); color:#fff;
+      background: linear-gradient(to right, #3b82f6, #06b6d4);
+      color: #fff;
+      font-weight: 500;
     }
-    #joinButton:hover {transform:scale(1.03);}
+
+    #joinButton:hover {
+      background: linear-gradient(to right, #2563eb, #0891b2);
+      transform: scale(1.02);
+    }
+
     #closeButton {
-      background:rgba(255,255,255,0.1); color:#fff;
+      background: rgba(255, 255, 255, 0.1);
+      color: #f3f4f6;
     }
-    #closeButton:hover {background:rgba(255,255,255,0.2);transform:scale(1.03);}
-    @keyframes fadeIn {from{opacity:0}to{opacity:1}}
-    @keyframes scaleIn {to{transform:scale(1);opacity:1}}
-    #chromeModal .modal-content {background:rgba(255,0,0,0.1);border:1px solid rgba(255,0,0,0.3);}
-    #chromeModal h2 {color:#f87171;}
+
+    #closeButton:hover {
+      background: rgba(255, 255, 255, 0.15);
+      transform: scale(1.02);
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; }
+      to { opacity: 1; }
+    }
+
+    @keyframes scaleIn {
+      to {
+        transform: scale(1);
+        opacity: 1;
+      }
+    }
+
+    /* Chrome Only Modal */
+    #chromeModal .modal-content {
+      background: rgba(255, 0, 0, 0.1);
+      border: 1px solid rgba(255, 0, 0, 0.3);
+    }
+
+    #chromeModal h2 {
+      color: #f87171;
+    }
   </style>
 </head>
 
 <body>
-
-  <!-- Telegram Popup -->
-  <div id="telegramModal" class="modal" role="dialog" aria-modal="true">
-    <div class="modal-content">
-      <h2>Join our Telegram</h2>
-      <p>Stay updated with the latest <strong>@Cricinsider365</strong> updates. Click below to join our official Telegram channel.</p>
-      <a href="https://t.me/+IhSW51QysxU3NzY1" target="_blank" rel="noopener noreferrer" style="text-decoration:none;display:block;">
-        <button id="joinButton" class="btn">Join Telegram</button>
+  <!-- Telegram Popup Modal -->
+  <div id="telegramModal" class="modal hidden" aria-hidden="true" role="dialog" aria-modal="true">
+    <div class="modal-content" role="document" aria-labelledby="modalTitle" aria-describedby="modalDesc">
+      <h2 id="modalTitle">Join our Telegram</h2>
+      <p id="modalDesc">
+        Stay updated with the latest <strong>Live Match Links</strong> and updates.
+        Click below to join our official Telegram channel.
+      </p>
+      <a id="joinLink" href="https://t.me/+e3-eAje291cxNGNl" target="_blank" rel="noopener noreferrer" style="text-decoration:none;display:block">
+        <button id="joinButton" class="btn" type="button">Join Telegram</button>
       </a>
-      <button id="closeButton" class="btn">Maybe Later</button>
+      <button id="closeButton" class="btn" type="button">Maybe Later</button>
     </div>
   </div>
 
@@ -91,110 +193,86 @@
   <div id="chromeModal" class="modal hidden" role="dialog" aria-modal="true">
     <div class="modal-content">
       <h2>Please Open in Chrome</h2>
-      <p>This site works best in <strong>Google Chrome</strong>. Please open this page there.</p>
+      <p>
+        This site is optimized for <strong>Google Chrome</strong>.
+        Please open the link in Chrome browser for the best experience.
+      </p>
     </div>
   </div>
 
-  <!-- Video Player -->
-  <div class="shaka-video-container" data-shaka-player>
-    <video autoplay playsinline muted></video>
+  <!-- Shaka Player Container -->
+  <div class="shaka-video-container" data-shaka-player-container shaka-controls="true">
+    <video autoplay playsinline preload="metadata" poster=""
+      class="shaka-video"></video>
   </div>
 
   <script>
-  document.addEventListener('DOMContentLoaded', async () => {
-    /*** Chrome check ***/
-    const isChrome = /Chrome/.test(navigator.userAgent) && /Google Inc/.test(navigator.vendor);
-    const chromeModal = document.getElementById('chromeModal');
-    if (!isChrome) {
-      chromeModal.classList.remove('hidden');
-      return;
-    }
-
-    /*** Cookie Fetching ***/
-    const COOKIE_URL = 'https://raw.githubusercontent.com/Sarcastic-GOD/m3u-stuff/refs/heads/main/cookie.txt';
-    let cookieHeader = '';
-    async function fetchAndUpdateCookie() {
-      try {
-        const res = await fetch(COOKIE_URL + '?t=' + Date.now());
-        cookieHeader = (await res.text()).trim();
-      } catch (err) { console.error(err); }
-    }
-    await fetchAndUpdateCookie();
-    setInterval(fetchAndUpdateCookie, 300000);
-
-    /*** Shaka Player Setup ***/
-    shaka.polyfill.installAll();
-    if (!shaka.Player.isBrowserSupported()) { console.error('Browser not supported'); return; }
-
-    const video = document.querySelector('video');
-    const container = document.querySelector('.shaka-video-container');
-    const player = new shaka.Player(video);
-    const ui = new shaka.ui.Overlay(player, container, video);
-
-    ui.configure({
-      controlPanelElements: ['play_pause','time_and_duration','mute','volume','spacer','picture_in_picture','fullscreen'],
-      volumeBarColors: {base:'rgba(63,187,1,1)', level:'rgb(255,69,0)'},
-      seekBarColors: {base:'rgb(41,41,163)', buffered:'rgb(35,99,3)', played:'rgba(63,187,1,1)'}
-    });
-
-    player.configure({
-      drm:{clearKeys:{"400131994b445d8c8817202248760fda":"2d56cb6f07a75b9aff165d534ae2bfc4"}},
-      streaming:{lowLatencyMode:true, bufferingGoal:15, rebufferingGoal:2},
-    });
-
-    player.getNetworkingEngine().registerRequestFilter((type, request) => {
-      request.headers['Referer'] = 'https://www.jiotv.com/';
-      request.headers['User-Agent'] = "plaYtv/7.1.5 (Linux;Android 13) ExoPlayerLib/2.11.6";
-      request.headers['Cookie'] = cookieHeader;
-      if ((type === shaka.net.NetworkingEngine.RequestType.MANIFEST ||
-           type === shaka.net.NetworkingEngine.RequestType.SEGMENT) &&
-          request.uris[0] && !request.uris[0].includes('__hdnea__=')) {
-        const sep = request.uris[0].includes('?') ? '&' : '?';
-        request.uris[0] += sep + cookieHeader;
+    document.addEventListener('DOMContentLoaded', async () => {
+      const isChrome = /Chrome/.test(navigator.userAgent) && /Google Inc/.test(navigator.vendor);
+      if (!isChrome) {
+        document.getElementById('chromeModal').classList.remove('hidden');
+        return;
       }
-    });
 
-    try {
-      await player.load("https://jiotvmblive.cdn.jio.com/bpk-tv/Star_Sports_HD1_Hindi_BTS/output/index.mpd");
-      console.log("✅ Player loaded successfully");
-    } catch (e) { console.error("❌ Error loading stream", e); }
+      const COOKIE_URL = 'https://matcheslinks-eaa.pages.dev/cookie.txt';
+      let cookieHeader = '';
 
-    /*** Add Picture-in-Picture Button beside Fullscreen ***/
-    const fullscreenBtn = document.querySelector('.shaka-fullscreen-button');
-    if (fullscreenBtn) {
-      const pipButton = document.createElement('button');
-      pipButton.className = 'pip-button';
-      pipButton.innerHTML = `<svg class="pip-icon" xmlns="http://www.w3.org/2000/svg" fill="white" viewBox="0 0 24 24"><path d="M19 7H5c-1.1 0-2 .9-2 2v8h2V9h14v10H9v2h10c1.1 0 2-.9 2-2V9c0-1.1-.9-2-2-2zm-2 7h-6v3h6v-3z"/></svg>`;
-      pipButton.title = "Picture-in-Picture";
-
-      pipButton.onclick = async () => {
+      async function fetchCookie() {
         try {
-          if (document.pictureInPictureElement) {
-            await document.exitPictureInPicture();
-          } else if (document.pictureInPictureEnabled) {
-            await video.requestPictureInPicture();
+          const res = await fetch(COOKIE_URL + '?t=' + Date.now());
+          cookieHeader = (await res.text()).trim();
+        } catch (e) {
+          console.error('Cookie fetch failed', e);
+        }
+      }
+
+      await fetchCookie();
+
+      shaka.polyfill.installAll();
+      const video = document.querySelector('video');
+      const player = new shaka.Player(video);
+
+      const container = document.querySelector('.shaka-video-container');
+      const ui = new shaka.ui.Overlay(player, container, video);
+
+      ui.configure({
+        controlPanelElements: [
+          'play_pause', 'time_and_duration', 'mute', 'volume', 'spacer',
+          'language', 'captions', 'picture_in_picture', 'quality', 'fullscreen'
+        ],
+      });
+
+      player.configure({
+        drm: {
+          clearKeys: {
+            "400131994b445d8c8817202248760fda": "2d56cb6f07a75b9aff165d534ae2bfc4"
           }
-        } catch (err) { console.error('PiP Error:', err); }
-      };
-      fullscreenBtn.parentNode.insertBefore(pipButton, fullscreenBtn);
-    }
+        }
+      });
 
-    /*** Fix fullscreen shrink issue ***/
-    document.addEventListener('fullscreenchange', () => {
-      setTimeout(() => {
-        container.style.width = '100%';
-        container.style.height = '100vh';
-        video.style.width = '100%';
-        video.style.height = '100%';
-        video.style.objectFit = 'contain';
-      }, 200);
+      player.getNetworkingEngine().registerRequestFilter((type, request) => {
+        request.headers['Referer'] = 'https://www.jiotv.com/';
+        request.headers['Cookie'] = cookieHeader;
+      });
+
+      await player.load("https://jiotvmblive.cdn.jio.com/bpk-tv/Star_Sports_HD1_Hindi_BTS/output/index.mpd");
+
+      // Fix fullscreen exit resize
+      document.addEventListener('fullscreenchange', () => {
+        if (!document.fullscreenElement) {
+          video.style.width = '100%';
+          video.style.height = '100%';
+          container.style.display = 'flex';
+          container.style.justifyContent = 'center';
+          container.style.alignItems = 'center';
+        }
+      });
+
+      // Telegram popup
+      const modal = document.getElementById('telegramModal');
+      setTimeout(() => modal.classList.remove('hidden'), 4000);
+      document.getElementById('closeButton').onclick = () => modal.classList.add('hidden');
     });
-
-    /*** Telegram Modal Logic ***/
-    const modal = document.getElementById('telegramModal');
-    document.getElementById('closeButton').onclick = ()=> modal.classList.add('hidden');
-    setTimeout(()=> modal.classList.add('hidden'), 10000);
-  });
   </script>
 </body>
 </html>
