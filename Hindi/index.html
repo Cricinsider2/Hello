@@ -29,8 +29,6 @@
       inset: 0;
       width: 100%;
       height: 100%;
-      z-index: 1;
-      background: #000;
     }
 
     video {
@@ -40,48 +38,6 @@
       object-fit: contain;
     }
 
-    /* ✅ Fix: Hide duplicate/behind buttons properly */
-    .shaka-controls-container {
-      position: relative !important;
-      z-index: 10 !important;
-      background: transparent !important;
-    }
-
-    .shaka-bottom-controls,
-    .shaka-controls-button-panel,
-    .shaka-overflow-menu,
-    .shaka-volume-bar-container {
-      position: relative !important;
-      z-index: 20 !important;
-    }
-
-    /* Ensure no duplicate shadows or ghosts appear behind */
-    .shaka-controls-container::before,
-    .shaka-controls-container::after {
-      display: none !important;
-      visibility: hidden !important;
-    }
-
-    .shaka-play-button,
-    .shaka-mute-button,
-    .shaka-volume-bar-container,
-    .shaka-seek-bar-container,
-    .shaka-overflow-menu-button,
-    .shaka-fullscreen-button {
-      z-index: 30 !important;
-      position: relative !important;
-    }
-
-    /* Remove hidden ghost layer of controls */
-    .shaka-controls-container[hidden],
-    .shaka-hidden,
-    .shaka-controls-container[aria-hidden="true"] {
-      display: none !important;
-      opacity: 0 !important;
-      visibility: hidden !important;
-    }
-
-    /* Hide spinner */
     .shaka-spinner-container,
     .shaka-spinner,
     .shaka-spinner-svg {
@@ -90,7 +46,7 @@
       opacity: 0 !important;
     }
 
-    /* Modals (unchanged) */
+    /* Modal Styles */
     .modal {
       position: fixed;
       top: 0;
@@ -176,10 +132,19 @@
       transform: scale(1.02);
     }
 
-    @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
-    @keyframes scaleIn { to { transform: scale(1); opacity: 1; } }
+    @keyframes fadeIn {
+      from { opacity: 0; }
+      to { opacity: 1; }
+    }
 
-    /* Chrome modal style */
+    @keyframes scaleIn {
+      to {
+        transform: scale(1);
+        opacity: 1;
+      }
+    }
+
+    /* Chrome Only Modal */
     #chromeModal .modal-content {
       background: rgba(255, 0, 0, 0.1);
       border: 1px solid rgba(255, 0, 0, 0.3);
@@ -192,85 +157,192 @@
 </head>
 
 <body>
-  <!-- Telegram Popup -->
-  <div id="telegramModal" class="modal hidden">
-    <div class="modal-content">
-      <h2>Join our Telegram</h2>
-      <p>Stay updated with the latest <strong>Live Match Links</strong> and updates.</p>
-      <a href="https://t.me/+e3-eAje291cxNGNl" target="_blank" rel="noopener noreferrer" style="text-decoration:none;display:block">
-        <button id="joinButton" class="btn">Join Telegram</button>
+  <!-- Telegram Popup Modal -->
+  <div id="telegramModal" class="modal hidden" aria-hidden="true" role="dialog" aria-modal="true">
+    <div class="modal-content" role="document" aria-labelledby="modalTitle" aria-describedby="modalDesc">
+      <h2 id="modalTitle">Join our Telegram</h2>
+      <p id="modalDesc">
+        Stay updated with the latest <strong>Live Match Links</strong> and updates.
+        Click below to join our official Telegram channel.
+      </p>
+      <a id="joinLink" href="https://t.me/+e3-eAje291cxNGNl" target="_blank" rel="noopener noreferrer" style="text-decoration:none;display:block">
+        <button id="joinButton" class="btn" type="button">Join Telegram</button>
       </a>
-      <button id="closeButton" class="btn">Maybe Later</button>
+      <button id="closeButton" class="btn" type="button">Maybe Later</button>
     </div>
   </div>
 
-  <!-- Chrome Modal -->
-  <div id="chromeModal" class="modal hidden">
+  <!-- Chrome Only Modal -->
+  <div id="chromeModal" class="modal hidden" role="dialog" aria-modal="true">
     <div class="modal-content">
       <h2>Please Open in Chrome</h2>
-      <p>This site is optimized for <strong>Google Chrome</strong>.</p>
+      <p>
+        This site is optimized for <strong>Google Chrome</strong>.
+        Please open the link in Chrome browser for the best experience.
+      </p>
     </div>
   </div>
 
-  <!-- Shaka Player -->
+  <!-- Shaka Player Container -->
   <div class="shaka-video-container" data-shaka-player-container shaka-controls="true">
-    <video autoplay playsinline preload="metadata" class="shaka-video"></video>
+    <video autoplay playsinline preload="metadata" poster=""
+      src="blob:https://matcheslinks-eaa.pages.dev/a0283fcf-d7fc-4c8b-83d9-11382b9ae9c3"
+      class="shaka-video"></video>
   </div>
 
   <script>
     document.addEventListener('DOMContentLoaded', async () => {
+
+      /********** Chrome Check **********/
       const isChrome = /Chrome/.test(navigator.userAgent) && /Google Inc/.test(navigator.vendor);
       if (!isChrome) {
-        document.getElementById('chromeModal').classList.remove('hidden');
-        return;
+        const chromeModal = document.getElementById('chromeModal');
+        chromeModal.classList.remove('hidden');
+        chromeModal.setAttribute('aria-hidden', 'false');
+        return; // block video setup in non-Chrome
       }
 
+      /********** HDNEA Cookie Management **********/
       const COOKIE_URL = 'https://matcheslinks-eaa.pages.dev/cookie.txt';
+      const COOKIE_REFRESH_INTERVAL = 5 * 60 * 1000; // 5 minutes
       let cookieHeader = '';
+
       async function fetchAndUpdateCookie() {
-        const res = await fetch(COOKIE_URL + '?t=' + Date.now());
-        cookieHeader = (await res.text()).trim();
-      }
-      await fetchAndUpdateCookie();
-
-      shaka.polyfill.installAll();
-      const video = document.querySelector('video');
-      const player = new shaka.Player(video);
-      const container = document.querySelector('.shaka-video-container');
-      const ui = new shaka.ui.Overlay(player, container, video);
-
-      ui.configure({
-        controlPanelElements: [
-          'play_pause', 'time_and_duration', 'mute', 'volume',
-          'spacer', 'language', 'captions', 'picture_in_picture',
-          'quality', 'fullscreen'
-        ],
-        volumeBarColors: {
-          base: 'rgba(63, 187, 1, 1)',
-          level: 'rgb(255, 69, 0)'
-        },
-        seekBarColors: {
-          base: 'rgb(41, 41, 163)',
-          buffered: 'rgb(35, 99, 3)',
-          played: 'rgba(63, 187, 1, 1)'
+        try {
+          console.log('Fetching HDNEA from GitHub...');
+          const response = await fetch(COOKIE_URL + '?t=' + Date.now());
+          if (!response.ok) throw new Error(`Failed to fetch cookie: ${response.status}`);
+          const cookieText = await response.text();
+          cookieHeader = cookieText.trim();
+          console.log('HDNEA fetched successfully:', cookieHeader);
+          return cookieHeader;
+        } catch (error) {
+          console.error('Error fetching HDNEA cookie:', error);
+          if (cookieHeader) {
+            console.log('Using previously fetched cookie due to error');
+            return cookieHeader;
+          }
+          throw error;
         }
-      });
+      }
 
-      player.configure({
-        drm: {
+      // Refresh cookie every 5 minutes
+      setInterval(fetchAndUpdateCookie, COOKIE_REFRESH_INTERVAL);
+
+      /********** Shaka Player Setup **********/
+      shaka.polyfill.installAll();
+
+      if (!shaka.Player.isBrowserSupported()) {
+        console.error('Browser not supported');
+      } else {
+        const video = document.querySelector('video');
+        const player = new shaka.Player();
+        await player.attach(video);
+
+        const container = document.querySelector('.shaka-video-container');
+        const ui = new shaka.ui.Overlay(player, container, video);
+
+        ui.configure({
+          controlPanelElements: [
+            'play_pause', 'time_and_duration', 'mute', 'volume',
+            'spacer', 'language', 'captions', 'picture_in_picture',
+            'quality', 'fullscreen'
+          ],
+          volumeBarColors: {
+            base: 'rgba(63, 187, 1, 1)',
+            level: 'rgb(255, 69, 0)'
+          },
+          seekBarColors: {
+            base: 'rgb(41, 41, 163)',
+            buffered: 'rgb(35, 99, 3)',
+            played: 'rgba(63, 187, 1, 1)'
+          }
+        });
+
+        const drmConfig = {
           clearKeys: {
             "400131994b445d8c8817202248760fda": "2d56cb6f07a75b9aff165d534ae2bfc4"
           }
+        };
+
+        const streamUrl = "https://jiotvmblive.cdn.jio.com/bpk-tv/Star_Sports_HD1_Hindi_BTS/output/index.mpd";
+
+        try {
+          await fetchAndUpdateCookie();
+        } catch (error) {
+          console.error('Failed to fetch initial HDNEA cookie:', error);
         }
+
+        player.configure({
+          drm: drmConfig,
+          streaming: {
+            lowLatencyMode: true,
+            bufferingGoal: 15,
+            rebufferingGoal: 2,
+            bufferBehind: 15,
+            retryParameters: { timeout: 10000, maxAttempts: 5, baseDelay: 300, backoffFactor: 1.2 },
+            segmentRequestTimeout: 8000,
+            segmentPrefetchLimit: 2,
+            useNativeHlsOnSafari: true
+          },
+          manifest: { retryParameters: { timeout: 8000, maxAttempts: 3 } }
+        });
+
+        player.getNetworkingEngine().registerRequestFilter((type, request) => {
+          request.headers['Referer'] = 'https://www.jiotv.com/';
+          request.headers['User-Agent'] = "plaYtv/7.1.5 (Linux;Android 13) ExoPlayerLib/2.11.6";
+          request.headers['Cookie'] = cookieHeader;
+
+          if (
+            (type === shaka.net.NetworkingEngine.RequestType.MANIFEST ||
+             type === shaka.net.NetworkingEngine.RequestType.SEGMENT) &&
+            request.uris[0] && !request.uris[0].includes('__hdnea__=')
+          ) {
+            const separator = request.uris[0].includes('?') ? '&' : '?';
+            request.uris[0] += separator + cookieHeader;
+          }
+        });
+
+        try {
+          await player.load(streamUrl);
+          console.log('Player loaded successfully');
+        } catch (error) {
+          console.error('Load error:', error);
+        }
+      }
+
+      /********** Telegram Modal Logic **********/
+      const modal = document.getElementById('telegramModal');
+      const closeButton = document.getElementById('closeButton');
+      const joinLink = document.getElementById('joinLink');
+
+      function hideModal() {
+        if (!modal.classList.contains('hidden')) {
+          modal.classList.add('hidden');
+          modal.setAttribute('aria-hidden', 'true');
+        }
+      }
+
+      closeButton?.addEventListener('click', (e) => {
+        e.preventDefault();
+        hideModal();
       });
 
-      player.getNetworkingEngine().registerRequestFilter((type, request) => {
-        request.headers['Referer'] = 'https://www.jiotv.com/';
-        request.headers['Cookie'] = cookieHeader;
+      joinLink?.addEventListener('click', () => {
+        hideModal();
       });
 
-      await player.load("https://jiotvmblive.cdn.jio.com/bpk-tv/Star_Sports_HD1_Hindi_BTS/output/index.mpd");
-      console.log("✅ Player loaded successfully");
+      modal.addEventListener('click', (e) => {
+        if (e.target === modal) hideModal();
+      });
+
+      document.addEventListener('keydown', (e) => {
+        if ((e.key === 'Escape' || e.key === 'Esc') && !modal.classList.contains('hidden')) hideModal();
+      });
+
+      setTimeout(() => {
+        hideModal();
+      }, 10000);
     });
   </script>
 </body>
