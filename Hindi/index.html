@@ -10,65 +10,75 @@
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/shaka-player/4.7.11/controls.min.css" crossorigin="anonymous">
 
   <style>
-    * { margin: 0; padding: 0; box-sizing: border-box; }
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
 
     html, body {
       background: #000;
-      height: 100%;
-      width: 100%;
+      height: 100vh;
+      width: 100vw;
       overflow: hidden;
       font-family: system-ui, -apple-system, sans-serif;
     }
 
     .shaka-video-container {
-      position: fixed;
+      position: absolute;
       inset: 0;
-      width: 100vw;
-      height: 100vh;
-      background: #000;
-      display: flex;
-      justify-content: center;
-      align-items: center;
+      width: 100%;
+      height: 100%;
       z-index: 1;
+      background: #000;
     }
 
     video {
       width: 100%;
       height: 100%;
-      object-fit: contain;
       background: #000;
-      transition: all 0.3s ease-in-out;
+      object-fit: contain;
     }
 
-    /* Fix fullscreen exit issue */
-    video:-webkit-full-screen,
-    video:-moz-full-screen,
-    video:-ms-fullscreen,
-    video:fullscreen {
-      width: 100vw !important;
-      height: 100vh !important;
-    }
-
-    /* Ensure controls stay aligned and visible */
+    /* ✅ Fix: Hide duplicate/behind buttons properly */
     .shaka-controls-container {
-      z-index: 5 !important;
+      position: relative !important;
+      z-index: 10 !important;
+      background: transparent !important;
     }
 
-    .shaka-bottom-controls {
-      display: flex !important;
-      align-items: center !important;
-      justify-content: space-between !important;
-      flex-wrap: nowrap !important;
-      padding: 6px 10px !important;
+    .shaka-bottom-controls,
+    .shaka-controls-button-panel,
+    .shaka-overflow-menu,
+    .shaka-volume-bar-container {
+      position: relative !important;
+      z-index: 20 !important;
+    }
+
+    /* Ensure no duplicate shadows or ghosts appear behind */
+    .shaka-controls-container::before,
+    .shaka-controls-container::after {
+      display: none !important;
+      visibility: hidden !important;
     }
 
     .shaka-play-button,
+    .shaka-mute-button,
     .shaka-volume-bar-container,
     .shaka-seek-bar-container,
     .shaka-overflow-menu-button,
     .shaka-fullscreen-button {
+      z-index: 30 !important;
       position: relative !important;
-      z-index: 10 !important;
+    }
+
+    /* Remove hidden ghost layer of controls */
+    .shaka-controls-container[hidden],
+    .shaka-hidden,
+    .shaka-controls-container[aria-hidden="true"] {
+      display: none !important;
+      opacity: 0 !important;
+      visibility: hidden !important;
     }
 
     /* Hide spinner */
@@ -76,48 +86,113 @@
     .shaka-spinner,
     .shaka-spinner-svg {
       display: none !important;
+      visibility: hidden !important;
+      opacity: 0 !important;
     }
 
-    /* Modal styles (unchanged) */
+    /* Modals (unchanged) */
     .modal {
       position: fixed;
-      top: 0; left: 0;
-      width: 100vw; height: 100vh;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
       backdrop-filter: blur(6px);
       background: rgba(0, 0, 0, 0.4);
-      display: flex; justify-content: center; align-items: center;
-      z-index: 9999; animation: fadeIn 0.5s ease;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      z-index: 9999;
+      animation: fadeIn 0.5s ease;
     }
 
-    .modal.hidden { display: none !important; }
+    .modal.hidden {
+      display: none !important;
+    }
 
     .modal-content {
       background: rgba(255, 255, 255, 0.05);
       border: 1px solid rgba(255, 255, 255, 0.1);
       border-radius: 20px;
       padding: 30px 25px;
-      width: 90%; max-width: 400px;
+      width: 90%;
+      max-width: 400px;
       text-align: center;
       color: #f3f4f6;
-      box-shadow: 0 8px 32px rgba(0,0,0,0.4);
+      box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4);
       backdrop-filter: blur(12px);
+      transform: scale(0.95);
       animation: scaleIn 0.4s ease forwards;
+    }
+
+    .modal-content h2 {
+      font-size: 24px;
+      font-weight: 700;
+      color: #facc15;
+      margin-bottom: 16px;
+    }
+
+    .modal-content p {
+      font-size: 16px;
+      color: #d1d5db;
+      margin-bottom: 24px;
+      line-height: 1.5;
+    }
+
+    .modal-content strong {
+      color: #fff;
+    }
+
+    .modal-content .btn {
+      width: 100%;
+      padding: 12px;
+      font-size: 16px;
+      border: none;
+      border-radius: 12px;
+      margin-bottom: 12px;
+      cursor: pointer;
+      transition: 0.3s;
+      display: inline-block;
+    }
+
+    #joinButton {
+      background: linear-gradient(to right, #3b82f6, #06b6d4);
+      color: #fff;
+      font-weight: 500;
+    }
+
+    #joinButton:hover {
+      background: linear-gradient(to right, #2563eb, #0891b2);
+      transform: scale(1.02);
+    }
+
+    #closeButton {
+      background: rgba(255, 255, 255, 0.1);
+      color: #f3f4f6;
+    }
+
+    #closeButton:hover {
+      background: rgba(255, 255, 255, 0.15);
+      transform: scale(1.02);
     }
 
     @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
     @keyframes scaleIn { to { transform: scale(1); opacity: 1; } }
 
+    /* Chrome modal style */
     #chromeModal .modal-content {
       background: rgba(255, 0, 0, 0.1);
       border: 1px solid rgba(255, 0, 0, 0.3);
     }
 
-    #chromeModal h2 { color: #f87171; }
+    #chromeModal h2 {
+      color: #f87171;
+    }
   </style>
 </head>
 
 <body>
-  <!-- Telegram Modal -->
+  <!-- Telegram Popup -->
   <div id="telegramModal" class="modal hidden">
     <div class="modal-content">
       <h2>Join our Telegram</h2>
@@ -151,8 +226,6 @@
       }
 
       const COOKIE_URL = 'https://matcheslinks-eaa.pages.dev/cookie.txt';
-      const streamUrl = "https://jiotvmblive.cdn.jio.com/bpk-tv/Star_Sports_HD1_Hindi_BTS/output/index.mpd";
-
       let cookieHeader = '';
       async function fetchAndUpdateCookie() {
         const res = await fetch(COOKIE_URL + '?t=' + Date.now());
@@ -162,8 +235,7 @@
 
       shaka.polyfill.installAll();
       const video = document.querySelector('video');
-      const player = new shaka.Player();
-      await player.attach(video);
+      const player = new shaka.Player(video);
       const container = document.querySelector('.shaka-video-container');
       const ui = new shaka.ui.Overlay(player, container, video);
 
@@ -172,7 +244,16 @@
           'play_pause', 'time_and_duration', 'mute', 'volume',
           'spacer', 'language', 'captions', 'picture_in_picture',
           'quality', 'fullscreen'
-        ]
+        ],
+        volumeBarColors: {
+          base: 'rgba(63, 187, 1, 1)',
+          level: 'rgb(255, 69, 0)'
+        },
+        seekBarColors: {
+          base: 'rgb(41, 41, 163)',
+          buffered: 'rgb(35, 99, 3)',
+          played: 'rgba(63, 187, 1, 1)'
+        }
       });
 
       player.configure({
@@ -188,16 +269,8 @@
         request.headers['Cookie'] = cookieHeader;
       });
 
-      await player.load(streamUrl);
-      console.log("✅ Player Loaded");
-
-      // FIX: resize video after exiting fullscreen
-      document.addEventListener('fullscreenchange', () => {
-        if (!document.fullscreenElement) {
-          video.style.width = '100%';
-          video.style.height = '100%';
-        }
-      });
+      await player.load("https://jiotvmblive.cdn.jio.com/bpk-tv/Star_Sports_HD1_Hindi_BTS/output/index.mpd");
+      console.log("✅ Player loaded successfully");
     });
   </script>
 </body>
