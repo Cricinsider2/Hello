@@ -9,151 +9,194 @@
   <script src="https://cdnjs.cloudflare.com/ajax/libs/shaka-player/4.7.11/shaka-player.ui.min.js" crossorigin="anonymous"></script>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/shaka-player/4.7.11/controls.min.css" crossorigin="anonymous">
 
-  <style>
-    * {
-      margin: 0;
-      padding: 0;
-      box-sizing: border-box;
-    }
+<style>
+  * {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+  }
 
-    html, body {
-      background: #000;
-      height: 100vh;
-      width: 100vw;
-      overflow: hidden;
-      font-family: system-ui, -apple-system, sans-serif;
-    }
+  html, body {
+    background: #000;
+    height: 100vh;
+    width: 100vw;
+    overflow: hidden;
+    font-family: system-ui, -apple-system, sans-serif;
+  }
 
-    .shaka-video-container {
-      position: absolute;
-      inset: 0;
-      width: 100%;
-      height: 100%;
-    }
+  /* ✅ Keeps video centered correctly after fullscreen exit */
+  .shaka-video-container {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background: #000;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 1;
+  }
 
-    video {
-      width: 100%;
-      height: 100%;
-      background: #000;
-      object-fit: contain;
-    }
+  video {
+    width: 100%;
+    height: 100%;
+    background: #000;
+    object-fit: contain;
+  }
 
-    .shaka-spinner-container,
-    .shaka-spinner,
-    .shaka-spinner-svg {
-      display: none !important;
-      visibility: hidden !important;
-      opacity: 0 !important;
-    }
+  /* ✅ Remove duplicate/ghost control buttons */
+  .shaka-controls-container {
+    position: absolute !important;
+    bottom: 0 !important;
+    left: 0 !important;
+    right: 0 !important;
+    z-index: 10 !important;
+    background: transparent !important;
+  }
 
-    /* Modal Styles */
-    .modal {
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100vw;
-      height: 100vh;
-      backdrop-filter: blur(6px);
-      background: rgba(0, 0, 0, 0.4);
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      z-index: 9999;
-      animation: fadeIn 0.5s ease;
-    }
+  .shaka-bottom-controls,
+  .shaka-controls-button-panel,
+  .shaka-overflow-menu,
+  .shaka-volume-bar-container {
+    position: relative !important;
+    z-index: 20 !important;
+  }
 
-    .modal.hidden {
-      display: none !important;
-    }
+  .shaka-controls-container[hidden],
+  .shaka-hidden,
+  .shaka-controls-container[aria-hidden="true"] {
+    display: none !important;
+    opacity: 0 !important;
+    visibility: hidden !important;
+  }
 
-    .modal-content {
-      background: rgba(255, 255, 255, 0.05);
-      border: 1px solid rgba(255, 255, 255, 0.1);
-      border-radius: 20px;
-      padding: 30px 25px;
-      width: 90%;
-      max-width: 400px;
-      text-align: center;
-      color: #f3f4f6;
-      box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4);
-      backdrop-filter: blur(12px);
-      transform: scale(0.95);
-      animation: scaleIn 0.4s ease forwards;
-    }
+  /* ✅ Spinner hide */
+  .shaka-spinner-container,
+  .shaka-spinner,
+  .shaka-spinner-svg {
+    display: none !important;
+    visibility: hidden !important;
+    opacity: 0 !important;
+  }
 
-    .modal-content h2 {
-      font-size: 24px;
-      font-weight: 700;
-      color: #facc15;
-      margin-bottom: 16px;
-    }
+  /* ✅ Control buttons always on top */
+  .shaka-play-button,
+  .shaka-mute-button,
+  .shaka-volume-bar-container,
+  .shaka-seek-bar-container,
+  .shaka-overflow-menu-button,
+  .shaka-fullscreen-button {
+    z-index: 25 !important;
+    position: relative !important;
+  }
 
-    .modal-content p {
-      font-size: 16px;
-      color: #d1d5db;
-      margin-bottom: 24px;
-      line-height: 1.5;
-    }
+  /* ✅ Fix fullscreen exit — restore size & center */
+  video:-webkit-full-screen,
+  video:fullscreen {
+    object-fit: contain !important;
+    width: 100vw !important;
+    height: 100vh !important;
+  }
 
-    .modal-content strong {
-      color: #fff;
-    }
+  /* ✅ Modal Styles (unchanged from your original) */
+  .modal {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    backdrop-filter: blur(6px);
+    background: rgba(0, 0, 0, 0.4);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 9999;
+    animation: fadeIn 0.5s ease;
+  }
 
-    .modal-content .btn {
-      width: 100%;
-      padding: 12px;
-      font-size: 16px;
-      border: none;
-      border-radius: 12px;
-      margin-bottom: 12px;
-      cursor: pointer;
-      transition: 0.3s;
-      display: inline-block;
-    }
+  .modal.hidden {
+    display: none !important;
+  }
 
-    #joinButton {
-      background: linear-gradient(to right, #3b82f6, #06b6d4);
-      color: #fff;
-      font-weight: 500;
-    }
+  .modal-content {
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 20px;
+    padding: 30px 25px;
+    width: 90%;
+    max-width: 400px;
+    text-align: center;
+    color: #f3f4f6;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4);
+    backdrop-filter: blur(12px);
+    transform: scale(0.95);
+    animation: scaleIn 0.4s ease forwards;
+  }
 
-    #joinButton:hover {
-      background: linear-gradient(to right, #2563eb, #0891b2);
-      transform: scale(1.02);
-    }
+  .modal-content h2 {
+    font-size: 24px;
+    font-weight: 700;
+    color: #facc15;
+    margin-bottom: 16px;
+  }
 
-    #closeButton {
-      background: rgba(255, 255, 255, 0.1);
-      color: #f3f4f6;
-    }
+  .modal-content p {
+    font-size: 16px;
+    color: #d1d5db;
+    margin-bottom: 24px;
+    line-height: 1.5;
+  }
 
-    #closeButton:hover {
-      background: rgba(255, 255, 255, 0.15);
-      transform: scale(1.02);
-    }
+  .modal-content strong {
+    color: #fff;
+  }
 
-    @keyframes fadeIn {
-      from { opacity: 0; }
-      to { opacity: 1; }
-    }
+  .modal-content .btn {
+    width: 100%;
+    padding: 12px;
+    font-size: 16px;
+    border: none;
+    border-radius: 12px;
+    margin-bottom: 12px;
+    cursor: pointer;
+    transition: 0.3s;
+    display: inline-block;
+  }
 
-    @keyframes scaleIn {
-      to {
-        transform: scale(1);
-        opacity: 1;
-      }
-    }
+  #joinButton {
+    background: linear-gradient(to right, #3b82f6, #06b6d4);
+    color: #fff;
+    font-weight: 500;
+  }
 
-    /* Chrome Only Modal */
-    #chromeModal .modal-content {
-      background: rgba(255, 0, 0, 0.1);
-      border: 1px solid rgba(255, 0, 0, 0.3);
-    }
+  #joinButton:hover {
+    background: linear-gradient(to right, #2563eb, #0891b2);
+    transform: scale(1.02);
+  }
 
-    #chromeModal h2 {
-      color: #f87171;
-    }
-  </style>
+  #closeButton {
+    background: rgba(255, 255, 255, 0.1);
+    color: #f3f4f6;
+  }
+
+  #closeButton:hover {
+    background: rgba(255, 255, 255, 0.15);
+    transform: scale(1.02);
+  }
+
+  @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+  @keyframes scaleIn { to { transform: scale(1); opacity: 1; } }
+
+  #chromeModal .modal-content {
+    background: rgba(255, 0, 0, 0.1);
+    border: 1px solid rgba(255, 0, 0, 0.3);
+  }
+
+  #chromeModal h2 {
+    color: #f87171;
+  }
+</style>
 </head>
 
 <body>
