@@ -10,339 +10,194 @@
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/shaka-player/4.7.11/controls.min.css" crossorigin="anonymous">
 
   <style>
-    * {
-      margin: 0;
-      padding: 0;
-      box-sizing: border-box;
-    }
+    * { margin: 0; padding: 0; box-sizing: border-box; }
 
     html, body {
       background: #000;
-      height: 100vh;
-      width: 100vw;
+      height: 100%;
+      width: 100%;
       overflow: hidden;
       font-family: system-ui, -apple-system, sans-serif;
     }
 
     .shaka-video-container {
-      position: absolute;
+      position: fixed;
       inset: 0;
-      width: 100%;
-      height: 100%;
+      width: 100vw;
+      height: 100vh;
+      background: #000;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      z-index: 1;
     }
 
     video {
       width: 100%;
       height: 100%;
-      background: #000;
       object-fit: contain;
+      background: #000;
+      transition: all 0.3s ease-in-out;
     }
 
+    /* Fix fullscreen exit issue */
+    video:-webkit-full-screen,
+    video:-moz-full-screen,
+    video:-ms-fullscreen,
+    video:fullscreen {
+      width: 100vw !important;
+      height: 100vh !important;
+    }
+
+    /* Ensure controls stay aligned and visible */
+    .shaka-controls-container {
+      z-index: 5 !important;
+    }
+
+    .shaka-bottom-controls {
+      display: flex !important;
+      align-items: center !important;
+      justify-content: space-between !important;
+      flex-wrap: nowrap !important;
+      padding: 6px 10px !important;
+    }
+
+    .shaka-play-button,
+    .shaka-volume-bar-container,
+    .shaka-seek-bar-container,
+    .shaka-overflow-menu-button,
+    .shaka-fullscreen-button {
+      position: relative !important;
+      z-index: 10 !important;
+    }
+
+    /* Hide spinner */
     .shaka-spinner-container,
     .shaka-spinner,
     .shaka-spinner-svg {
       display: none !important;
-      visibility: hidden !important;
-      opacity: 0 !important;
     }
 
-    /* Modal Styles */
+    /* Modal styles (unchanged) */
     .modal {
       position: fixed;
-      top: 0;
-      left: 0;
-      width: 100vw;
-      height: 100vh;
+      top: 0; left: 0;
+      width: 100vw; height: 100vh;
       backdrop-filter: blur(6px);
       background: rgba(0, 0, 0, 0.4);
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      z-index: 9999;
-      animation: fadeIn 0.5s ease;
+      display: flex; justify-content: center; align-items: center;
+      z-index: 9999; animation: fadeIn 0.5s ease;
     }
 
-    .modal.hidden {
-      display: none !important;
-    }
+    .modal.hidden { display: none !important; }
 
     .modal-content {
       background: rgba(255, 255, 255, 0.05);
       border: 1px solid rgba(255, 255, 255, 0.1);
       border-radius: 20px;
       padding: 30px 25px;
-      width: 90%;
-      max-width: 400px;
+      width: 90%; max-width: 400px;
       text-align: center;
       color: #f3f4f6;
-      box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4);
+      box-shadow: 0 8px 32px rgba(0,0,0,0.4);
       backdrop-filter: blur(12px);
-      transform: scale(0.95);
       animation: scaleIn 0.4s ease forwards;
     }
 
-    .modal-content h2 {
-      font-size: 24px;
-      font-weight: 700;
-      color: #facc15;
-      margin-bottom: 16px;
-    }
+    @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+    @keyframes scaleIn { to { transform: scale(1); opacity: 1; } }
 
-    .modal-content p {
-      font-size: 16px;
-      color: #d1d5db;
-      margin-bottom: 24px;
-      line-height: 1.5;
-    }
-
-    .modal-content strong {
-      color: #fff;
-    }
-
-    .modal-content .btn {
-      width: 100%;
-      padding: 12px;
-      font-size: 16px;
-      border: none;
-      border-radius: 12px;
-      margin-bottom: 12px;
-      cursor: pointer;
-      transition: 0.3s;
-      display: inline-block;
-    }
-
-    #joinButton {
-      background: linear-gradient(to right, #3b82f6, #06b6d4);
-      color: #fff;
-      font-weight: 500;
-    }
-
-    #joinButton:hover {
-      background: linear-gradient(to right, #2563eb, #0891b2);
-      transform: scale(1.02);
-    }
-
-    #closeButton {
-      background: rgba(255, 255, 255, 0.1);
-      color: #f3f4f6;
-    }
-
-    #closeButton:hover {
-      background: rgba(255, 255, 255, 0.15);
-      transform: scale(1.02);
-    }
-
-    @keyframes fadeIn {
-      from { opacity: 0; }
-      to { opacity: 1; }
-    }
-
-    @keyframes scaleIn {
-      to {
-        transform: scale(1);
-        opacity: 1;
-      }
-    }
-
-    /* Chrome Only Modal */
     #chromeModal .modal-content {
       background: rgba(255, 0, 0, 0.1);
       border: 1px solid rgba(255, 0, 0, 0.3);
     }
 
-    #chromeModal h2 {
-      color: #f87171;
-    }
+    #chromeModal h2 { color: #f87171; }
   </style>
 </head>
 
 <body>
-  <!-- Telegram Popup Modal -->
-  <div id="telegramModal" class="modal hidden" aria-hidden="true" role="dialog" aria-modal="true">
-    <div class="modal-content" role="document" aria-labelledby="modalTitle" aria-describedby="modalDesc">
-      <h2 id="modalTitle">Join our Telegram</h2>
-      <p id="modalDesc">
-        Stay updated with the latest <strong>Live Match Links</strong> and updates.
-        Click below to join our official Telegram channel.
-      </p>
-      <a id="joinLink" href="https://t.me/+e3-eAje291cxNGNl" target="_blank" rel="noopener noreferrer" style="text-decoration:none;display:block">
-        <button id="joinButton" class="btn" type="button">Join Telegram</button>
+  <!-- Telegram Modal -->
+  <div id="telegramModal" class="modal hidden">
+    <div class="modal-content">
+      <h2>Join our Telegram</h2>
+      <p>Stay updated with the latest <strong>Live Match Links</strong> and updates.</p>
+      <a href="https://t.me/+e3-eAje291cxNGNl" target="_blank" rel="noopener noreferrer" style="text-decoration:none;display:block">
+        <button id="joinButton" class="btn">Join Telegram</button>
       </a>
-      <button id="closeButton" class="btn" type="button">Maybe Later</button>
+      <button id="closeButton" class="btn">Maybe Later</button>
     </div>
   </div>
 
-  <!-- Chrome Only Modal -->
-  <div id="chromeModal" class="modal hidden" role="dialog" aria-modal="true">
+  <!-- Chrome Modal -->
+  <div id="chromeModal" class="modal hidden">
     <div class="modal-content">
       <h2>Please Open in Chrome</h2>
-      <p>
-        This site is optimized for <strong>Google Chrome</strong>.
-        Please open the link in Chrome browser for the best experience.
-      </p>
+      <p>This site is optimized for <strong>Google Chrome</strong>.</p>
     </div>
   </div>
 
-  <!-- Shaka Player Container -->
+  <!-- Shaka Player -->
   <div class="shaka-video-container" data-shaka-player-container shaka-controls="true">
-    <video autoplay playsinline preload="metadata" poster=""
-      src="blob:https://matcheslinks-eaa.pages.dev/a0283fcf-d7fc-4c8b-83d9-11382b9ae9c3"
-      class="shaka-video"></video>
+    <video autoplay playsinline preload="metadata" class="shaka-video"></video>
   </div>
 
   <script>
     document.addEventListener('DOMContentLoaded', async () => {
-
-      /********** Chrome Check **********/
       const isChrome = /Chrome/.test(navigator.userAgent) && /Google Inc/.test(navigator.vendor);
       if (!isChrome) {
-        const chromeModal = document.getElementById('chromeModal');
-        chromeModal.classList.remove('hidden');
-        chromeModal.setAttribute('aria-hidden', 'false');
-        return; // block video setup in non-Chrome
+        document.getElementById('chromeModal').classList.remove('hidden');
+        return;
       }
 
-      /********** HDNEA Cookie Management **********/
       const COOKIE_URL = 'https://matcheslinks-eaa.pages.dev/cookie.txt';
-      const COOKIE_REFRESH_INTERVAL = 5 * 60 * 1000; // 5 minutes
+      const streamUrl = "https://jiotvmblive.cdn.jio.com/bpk-tv/Star_Sports_HD1_Hindi_BTS/output/index.mpd";
+
       let cookieHeader = '';
-
       async function fetchAndUpdateCookie() {
-        try {
-          console.log('Fetching HDNEA from GitHub...');
-          const response = await fetch(COOKIE_URL + '?t=' + Date.now());
-          if (!response.ok) throw new Error(`Failed to fetch cookie: ${response.status}`);
-          const cookieText = await response.text();
-          cookieHeader = cookieText.trim();
-          console.log('HDNEA fetched successfully:', cookieHeader);
-          return cookieHeader;
-        } catch (error) {
-          console.error('Error fetching HDNEA cookie:', error);
-          if (cookieHeader) {
-            console.log('Using previously fetched cookie due to error');
-            return cookieHeader;
-          }
-          throw error;
-        }
+        const res = await fetch(COOKIE_URL + '?t=' + Date.now());
+        cookieHeader = (await res.text()).trim();
       }
+      await fetchAndUpdateCookie();
 
-      // Refresh cookie every 5 minutes
-      setInterval(fetchAndUpdateCookie, COOKIE_REFRESH_INTERVAL);
-
-      /********** Shaka Player Setup **********/
       shaka.polyfill.installAll();
+      const video = document.querySelector('video');
+      const player = new shaka.Player();
+      await player.attach(video);
+      const container = document.querySelector('.shaka-video-container');
+      const ui = new shaka.ui.Overlay(player, container, video);
 
-      if (!shaka.Player.isBrowserSupported()) {
-        console.error('Browser not supported');
-      } else {
-        const video = document.querySelector('video');
-        const player = new shaka.Player();
-        await player.attach(video);
+      ui.configure({
+        controlPanelElements: [
+          'play_pause', 'time_and_duration', 'mute', 'volume',
+          'spacer', 'language', 'captions', 'picture_in_picture',
+          'quality', 'fullscreen'
+        ]
+      });
 
-        const container = document.querySelector('.shaka-video-container');
-        const ui = new shaka.ui.Overlay(player, container, video);
-
-        ui.configure({
-          controlPanelElements: [
-            'play_pause', 'time_and_duration', 'mute', 'volume',
-            'spacer', 'language', 'captions', 'picture_in_picture',
-            'quality', 'fullscreen'
-          ],
-          volumeBarColors: {
-            base: 'rgba(63, 187, 1, 1)',
-            level: 'rgb(255, 69, 0)'
-          },
-          seekBarColors: {
-            base: 'rgb(41, 41, 163)',
-            buffered: 'rgb(35, 99, 3)',
-            played: 'rgba(63, 187, 1, 1)'
-          }
-        });
-
-        const drmConfig = {
+      player.configure({
+        drm: {
           clearKeys: {
             "400131994b445d8c8817202248760fda": "2d56cb6f07a75b9aff165d534ae2bfc4"
           }
-        };
-
-        const streamUrl = "https://jiotvmblive.cdn.jio.com/bpk-tv/Star_Sports_HD1_Hindi_BTS/output/index.mpd";
-
-        try {
-          await fetchAndUpdateCookie();
-        } catch (error) {
-          console.error('Failed to fetch initial HDNEA cookie:', error);
         }
+      });
 
-        player.configure({
-          drm: drmConfig,
-          streaming: {
-            lowLatencyMode: true,
-            bufferingGoal: 15,
-            rebufferingGoal: 2,
-            bufferBehind: 15,
-            retryParameters: { timeout: 10000, maxAttempts: 5, baseDelay: 300, backoffFactor: 1.2 },
-            segmentRequestTimeout: 8000,
-            segmentPrefetchLimit: 2,
-            useNativeHlsOnSafari: true
-          },
-          manifest: { retryParameters: { timeout: 8000, maxAttempts: 3 } }
-        });
+      player.getNetworkingEngine().registerRequestFilter((type, request) => {
+        request.headers['Referer'] = 'https://www.jiotv.com/';
+        request.headers['Cookie'] = cookieHeader;
+      });
 
-        player.getNetworkingEngine().registerRequestFilter((type, request) => {
-          request.headers['Referer'] = 'https://www.jiotv.com/';
-          request.headers['User-Agent'] = "plaYtv/7.1.5 (Linux;Android 13) ExoPlayerLib/2.11.6";
-          request.headers['Cookie'] = cookieHeader;
+      await player.load(streamUrl);
+      console.log("✅ Player Loaded");
 
-          if (
-            (type === shaka.net.NetworkingEngine.RequestType.MANIFEST ||
-             type === shaka.net.NetworkingEngine.RequestType.SEGMENT) &&
-            request.uris[0] && !request.uris[0].includes('__hdnea__=')
-          ) {
-            const separator = request.uris[0].includes('?') ? '&' : '?';
-            request.uris[0] += separator + cookieHeader;
-          }
-        });
-
-        try {
-          await player.load(streamUrl);
-          console.log('Player loaded successfully');
-        } catch (error) {
-          console.error('Load error:', error);
+      // FIX: resize video after exiting fullscreen
+      document.addEventListener('fullscreenchange', () => {
+        if (!document.fullscreenElement) {
+          video.style.width = '100%';
+          video.style.height = '100%';
         }
-      }
-
-      /********** Telegram Modal Logic **********/
-      const modal = document.getElementById('telegramModal');
-      const closeButton = document.getElementById('closeButton');
-      const joinLink = document.getElementById('joinLink');
-
-      function hideModal() {
-        if (!modal.classList.contains('hidden')) {
-          modal.classList.add('hidden');
-          modal.setAttribute('aria-hidden', 'true');
-        }
-      }
-
-      closeButton?.addEventListener('click', (e) => {
-        e.preventDefault();
-        hideModal();
       });
-
-      joinLink?.addEventListener('click', () => {
-        hideModal();
-      });
-
-      modal.addEventListener('click', (e) => {
-        if (e.target === modal) hideModal();
-      });
-
-      document.addEventListener('keydown', (e) => {
-        if ((e.key === 'Escape' || e.key === 'Esc') && !modal.classList.contains('hidden')) hideModal();
-      });
-
-      setTimeout(() => {
-        hideModal();
-      }, 10000);
     });
   </script>
 </body>
