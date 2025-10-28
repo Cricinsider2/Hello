@@ -1,100 +1,349 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta http-equiv="X-UA-Compatible" content="IE=edge">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Cricinsider365</title>
-  <script src="https://content.jwplatform.com/libraries/KB5zFt7A.js"></script>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Star Hindi</title>
+
+  <!-- Shaka Player -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/shaka-player/4.7.11/shaka-player.ui.min.js" crossorigin="anonymous"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/shaka-player/4.7.11/controls.min.css" crossorigin="anonymous">
+
   <style>
-    body {
+    * {
       margin: 0;
-      font-family: Arial, sans-serif;
-      background: linear-gradient(to bottom, #000000, #1a1a1a);
-      color: white;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    html, body {
+      background: #000;
       height: 100vh;
+      width: 100vw;
       overflow: hidden;
+      font-family: system-ui, -apple-system, sans-serif;
     }
 
-    #logo {
+    .shaka-video-container {
       position: absolute;
-      top: 80px;
-      left: 50%;
-      transform: translateX(-50%);
-      cursor: pointer;
+      inset: 0;
+      width: 100%;
+      height: 100%;
     }
 
-    #logo img {
-      width: 180px;
-      height: auto;
+    video {
+      width: 100%;
+      height: 100%;
+      background: #000;
+      object-fit: contain;
     }
 
-    #video {
-      width: 90%;
-      max-width: 720px;
-      margin: 60px auto 20px auto;
-      border: 2px solid #1e90ff;
-      border-radius: 10px;
-      overflow: hidden;
-      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.6);
-      transition: border 0.3s;
+    .shaka-spinner-container,
+    .shaka-spinner,
+    .shaka-spinner-svg {
+      display: none !important;
+      visibility: hidden !important;
+      opacity: 0 !important;
     }
 
-    .fullscreen #video {
-      border: none;
-      box-shadow: none;
-    }
-
-    #telegramButton {
+    /* Modal Styles */
+    .modal {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      backdrop-filter: blur(6px);
+      background: rgba(0, 0, 0, 0.4);
       display: flex;
-      align-items: center;
       justify-content: center;
-      width: 250px;
-      height: 50px;
-      background: linear-gradient(90deg, #1e90ff, #001f3f);
-      color: white;
-      font-weight: bold;
+      align-items: center;
+      z-index: 9999;
+      animation: fadeIn 0.5s ease;
+    }
+
+    .modal.hidden {
+      display: none !important;
+    }
+
+    .modal-content {
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      border-radius: 20px;
+      padding: 30px 25px;
+      width: 90%;
+      max-width: 400px;
+      text-align: center;
+      color: #f3f4f6;
+      box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4);
+      backdrop-filter: blur(12px);
+      transform: scale(0.95);
+      animation: scaleIn 0.4s ease forwards;
+    }
+
+    .modal-content h2 {
+      font-size: 24px;
+      font-weight: 700;
+      color: #facc15;
+      margin-bottom: 16px;
+    }
+
+    .modal-content p {
+      font-size: 16px;
+      color: #d1d5db;
+      margin-bottom: 24px;
+      line-height: 1.5;
+    }
+
+    .modal-content strong {
+      color: #fff;
+    }
+
+    .modal-content .btn {
+      width: 100%;
+      padding: 12px;
       font-size: 16px;
       border: none;
-      border-radius: 25px;
-      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.4);
+      border-radius: 12px;
+      margin-bottom: 12px;
       cursor: pointer;
-      overflow: hidden;
-      position: relative;
-      transition: transform 0.3s, box-shadow 0.3s;
+      transition: 0.3s;
+      display: inline-block;
     }
 
-    #telegramButton:hover {
-      transform: scale(1.05);
-      box-shadow: 0 6px 12px rgba(0, 0, 0, 0.6);
-      background: linear-gradient(90deg, #001f3f, #1e90ff);
+    #joinButton {
+      background: linear-gradient(to right, #3b82f6, #06b6d4);
+      color: #fff;
+      font-weight: 500;
+    }
+
+    #joinButton:hover {
+      background: linear-gradient(to right, #2563eb, #0891b2);
+      transform: scale(1.02);
+    }
+
+    #closeButton {
+      background: rgba(255, 255, 255, 0.1);
+      color: #f3f4f6;
+    }
+
+    #closeButton:hover {
+      background: rgba(255, 255, 255, 0.15);
+      transform: scale(1.02);
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; }
+      to { opacity: 1; }
+    }
+
+    @keyframes scaleIn {
+      to {
+        transform: scale(1);
+        opacity: 1;
+      }
+    }
+
+    /* Chrome Only Modal */
+    #chromeModal .modal-content {
+      background: rgba(255, 0, 0, 0.1);
+      border: 1px solid rgba(255, 0, 0, 0.3);
+    }
+
+    #chromeModal h2 {
+      color: #f87171;
     }
   </style>
 </head>
-<body>
 
-  <!-- Logo -->
-  <div id="logo" onclick="redirectToWebsite()">
-    <img src="https://i.postimg.cc/fRSw4ZRD/IMG-20250925-223757.jpg" alt="Logo" />
+<body>
+  <!-- Telegram Popup Modal -->
+  <div id="telegramModal" class="modal hidden" aria-hidden="true" role="dialog" aria-modal="true">
+    <div class="modal-content" role="document" aria-labelledby="modalTitle" aria-describedby="modalDesc">
+      <h2 id="modalTitle">Join our Telegram</h2>
+      <p id="modalDesc">
+        Stay updated with the latest <strong>Live Match Links</strong> and updates.
+        Click below to join our official Telegram channel.
+      </p>
+      <a id="joinLink" href="https://t.me/+e3-eAje291cxNGNl" target="_blank" rel="noopener noreferrer" style="text-decoration:none;display:block">
+        <button id="joinButton" class="btn" type="button">Join Telegram</button>
+      </a>
+      <button id="closeButton" class="btn" type="button">Maybe Later</button>
+    </div>
   </div>
 
-  <!-- Video Player -->
-  <div id="video"></div>
+  <!-- Chrome Only Modal -->
+  <div id="chromeModal" class="modal hidden" role="dialog" aria-modal="true">
+    <div class="modal-content">
+      <h2>Please Open in Chrome</h2>
+      <p>
+        This site is optimized for <strong>Google Chrome</strong>.
+        Please open the link in Chrome browser for the best experience.
+      </p>
+    </div>
+  </div>
 
-  <!-- Telegram Button -->
-  <div id="telegramButton" onclick="redirectToTelegram()">
-    Join Telegram For More Live Links 
+  <!-- Shaka Player Container -->
+  <div class="shaka-video-container" data-shaka-player-container shaka-controls="true">
+    <video autoplay playsinline preload="metadata" poster=""
+      src="blob:https://matcheslinks-eaa.pages.dev/a0283fcf-d7fc-4c8b-83d9-11382b9ae9c3"
+      class="shaka-video"></video>
   </div>
 
   <script>
-   //<!--
-const _0x45bfe4=_0x46ca;(function(_0x5dac83,_0x53187a){const _0x17fbb6=_0x46ca,_0x3beafb=_0x5dac83();while(!![]){try{const _0x5123a6=-parseInt(_0x17fbb6(0x135))/(-0x34d+0x2a2*0xe+-0x218e)*(-parseInt(_0x17fbb6(0x12a))/(-0xd39*-0x1+-0x15af+0x4*0x21e))+parseInt(_0x17fbb6(0x13d))/(-0x22d+0xcda+-0xaaa)*(parseInt(_0x17fbb6(0x14d))/(-0x2263+-0x193e+-0x3ba5*-0x1))+-parseInt(_0x17fbb6(0x12f))/(0x205d+-0x1*0x1613+-0xa45)+-parseInt(_0x17fbb6(0x131))/(-0x1*0x1e7f+-0x1*-0xf3+0x1d92)*(parseInt(_0x17fbb6(0x12e))/(0x43*0x39+0x1*-0x16ed+0x809))+-parseInt(_0x17fbb6(0x145))/(-0x581+-0x11fd*-0x2+-0x1e71)+-parseInt(_0x17fbb6(0x13e))/(-0xe16+-0x1*-0xe95+-0x76)*(parseInt(_0x17fbb6(0x147))/(-0x1385+0x3c4*0x1+-0x1*-0xfcb))+parseInt(_0x17fbb6(0x14f))/(-0x6*0x568+0x22d*0x7+0x1140);if(_0x5123a6===_0x53187a)break;else _0x3beafb['push'](_0x3beafb['shift']());}catch(_0x1b9bf1){_0x3beafb['push'](_0x3beafb['shift']());}}}(_0x2a8b,-0x45259+0x47*-0x450b+0x2293e4));const playerInstance=jwplayer(_0x45bfe4(0x143))[_0x45bfe4(0x148)]({'width':_0x45bfe4(0x136),'aspectratio':_0x45bfe4(0x132),'autostart':!![],'mute':![],'file':_0x45bfe4(0x150)+_0x45bfe4(0x14b)+_0x45bfe4(0x141)+_0x45bfe4(0x12d)+_0x45bfe4(0x13a)+'u8','skin':{'name':_0x45bfe4(0x139)}});playerInstance['on'](_0x45bfe4(0x13f),function(_0x42f65c){const _0x172a3b=_0x45bfe4,_0x3b4b3e={'BCPrL':_0x172a3b(0x13f)};_0x42f65c[_0x172a3b(0x13f)]?document[_0x172a3b(0x130)][_0x172a3b(0x134)][_0x172a3b(0x142)](_0x3b4b3e[_0x172a3b(0x12c)]):document[_0x172a3b(0x130)][_0x172a3b(0x134)][_0x172a3b(0x137)](_0x3b4b3e[_0x172a3b(0x12c)]);});function _0x46ca(_0x6b0ee4,_0x362e89){const _0x6ed48b=_0x2a8b();return _0x46ca=function(_0x3e75ee,_0x64134b){_0x3e75ee=_0x3e75ee-(-0xe1b+-0x2*0x12c8+-0x1*-0x34d2);let _0x1d49ad=_0x6ed48b[_0x3e75ee];return _0x1d49ad;},_0x46ca(_0x6b0ee4,_0x362e89);}function redirectToTelegram(){const _0x4b41ec=_0x45bfe4,_0x4e27be={'grNvI':_0x4b41ec(0x129)+_0x4b41ec(0x149)+_0x4b41ec(0x140)};window[_0x4b41ec(0x128)][_0x4b41ec(0x138)]=_0x4e27be[_0x4b41ec(0x13b)];}function redirectToWebsite(){const _0x2d0d3c=_0x45bfe4,_0xf01599={'rnHzn':_0x2d0d3c(0x129)+_0x2d0d3c(0x149)+_0x2d0d3c(0x140)};window[_0x2d0d3c(0x128)][_0x2d0d3c(0x138)]=_0xf01599[_0x2d0d3c(0x14e)];}window[_0x45bfe4(0x146)]=function(){const _0x5a1586=_0x45bfe4,_0x157c7d={'LSuLm':function(_0x396a00,_0x3c3eee){return _0x396a00(_0x3c3eee);},'gWSgt':_0x5a1586(0x144)+_0x5a1586(0x14c)+_0x5a1586(0x133)+_0x5a1586(0x12b)+'d!','NBclS':function(_0x395660){return _0x395660();}};_0x157c7d[_0x5a1586(0x14a)](confirm,_0x157c7d[_0x5a1586(0x127)])&&_0x157c7d[_0x5a1586(0x13c)](redirectToTelegram);};function _0x2a8b(){const _0x552c38=['1881685VgFCmy','body','246ioJYqv','16:9','annel\x20to\x20s','classList','93TqtVGQ','100%','remove','href','glow','laylist.m3','grNvI','NBclS','12fSaTKc','9DSjMOp','fullscreen','QysxU3NzY1','ive-hls-dv','add','video','Join\x20Our\x20T','1551360BpnwPu','onload','1369250MfBBvE','setup','me/+IhSW51','LSuLm','mble.com/l','elegram\x20Ch','705504XeuPuu','rnHzn','10043462LpTLhS','https://ru','gWSgt','location','https://t.','11354xGlZaq','tay\x20update','BCPrL','r/6ykg6g/p','121457WBcpSW'];_0x2a8b=function(){return _0x552c38;};return _0x2a8b();}
-//-->
+    document.addEventListener('DOMContentLoaded', async () => {
 
+      /********** Chrome Check **********/
+      const isChrome = /Chrome/.test(navigator.userAgent) && /Google Inc/.test(navigator.vendor);
+      if (!isChrome) {
+        const chromeModal = document.getElementById('chromeModal');
+        chromeModal.classList.remove('hidden');
+        chromeModal.setAttribute('aria-hidden', 'false');
+        return; // block video setup in non-Chrome
+      }
+
+      /********** HDNEA Cookie Management **********/
+      const COOKIE_URL = 'https://matcheslinks-eaa.pages.dev/cookie.txt';
+      const COOKIE_REFRESH_INTERVAL = 5 * 60 * 1000; // 5 minutes
+      let cookieHeader = '';
+
+      async function fetchAndUpdateCookie() {
+        try {
+          console.log('Fetching HDNEA from GitHub...');
+          const response = await fetch(COOKIE_URL + '?t=' + Date.now());
+          if (!response.ok) throw new Error(`Failed to fetch cookie: ${response.status}`);
+          const cookieText = await response.text();
+          cookieHeader = cookieText.trim();
+          console.log('HDNEA fetched successfully:', cookieHeader);
+          return cookieHeader;
+        } catch (error) {
+          console.error('Error fetching HDNEA cookie:', error);
+          if (cookieHeader) {
+            console.log('Using previously fetched cookie due to error');
+            return cookieHeader;
+          }
+          throw error;
+        }
+      }
+
+      // Refresh cookie every 5 minutes
+      setInterval(fetchAndUpdateCookie, COOKIE_REFRESH_INTERVAL);
+
+      /********** Shaka Player Setup **********/
+      shaka.polyfill.installAll();
+
+      if (!shaka.Player.isBrowserSupported()) {
+        console.error('Browser not supported');
+      } else {
+        const video = document.querySelector('video');
+        const player = new shaka.Player();
+        await player.attach(video);
+
+        const container = document.querySelector('.shaka-video-container');
+        const ui = new shaka.ui.Overlay(player, container, video);
+
+        ui.configure({
+          controlPanelElements: [
+            'play_pause', 'time_and_duration', 'mute', 'volume',
+            'spacer', 'language', 'captions', 'picture_in_picture',
+            'quality', 'fullscreen'
+          ],
+          volumeBarColors: {
+            base: 'rgba(63, 187, 1, 1)',
+            level: 'rgb(255, 69, 0)'
+          },
+          seekBarColors: {
+            base: 'rgb(41, 41, 163)',
+            buffered: 'rgb(35, 99, 3)',
+            played: 'rgba(63, 187, 1, 1)'
+          }
+        });
+
+        const drmConfig = {
+          clearKeys: {
+            "400131994b445d8c8817202248760fda": "2d56cb6f07a75b9aff165d534ae2bfc4"
+          }
+        };
+
+        const streamUrl = "https://jiotvmblive.cdn.jio.com/bpk-tv/Star_Sports_HD1_Hindi_BTS/output/index.mpd";
+
+        try {
+          await fetchAndUpdateCookie();
+        } catch (error) {
+          console.error('Failed to fetch initial HDNEA cookie:', error);
+        }
+
+        player.configure({
+          drm: drmConfig,
+          streaming: {
+            lowLatencyMode: true,
+            bufferingGoal: 15,
+            rebufferingGoal: 2,
+            bufferBehind: 15,
+            retryParameters: { timeout: 10000, maxAttempts: 5, baseDelay: 300, backoffFactor: 1.2 },
+            segmentRequestTimeout: 8000,
+            segmentPrefetchLimit: 2,
+            useNativeHlsOnSafari: true
+          },
+          manifest: { retryParameters: { timeout: 8000, maxAttempts: 3 } }
+        });
+
+        player.getNetworkingEngine().registerRequestFilter((type, request) => {
+          request.headers['Referer'] = 'https://www.jiotv.com/';
+          request.headers['User-Agent'] = "plaYtv/7.1.5 (Linux;Android 13) ExoPlayerLib/2.11.6";
+          request.headers['Cookie'] = cookieHeader;
+
+          if (
+            (type === shaka.net.NetworkingEngine.RequestType.MANIFEST ||
+             type === shaka.net.NetworkingEngine.RequestType.SEGMENT) &&
+            request.uris[0] && !request.uris[0].includes('__hdnea__=')
+          ) {
+            const separator = request.uris[0].includes('?') ? '&' : '?';
+            request.uris[0] += separator + cookieHeader;
+          }
+        });
+
+        try {
+          await player.load(streamUrl);
+          console.log('Player loaded successfully');
+        } catch (error) {
+          console.error('Load error:', error);
+        }
+      }
+
+      /********** Telegram Modal Logic **********/
+      const modal = document.getElementById('telegramModal');
+      const closeButton = document.getElementById('closeButton');
+      const joinLink = document.getElementById('joinLink');
+
+      function hideModal() {
+        if (!modal.classList.contains('hidden')) {
+          modal.classList.add('hidden');
+          modal.setAttribute('aria-hidden', 'true');
+        }
+      }
+
+      closeButton?.addEventListener('click', (e) => {
+        e.preventDefault();
+        hideModal();
+      });
+
+      joinLink?.addEventListener('click', () => {
+        hideModal();
+      });
+
+      modal.addEventListener('click', (e) => {
+        if (e.target === modal) hideModal();
+      });
+
+      document.addEventListener('keydown', (e) => {
+        if ((e.key === 'Escape' || e.key === 'Esc') && !modal.classList.contains('hidden')) hideModal();
+      });
+
+      setTimeout(() => {
+        hideModal();
+      }, 10000);
+    });
   </script>
 </body>
 </html>
