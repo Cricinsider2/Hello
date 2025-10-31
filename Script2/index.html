@@ -91,7 +91,7 @@
         player.configure({
             drm: {
                 clearKeys: {
-                    'e31a5a81caff5d07ea2411a571fc2e59': "96c5ef69479732ae734f962748c19729"
+                    '581698bd7d049a4877227553e2902410': "e39e223d3679e533b8144a6241f794ba"
                 }
             }
         });
@@ -115,7 +115,7 @@ window.player = player;
         controls.addEventListener("error", onUIErrorEvent);
 
         try {
-            await player.load("https://live.ll.ww.aiv-cdn.net/OTTB/lhr-nitro/live/clients/dash/enc/i2pcjr4pe5/out/v1/912e9db56d75403b8a9ac0a719110f36/cenc.mpd");
+            await player.load("https://astro-cyan-sigma.vercel.app/5117/default_primary.mpd");
             console.log("The video has now been loaded!");
         } catch (error) {
             onPlayerError(error);
