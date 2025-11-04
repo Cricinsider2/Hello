@@ -25,14 +25,38 @@
       background: linear-gradient(to bottom, #2a0000, #000);
       border-radius: 12px; overflow: hidden;
       box-shadow: 0 0 10px rgba(255, 60, 0, 0.4);
-      transition: 0.3s; cursor: pointer;
+      transition: 0.3s;
     }
     .card:hover {transform: scale(1.02);}
     .card img {width: 100%; display: block;}
-    .card-content {padding: 15px;}
-    .card-content h2 {font-size: 1.1rem; color: #fff;}
-    .card-content p {font-size: 0.9rem; color: #ccc; margin-top: 5px;}
-    a {text-decoration: none;}
+    .card-content {padding: 15px; text-align: center;}
+    .card-content h2 {font-size: 1.1rem; color: #fff; margin-bottom: 10px;}
+    .card-content p {font-size: 0.9rem; color: #ccc; margin-top: 10px;}
+    .btn-group {
+      display: flex;
+      justify-content: center;
+      gap: 15px;
+      margin-top: 10px;
+    }
+    .btn {
+      padding: 10px 20px;
+      font-weight: 600;
+      border: none;
+      border-radius: 8px;
+      color: #fff;
+      cursor: pointer;
+      transition: 0.3s;
+      text-decoration: none;
+    }
+    .btn-hindi {
+      background: linear-gradient(90deg, #ff3c00, #ff6600);
+      box-shadow: 0 0 10px rgba(255, 60, 0, 0.5);
+    }
+    .btn-english {
+      background: linear-gradient(90deg, #0047ff, #009dff);
+      box-shadow: 0 0 10px rgba(0, 100, 255, 0.4);
+    }
+    .btn:hover {transform: scale(1.05);}
   </style>
 </head>
 <body>
@@ -45,27 +69,33 @@
   </header>
 
   <div class="container">
+
     <!-- Card 1 -->
-    <a href="watch.html">
-      <div class="card">
-        <img src="https://i.ibb.co/7JcLh0V/icc-womens-world-cup-2025.jpg" alt="ICC Womens World Cup 2025">
-        <div class="card-content">
-          <h2>ICC WOMENS WORLD CUP 2025</h2>
-          <p>Click to watch now.</p>
+    <div class="card">
+      <img src="https://i.ibb.co/7JcLh0V/icc-womens-world-cup-2025.jpg" alt="ICC Womens World Cup 2025">
+      <div class="card-content">
+        <h2>ICC WOMEN'S WORLD CUP 2025</h2>
+        <div class="btn-group">
+          <a href="http://insiderlivehd.pages.dev/Willow2" class="btn btn-hindi" target="_blank">Hindi 🎙️</a>
+          <a href="http://insiderlivehd.pages.dev/Willow2" class="btn btn-english" target="_blank">English 🎧</a>
         </div>
+        <p>Watch Live Tap On Button Hindi Or English</p>
       </div>
-    </a>
+    </div>
 
     <!-- Card 2 -->
-    <a href="watch.html">
-      <div class="card">
-        <img src="https://i.ibb.co/8brD9sN/ind-vs-aus-2025.jpg" alt="IND tour of AUS 2025">
-        <div class="card-content">
-          <h2>IND tour of AUS 2025</h2>
-          <p>Click to watch now.</p>
+    <div class="card">
+      <img src="https://i.ibb.co/8brD9sN/ind-vs-aus-2025.jpg" alt="IND tour of AUS 2025">
+      <div class="card-content">
+        <h2>IND tour of AUS 2025</h2>
+        <div class="btn-group">
+          <a href="http://insiderlivehd.pages.dev/Willow2" class="btn btn-hindi" target="_blank">Hindi 🎙️</a>
+          <a href="http://insiderlivehd.pages.dev/Willow2" class="btn btn-english" target="_blank">English 🎧</a>
         </div>
+        <p>Watch Live Tap On Button Hindi Or English</p>
       </div>
-    </a>
+    </div>
+
   </div>
 
 </body>
