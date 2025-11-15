@@ -79,14 +79,6 @@
     @keyframes fadeIn { from { opacity: 0 } to { opacity: 1 } }
     @keyframes scaleIn { to { transform: scale(1); opacity: 1 } }
 
-    /* Chrome Only Modal */
-    #chromeModal .modal-content {
-      background: rgba(255, 0, 0, 0.1);
-      border: 1px solid rgba(255, 0, 0, 0.3);
-    }
-    #chromeModal h2 {
-      color: #f87171;
-    }
   </style>
 </head>
 
@@ -103,7 +95,8 @@
       <button id="closeButton" class="btn" type="button">Maybe Later</button>
     </div>
   </div>
-<!-- Chrome Only Modal -->
+
+  <!-- Chrome Only Modal -->
   <div id="chromeModal" class="modal hidden" role="dialog" aria-modal="true">
     <div class="modal-content">
       <h2>Please Open in Chrome</h2>
@@ -117,151 +110,123 @@
 
   <script>
     document.addEventListener('DOMContentLoaded', async () => {
-      /********** Chrome check **********/
+
+      /********** Chrome Check **********/
       const isChrome = /Chrome/.test(navigator.userAgent) && /Google Inc/.test(navigator.vendor);
       if (!isChrome) {
         const chromeModal = document.getElementById('chromeModal');
         chromeModal.classList.remove('hidden');
         chromeModal.setAttribute('aria-hidden', 'false');
-        return; // block video setup in non-Chrome
+        return;
       }
 
-      /********** HDNEA cookie management **********/
+      /********** Cookie Management **********/
       const COOKIE_URL = 'https://matcheslinks-eaa.pages.dev/cookie.txt';
-      const COOKIE_REFRESH_INTERVAL = 5 * 60 * 1000; // 5 minutes in milliseconds
-      
+      const COOKIE_REFRESH_INTERVAL = 5 * 60 * 1000;
+
       let cookieHeader = '';
-      
-      // Function to fetch and update the HDNEA cookie
+
       async function fetchAndUpdateCookie() {
         try {
-          console.log('Fetching HDNEA from GitHub...');
           const response = await fetch(COOKIE_URL + '?t=' + Date.now());
           if (!response.ok) {
-            throw new Error(Failed to fetch cookie: ${response.status});
+            throw new Error(`Failed to fetch cookie: ${response.status}`);
           }
           const cookieText = await response.text();
           cookieHeader = cookieText.trim();
-          console.log('HDNEA fetched successfully:', cookieHeader);
           return cookieHeader;
         } catch (error) {
-          console.error('Error fetching HDNEA cookie:', error);
-          // If we have a previous cookie, keep using it
-          if (cookieHeader) {
-            console.log('Using previously fetched cookie due to error');
-            return cookieHeader;
-          }
-          throw error;
+          console.error("Cookie fetch error:", error);
+          return cookieHeader;
         }
       }
-      
-      // Set up periodic cookie refresh
+
       setInterval(fetchAndUpdateCookie, COOKIE_REFRESH_INTERVAL);
 
-      /********** Your original Shaka player code **********/
+      /********** Shaka Player **********/
       shaka.polyfill.installAll();
 
       if (!shaka.Player.isBrowserSupported()) {
-        console.error('Browser not supported');
-      } else {
-        const video = document.querySelector('video');
-        const player = new shaka.Player();
-        await player.attach(video);
-
-        const container = document.querySelector('.shaka-video-container');
-        const ui = new shaka.ui.Overlay(player, container, video);
-
-        // Original blue Shaka player configuration
-        ui.configure({
-          controlPanelElements: [
-            'play_pause', 'time_and_duration', 'mute', 'volume',
-            'spacer', 'language', 'captions', 'picture_in_picture',
-            'quality', 'fullscreen'
-          ],
-          volumeBarColors: {
-            base: 'rgba(63, 187, 1, 1)',
-            level: 'rgb(255, 69, 0)'
-          },
-          seekBarColors: {
-            base: 'rgb(41, 41, 163)',
-            buffered: 'rgb(35, 99, 3)',
-            played: 'rgba(63, 187, 1, 1)'
-          }
-        });
-
-        let drmConfig = {
-          clearKeys: {
-            "400131994b445d8c8817202248760fda": "2d56cb6f07a75b9aff165d534ae2bfc4"
-          }
-        };
-        
-        let streamUrl = "https://jiotvmblive.cdn.jio.com/bpk-tv/Star_Sports_HD1_Hindi_BTS/output/index.mpd";
-
-        // Fetch initial cookie before setting up player
-        try {
-          await fetchAndUpdateCookie();
-        } catch (error) {
-          console.error('Failed to fetch initial HDNEA cookie:', error);
-        }
-player.configure({
-          drm: drmConfig,
-          streaming: {
-            lowLatencyMode: true,
-            bufferingGoal: 15,
-            rebufferingGoal: 2,
-            bufferBehind: 15,
-            retryParameters: { timeout: 10000, maxAttempts: 5, baseDelay: 300, backoffFactor: 1.2 },
-            segmentRequestTimeout: 8000,
-            segmentPrefetchLimit: 2,
-            useNativeHlsOnSafari: true
-          },
-          manifest: { retryParameters: { timeout: 8000, maxAttempts: 3 } }
-        });
-
-        player.getNetworkingEngine().registerRequestFilter((type, request) => {
-          request.headers['Referer'] = 'https://www.jiotv.com/';
-          request.headers['User-Agent'] = "plaYtv/7.1.5 (Linux;Android 13) ExoPlayerLib/2.11.6";
-          request.headers['Cookie'] = cookieHeader;
-
-          if (
-            (type === shaka.net.NetworkingEngine.RequestType.MANIFEST 
-             type === shaka.net.NetworkingEngine.RequestType.SEGMENT) &&
-            request.uris[0] && !request.uris[0].includes('__hdnea__=')
-          ) {
-            const separator = request.uris[0].includes('?') ? '&' : '?';
-            request.uris[0] += separator + cookieHeader;
-          }
-        });
-
-        try {
-          await player.load(streamUrl);
-          console.log('Player loaded successfully');
-        } catch (error) {
-          console.error('Load error:', error);
-        }
+        console.error("Browser not supported");
+        return;
       }
 
-      /********** Telegram modal logic **********/
+      const video = document.querySelector('video');
+      const player = new shaka.Player();
+      await player.attach(video);
+
+      const container = document.querySelector('.shaka-video-container');
+      const ui = new shaka.ui.Overlay(player, container, video);
+
+      ui.configure({
+        controlPanelElements: [
+          'play_pause', 'time_and_duration', 'mute', 'volume',
+          'spacer', 'language', 'captions', 'picture_in_picture',
+          'quality', 'fullscreen'
+        ]
+      });
+
+      const drmConfig = {
+        clearKeys: {
+          "400131994b445d8c8817202248760fda": "2d56cb6f07a75b9aff165d534ae2bfc4"
+        }
+      };
+
+      const streamUrl =
+        "https://jiotvmblive.cdn.jio.com/bpk-tv/Star_Sports_HD1_Hindi_BTS/output/index.mpd";
+
+      await fetchAndUpdateCookie();
+
+      player.configure({
+        drm: drmConfig,
+        streaming: {
+          lowLatencyMode: true,
+          bufferingGoal: 15,
+          rebufferingGoal: 2,
+          bufferBehind: 15
+        }
+      });
+
+      player.getNetworkingEngine().registerRequestFilter((type, request) => {
+        request.headers['Referer'] = 'https://www.jiotv.com/';
+        request.headers['User-Agent'] = "plaYtv/7.1.5 (Linux;Android 13)";
+        request.headers['Cookie'] = cookieHeader;
+
+        if (
+          (type === shaka.net.NetworkingEngine.RequestType.MANIFEST ||
+           type === shaka.net.NetworkingEngine.RequestType.SEGMENT) &&
+          request.uris[0] && !request.uris[0].includes('__hdnea__=')
+        ) {
+          const sep = request.uris[0].includes('?') ? '&' : '?';
+          request.uris[0] += sep + cookieHeader;
+        }
+      });
+
+      try {
+        await player.load(streamUrl);
+        console.log("Player loaded successfully");
+      } catch (err) {
+        console.error("Load error:", err);
+      }
+
+      /********** Telegram Modal **********/
       const modal = document.getElementById('telegramModal');
       const closeButton = document.getElementById('closeButton');
       const joinLink = document.getElementById('joinLink');
 
       function hideModal() {
-        if (!modal.classList.contains('hidden')) {
-          modal.classList.add('hidden');
-          modal.setAttribute('aria-hidden', 'true');
-        }
+        modal.classList.add('hidden');
       }
 
-      if (closeButton) {
-        closeButton.addEventListener('click', (e) => { e.preventDefault(); hideModal(); });
-      }
-      if (joinLink) {
-        joinLink.addEventListener('click', () => { hideModal(); });
-      }
+      closeButton.addEventListener('click', hideModal);
+      joinLink.addEventListener('click', hideModal);
       modal.addEventListener('click', (e) => { if (e.target === modal) hideModal(); });
-      document.addEventListener('keydown', (e) => { if ((e.key === 'Escape'  e.key === 'Esc') && !modal.classList.contains('hidden')) hideModal(); });
-      setTimeout(() => { hideModal(); }, 10000);
+
+      document.addEventListener('keydown', (e) => {
+        if ((e.key === "Escape" || e.key === "Esc")) hideModal();
+      });
+
+      setTimeout(hideModal, 10000);
 
     });
   </script>
