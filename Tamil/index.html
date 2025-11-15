@@ -1,3 +1,6 @@
+
+
+
 <!DOCTYPE html>
 <html>
 <head>
@@ -79,6 +82,14 @@
     @keyframes fadeIn { from { opacity: 0 } to { opacity: 1 } }
     @keyframes scaleIn { to { transform: scale(1); opacity: 1 } }
 
+    /* Chrome Only Modal */
+    #chromeModal .modal-content {
+      background: rgba(255, 0, 0, 0.1);
+      border: 1px solid rgba(255, 0, 0, 0.3);
+    }
+    #chromeModal h2 {
+      color: #f87171;
+    }
   </style>
 </head>
 
@@ -110,131 +121,154 @@
 
   <script>
     document.addEventListener('DOMContentLoaded', async () => {
-
-      /********** Chrome Check **********/
+      /********** Chrome check **********/
       const isChrome = /Chrome/.test(navigator.userAgent) && /Google Inc/.test(navigator.vendor);
       if (!isChrome) {
         const chromeModal = document.getElementById('chromeModal');
         chromeModal.classList.remove('hidden');
         chromeModal.setAttribute('aria-hidden', 'false');
-        return;
+        return; // block video setup in non-Chrome
       }
 
-      /********** Cookie Management **********/
+      /********** HDNEA cookie management **********/
       const COOKIE_URL = 'https://matcheslinks-eaa.pages.dev/cookie.txt';
-      const COOKIE_REFRESH_INTERVAL = 5 * 60 * 1000;
-
+      const COOKIE_REFRESH_INTERVAL = 5 * 60 * 1000; // 5 minutes in milliseconds
+      
       let cookieHeader = '';
-
+      
+      // Function to fetch and update the HDNEA cookie
       async function fetchAndUpdateCookie() {
         try {
+          console.log('Fetching HDNEA from GitHub...');
           const response = await fetch(COOKIE_URL + '?t=' + Date.now());
           if (!response.ok) {
             throw new Error(`Failed to fetch cookie: ${response.status}`);
           }
           const cookieText = await response.text();
           cookieHeader = cookieText.trim();
+          console.log('HDNEA fetched successfully:', cookieHeader);
           return cookieHeader;
         } catch (error) {
-          console.error("Cookie fetch error:", error);
-          return cookieHeader;
+          console.error('Error fetching HDNEA cookie:', error);
+          // If we have a previous cookie, keep using it
+          if (cookieHeader) {
+            console.log('Using previously fetched cookie due to error');
+            return cookieHeader;
+          }
+          throw error;
         }
       }
-
+      
+      // Set up periodic cookie refresh
       setInterval(fetchAndUpdateCookie, COOKIE_REFRESH_INTERVAL);
 
-      /********** Shaka Player **********/
+      /********** Your original Shaka player code **********/
       shaka.polyfill.installAll();
 
       if (!shaka.Player.isBrowserSupported()) {
-        console.error("Browser not supported");
-        return;
+        console.error('Browser not supported');
+      } else {
+        const video = document.querySelector('video');
+        const player = new shaka.Player();
+        await player.attach(video);
+
+        const container = document.querySelector('.shaka-video-container');
+        const ui = new shaka.ui.Overlay(player, container, video);
+
+        // Original blue Shaka player configuration
+        ui.configure({
+          controlPanelElements: [
+            'play_pause', 'time_and_duration', 'mute', 'volume',
+            'spacer', 'language', 'captions', 'picture_in_picture',
+            'quality', 'fullscreen'
+          ],
+          volumeBarColors: {
+            base: 'rgba(63, 187, 1, 1)',
+            level: 'rgb(255, 69, 0)'
+          },
+          seekBarColors: {
+            base: 'rgb(41, 41, 163)',
+            buffered: 'rgb(35, 99, 3)',
+            played: 'rgba(63, 187, 1, 1)'
+          }
+        });
+
+        let drmConfig = {
+          clearKeys: {
+            "400131994b445d8c8817202248760fda": "2d56cb6f07a75b9aff165d534ae2bfc4"
+          }
+        };
+        
+        let streamUrl = "https://jiotvmblive.cdn.jio.com/bpk-tv/Star_Sports_HD1_Hindi_BTS/output/index.mpd";
+
+        // Fetch initial cookie before setting up player
+        try {
+          await fetchAndUpdateCookie();
+        } catch (error) {
+          console.error('Failed to fetch initial HDNEA cookie:', error);
+        }
+
+        player.configure({
+          drm: drmConfig,
+          streaming: {
+            lowLatencyMode: true,
+            bufferingGoal: 15,
+            rebufferingGoal: 2,
+            bufferBehind: 15,
+            retryParameters: { timeout: 10000, maxAttempts: 5, baseDelay: 300, backoffFactor: 1.2 },
+            segmentRequestTimeout: 8000,
+            segmentPrefetchLimit: 2,
+            useNativeHlsOnSafari: true
+          },
+          manifest: { retryParameters: { timeout: 8000, maxAttempts: 3 } }
+        });
+
+        player.getNetworkingEngine().registerRequestFilter((type, request) => {
+          request.headers['Referer'] = 'https://www.jiotv.com/';
+          request.headers['User-Agent'] = "plaYtv/7.1.5 (Linux;Android 13) ExoPlayerLib/2.11.6";
+          request.headers['Cookie'] = cookieHeader;
+
+          if (
+            (type === shaka.net.NetworkingEngine.RequestType.MANIFEST ||
+             type === shaka.net.NetworkingEngine.RequestType.SEGMENT) &&
+            request.uris[0] && !request.uris[0].includes('__hdnea__=')
+          ) {
+            const separator = request.uris[0].includes('?') ? '&' : '?';
+            request.uris[0] += separator + cookieHeader;
+          }
+        });
+
+        try {
+          await player.load(streamUrl);
+          console.log('Player loaded successfully');
+        } catch (error) {
+          console.error('Load error:', error);
+        }
       }
 
-      const video = document.querySelector('video');
-      const player = new shaka.Player();
-      await player.attach(video);
-
-      const container = document.querySelector('.shaka-video-container');
-      const ui = new shaka.ui.Overlay(player, container, video);
-
-      ui.configure({
-        controlPanelElements: [
-          'play_pause', 'time_and_duration', 'mute', 'volume',
-          'spacer', 'language', 'captions', 'picture_in_picture',
-          'quality', 'fullscreen'
-        ]
-      });
-
-      const drmConfig = {
-        clearKeys: {
-          "bd1ea6a1c1fb5dcdb709434e0826bbc0": "f57f22cba32739ce7beb1fab3f3d060b"
-        }
-      };
-
-      const streamUrl =
-        "https://jiotvpllive.cdn.jio.com/bpk-tv/Sports18_1_HD_BTS/output/index.mpd?__hdnea__=st=1763167410~exp=1763253810~acl=/*~hmac=69fdd353039aef2c0f6f916fa3534c9b496c237a3c0b4c2029fba54b30487e35";
-
-      await fetchAndUpdateCookie();
-
-      player.configure({
-        drm: drmConfig,
-        streaming: {
-          lowLatencyMode: true,
-          bufferingGoal: 15,
-          rebufferingGoal: 2,
-          bufferBehind: 15
-        }
-      });
-
-      player.getNetworkingEngine().registerRequestFilter((type, request) => {
-        request.headers['Referer'] = 'https://www.jiotv.com/';
-        request.headers['User-Agent'] = "plaYtv/7.1.5 (Linux;Android 13)";
-        request.headers['Cookie'] = cookieHeader;
-
-        if (
-          (type === shaka.net.NetworkingEngine.RequestType.MANIFEST ||
-           type === shaka.net.NetworkingEngine.RequestType.SEGMENT) &&
-          request.uris[0] && !request.uris[0].includes('__hdnea__=')
-        ) {
-          const sep = request.uris[0].includes('?') ? '&' : '?';
-          request.uris[0] += sep + cookieHeader;
-        }
-      });
-
-      try {
-        await player.load(streamUrl);
-        console.log("Player loaded successfully");
-      } catch (err) {
-        console.error("Load error:", err);
-      }
-
-      /********** Telegram Modal **********/
+      /********** Telegram modal logic **********/
       const modal = document.getElementById('telegramModal');
       const closeButton = document.getElementById('closeButton');
       const joinLink = document.getElementById('joinLink');
 
       function hideModal() {
-        modal.classList.add('hidden');
+        if (!modal.classList.contains('hidden')) {
+          modal.classList.add('hidden');
+          modal.setAttribute('aria-hidden', 'true');
+        }
       }
 
-      closeButton.addEventListener('click', hideModal);
-      joinLink.addEventListener('click', hideModal);
+      if (closeButton) {
+        closeButton.addEventListener('click', (e) => { e.preventDefault(); hideModal(); });
+      }
+      if (joinLink) {
+        joinLink.addEventListener('click', () => { hideModal(); });
+      }
       modal.addEventListener('click', (e) => { if (e.target === modal) hideModal(); });
-
-      document.addEventListener('keydown', (e) => {
-        if ((e.key === "Escape" || e.key === "Esc")) hideModal();
-      });
-
-      setTimeout(hideModal, 10000);
+      document.addEventListener('keydown', (e) => { if ((e.key === 'Escape' || e.key === 'Esc') && !modal.classList.contains('hidden')) hideModal(); });
+      setTimeout(() => { hideModal(); }, 10000);
 
     });
   </script>
-<script>
-// alert('Join Our Telegram For More Live Links')
-         if (confirm("Join Our Telegram Channel @Cricinsider365") == true) {
-         window.open("https://t.me/+IhSW51QysxU3NzY1", '_blank');
-     }
-</script>
 </body>
 </html>
