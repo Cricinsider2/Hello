@@ -135,13 +135,13 @@
       player.configure({
         drm: {
           clearKeys: {
-            '19bbff3cf0d0c91198947c63018ec66e': "90a1fb2f173ca5312f25cdd4d166cd33"
+            '2e2636daa74141b68cc14882ea3ff82b': "0961f48287324adbb4b7ff3c9d82b3c9"
           }
         }
       });
 
       try {
-        await player.load("https://sundirectgo-live.pc.cdn.bitgravity.com/src635/dth.mpd");
+        await player.load("https://dice-live-oc.akamaized.net/hdntl=exp=1763699291~acl=%2F*~id=b04a267c-3278-4378-a231-8792e3a783d1~data=hdntl,dWlkPXNWa2pnc3w2ZjZmZTIwMS02NWUyLTRmNWMtOWY3OC01MTBlNDU0NzY0YWUmaXA9MjAzLjk2LjIxOC4yNCZleHA9MTc2MzY5OTMyMCZlaWQ9MjE5MDI4JmNpZD1kY2Uuc2t5bnomb2lkPTMxOCZ0eXBlPUxJVkU~hmac=9dc279c9571fe1c1bde4a9daf1d386d95e7faa2ee2d09eac05fde1e9c79a09fa/dash/live/2093664/219028-311264/manifest-d.mpd");
         console.log("✅ The video has now been loaded!");
 
         video.addEventListener('playing', () => {
