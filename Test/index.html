@@ -135,13 +135,13 @@
       player.configure({
         drm: {
           clearKeys: {
-            '2e2636daa74141b68cc14882ea3ff82b': "0961f48287324adbb4b7ff3c9d82b3c9"
+            'aefc2c8d1c8840f1b6981f856c9269ba': "cf8ea114c45b4d6596b2748258ab74d6"
           }
         }
       });
 
       try {
-        await player.load("https://dice-live-oc.akamaized.net/hdntl=exp=1763699291~acl=%2F*~id=b04a267c-3278-4378-a231-8792e3a783d1~data=hdntl,dWlkPXNWa2pnc3w2ZjZmZTIwMS02NWUyLTRmNWMtOWY3OC01MTBlNDU0NzY0YWUmaXA9MjAzLjk2LjIxOC4yNCZleHA9MTc2MzY5OTMyMCZlaWQ9MjE5MDI4JmNpZD1kY2Uuc2t5bnomb2lkPTMxOCZ0eXBlPUxJVkU~hmac=9dc279c9571fe1c1bde4a9daf1d386d95e7faa2ee2d09eac05fde1e9c79a09fa/dash/live/2093664/219028-311264/manifest-d.mpd");
+        await player.load("https://dice-live-oc.akamaized.net/hdntl=exp=1763178968~acl=%2f*~id=158be98f-fca2-4570-b218-812b10a15e9d~data=hdntl,dWlkPXNWa2pnc3w2ZjZmZTIwMS02NWUyLTRmNWMtOWY3OC01MTBlNDU0NzY0YWUmaXA9MTI0LjI0OC4xNDIuMTImZXhwPTE3NjMxNzg5OTcmZWlkPTIxOTAyNiZjaWQ9ZGNlLnNreW56Jm9pZD0zMTgmdHlwZT1MSVZF~hmac=fc68c2565682b2053dad232c180c107285a52b1729bb5a4b52e1d05f455fe4cc/dash/live/2093775/219026-310853/manifest-d.mpd");
         console.log("✅ The video has now been loaded!");
 
         video.addEventListener('playing', () => {
