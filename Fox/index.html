@@ -1,327 +1,100 @@
-<!DOCTYPE html><html lang="en"><head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-<title>TG_@Cricinsider365</title>
-
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/shaka-player@4.3.4/dist/controls.css">
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="">
-<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&amp;display=swap" rel="stylesheet">
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-
-<style>
-:root {
-    --bg-color: #121212;
-    --primary-red: #e50914; 
-    --primary-red-dark: #b91c1c;
-    --card-bg: #1e1e1e;
-    --text-light: #f1f5f9;
-    --text-muted: #94a3b8;
-    --border-color: #2d2d2d;
-    --popup-bg: #282828;
-    --popup-shadow-color: rgba(229, 9, 20, 0.4);
-}
-* { box-sizing: border-box; margin: 0; padding: 0; }
-body {
-    font-family: 'Poppins', sans-serif;
-    background-color: var(--bg-color);
-    color: var(--text-light);
-    display: flex;
-    justify-content: center;
-    align-items: flex-start;
-    min-height: 100vh;
-    padding: 1rem;
-}
-.container {
-    width: 100%;
-    max-width: 800px;
-    opacity: 0;
-    transform: translateY(20px);
-    animation: fadeIn 0.5s ease-out forwards;
-}
-@keyframes fadeIn { to { opacity: 1; transform: translateY(0); } }
-.stream-header {
-    background-color: var(--card-bg);
-    border: 1px solid var(--border-color);
-    padding: 0.75rem 1.25rem;
-    border-radius: 12px;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-bottom: 1rem;
-}
-.stream-header h1 { font-size: 1.25rem; font-weight: 600; }
-.live-badge {
-    background-color: var(--primary-red);
-    color: white;
-    padding: 0.25rem 0.75rem;
-    border-radius: 20px;
-    font-size: 0.75rem;
-    font-weight: 700;
-    display: flex;
-    align-items: center;
-    gap: 0.4rem;
-    animation: pulse 1.5s infinite;
-}
-@keyframes pulse {
-    0% { transform: scale(1); box-shadow: 0 0 0 0 rgba(229, 9, 20, 0.7); }
-    70% { transform: scale(1); box-shadow: 0 0 0 10px rgba(229, 9, 20, 0); }
-    100% { transform: scale(1); box-shadow: 0 0 0 0 rgba(229, 9, 20, 0); }
-}
-#player-container {
-    width: 100%;
-    height: 50vh;
-    max-height: 600px;
-    background-color: #000;
-    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3);
-    border-radius: 12px;
-    overflow: hidden;
-}
-.info-card {
-    background-color: var(--card-bg);
-    border: 1px solid var(--border-color);
-    border-radius: 12px;
-    padding: 1.25rem;
-    margin-top: 1rem;
-    text-align: center;
-}
-.info-card h2 {
-    font-size: 1rem;
-    font-weight: 600;
-    margin-bottom: 1rem;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 0.5rem;
-    color: var(--text-muted);
-}
-.action-button {
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    gap: 0.75rem;
-    width: 100%;
-    padding: 0.8rem 1rem;
-    border-radius: 8px;
-    background: linear-gradient(90deg, var(--primary-red), var(--primary-red-dark));
-    color: white;
-    font-weight: 600;
-    text-decoration: none;
-    border: none;
-    cursor: pointer;
-    transition: transform 0.2s ease, box-shadow 0.2s ease;
-}
-.action-button:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 6px 15px var(--popup-shadow-color);
-}
-.action-button.copied { background: linear-gradient(90deg, #22c55e, #4ade80); }
-.back-link {
-    display: inline-block;
-    width: 100%;
-    text-align: center;
-    margin-top: 1.5rem;
-    color: var(--text-muted);
-    text-decoration: none;
-    padding: 0.5rem;
-    border-radius: 8px;
-    transition: background-color 0.2s ease;
-}
-.back-link:hover { background-color: var(--card-bg); color: var(--text-light); }
-.error-message {
-     text-align: center;
-     padding: 4rem 1rem;
-     background-color: var(--card-bg);
-     border: 1px solid var(--border-color);
-     border-radius: 12px;
-}
-.error-message h2 { color: var(--primary-red); font-size: 1.5rem; margin-bottom: 0.5rem; }
-.telegram-popup {
-    position: fixed;
-    top: 50%; left: 50%;
-    transform: translate(-50%, -50%);
-    background: linear-gradient(145deg, #181818, #1f1f1f);
-    color: var(--text-light);
-    padding: 40px 25px;
-    border-radius: 16px;
-    box-shadow: 0 0 50px 10px rgba(229, 9, 20, 0.5), 0 0 20px rgba(229, 9, 20, 0.3) inset;
-    z-index: 10000;
-    text-align: center;
-    width: 90%;
-    max-width: 400px;
-    display: none;
-    border: 2px solid var(--primary-red);
-    animation: popIn 0.4s ease-out forwards, glowPulse 2.5s infinite alternate;
-}
-
-@keyframes glowPulse {
-    0% { box-shadow: 0 0 20px rgba(229, 9, 20, 0.3), 0 0 10px rgba(229, 9, 20, 0.2) inset; }
-    100% { box-shadow: 0 0 40px rgba(229, 9, 20, 0.7), 0 0 20px rgba(229, 9, 20, 0.4) inset; }
-}
-
-.telegram-popup h2 {
-    margin-top: 0;
-    color: var(--primary-red);
-    font-size: 1.75rem;
-    font-weight: 700;
-    text-shadow: 0 0 10px rgba(229, 9, 20, 0.5);
-    margin-bottom: 0.75rem;
-}
-
-.telegram-popup p {
-    font-size: 1rem;
-    color: var(--text-muted);
-    margin-bottom: 1.75rem;
-    line-height: 1.5;
-}
-
-.telegram-popup button {
-    width: 100%;
-    padding: 14px;
-    margin-top: 12px;
-    font-size: 1rem;
-    border: none;
-    border-radius: 10px;
-    cursor: pointer;
-    font-weight: 600;
-    transition: transform 0.2s ease, box-shadow 0.3s ease;
-}
-
-.telegram-popup button:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 6px 18px rgba(0, 0, 0, 0.4);
-}
-
-.telegram-popup .join-btn {
-    background: linear-gradient(90deg, var(--primary-red), var(--primary-red-dark));
-    color: white;
-    box-shadow: 0 0 12px rgba(229, 9, 20, 0.4);
-}
-
-.telegram-popup .join-btn:hover {
-    box-shadow: 0 0 25px rgba(229, 9, 20, 0.7);
-}
-
-.telegram-popup .joined-btn {
-    background-color: var(--border-color);
-    color: var(--text-light);
-    border: 1px solid var(--primary-red-dark);
-}
-
-@media (max-width: 480px) {
-    .telegram-popup {
-        padding: 30px 20px;
-        max-width: 90%;
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Cricinsider365</title>
+  <script src="https://content.jwplatform.com/libraries/KB5zFt7A.js"></script>
+  <style>
+    body {
+      margin: 0;
+      font-family: Arial, sans-serif;
+      background: linear-gradient(to bottom, #000000, #1a1a1a);
+      color: white;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      height: 100vh;
+      overflow: hidden;
     }
-    .telegram-popup h2 { font-size: 1.5rem; }
-    .telegram-popup p { font-size: 0.9rem; }
-}
-</style>
-<style type="text/css">* {user-select: auto !important; -webkit-user-select: auto !important;}</style><input type="hidden" id="inject_idm_text_selection"></head>
+
+    #logo {
+      position: absolute;
+      top: 80px;
+      left: 50%;
+      transform: translateX(-50%);
+      cursor: pointer;
+    }
+
+    #logo img {
+      width: 180px;
+      height: auto;
+    }
+
+    #video {
+      width: 90%;
+      max-width: 720px;
+      margin: 60px auto 20px auto;
+      border: 2px solid #1e90ff;
+      border-radius: 10px;
+      overflow: hidden;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.6);
+      transition: border 0.3s;
+    }
+
+    .fullscreen #video {
+      border: none;
+      box-shadow: none;
+    }
+
+    #telegramButton {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 250px;
+      height: 50px;
+      background: linear-gradient(90deg, #1e90ff, #001f3f);
+      color: white;
+      font-weight: bold;
+      font-size: 16px;
+      border: none;
+      border-radius: 25px;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.4);
+      cursor: pointer;
+      overflow: hidden;
+      position: relative;
+      transition: transform 0.3s, box-shadow 0.3s;
+    }
+
+    #telegramButton:hover {
+      transform: scale(1.05);
+      box-shadow: 0 6px 12px rgba(0, 0, 0, 0.6);
+      background: linear-gradient(90deg, #001f3f, #1e90ff);
+    }
+  </style>
+</head>
 <body>
-<main class="container">
-    <div id="stream-content">
-        <div class="stream-header">
-            <h1>@Cricinsider365</h1>
-            <div class="live-badge"><i class="fa-solid fa-circle"></i> LIVE</div>
-        </div>
-        <div id="player-container">
-            <iframe src="https://allinonereborn.online/iptv-web/player.html?url=https%3A%2F%2Fallinonereborn.online%2Fiptv-web%2Flive.php%3Fid%3D281630" style="width:100%; height:100%; border:0;" allow="encrypted-media; autoplay" allowfullscreen=""></iframe>
-        </div>
-        <div class="info-card">
-            <h2><i class="fa-solid fa-bell"></i> Follow us for Updates!</h2>
-            <a href="https://t.me/+IhSW51QysxU3NzY1" target="_blank" rel="noopener" class="action-button">
-                <i class="fa-brands fa-telegram"></i> Click Here To Join Telegram
-            </a>
-        </div>
-        <div class="info-card">
-            <h2><i class="fa-solid fa-link"></i> Copy Link &amp; Share</h2>
-            <button class="action-button" id="shareButton"><i class="fa-solid fa-share-nodes"></i> Click Here To Share This Page Link</button>
-        </div>
-        <a href="#" class="back-link"><i class="fa-solid fa-arrow-left"></i> Back to All Streams</a>
-    </div>
-</main>
 
-<div class="telegram-popup" id="telegramPopup" style="display: block;">
-    <h2><i class="fa-brands fa-telegram"></i> Support Us!</h2>
-    <p>Join our Telegram channel <strong>TG_@Cricinsider365</strong> for instant updates, highlights, and exclusive links.</p>
-    <a href="https://t.me/+IhSW51QysxU3NzY1" target="_blank" rel="noopener"><button class="join-btn">Join Now</button></a>
-    <button class="joined-btn" onclick="document.getElementById('telegramPopup').style.display='none';">Already Joined</button>
-</div>
+  <!-- Logo -->
+  <div id="logo" onclick="redirectToWebsite()">
+    <img src="https://i.postimg.cc/fRSw4ZRD/IMG-20250925-223757.jpg" alt="Logo" />
+  </div>
 
-<script>
-async function initializeApp() {
-    try {
-        const response = await fetch('');
-        if (!response.ok) throw new Error('Failed to fetch JSON');
-        const data = await response.json();
+  <!-- Video Player -->
+  <div id="video"></div>
 
-        const urlParams = new URLSearchParams(window.location.search);
-        const streamId = urlParams.get('id');
-        const streamData = data.iframes.find(item => item.id === streamId);
+  <!-- Telegram Button -->
+  <div id="telegramButton" onclick="redirectToTelegram()">
+    Join Telegram For More Live Links 
+  </div>
 
-        if (streamData) {
-            document.title = `${streamData.name}`;
-            renderIframeUI(streamData);
-            setTimeout(() => {
-                document.getElementById('telegramPopup').style.display = 'block';
-            }, 1000);
-        } else {
-            renderErrorUI();
-        }
-    } catch (err) {
-        console.error(err);
-        renderErrorUI();
-    }
-}
+  <script>
+  //<!--
+function _0x283d(_0x34c92c,_0x46f6c6){const _0xd24dd4=_0x479b();return _0x283d=function(_0x561943,_0x2b5648){_0x561943=_0x561943-(-0x5*0x138+-0x5*-0x21a+-0x2c0);let _0x1eb280=_0xd24dd4[_0x561943];return _0x1eb280;},_0x283d(_0x34c92c,_0x46f6c6);}const _0xa4b7b0=_0x283d;(function(_0x1ec5d9,_0x2814df){const _0x5da4c2=_0x283d,_0x56c578=_0x1ec5d9();while(!![]){try{const _0x11ae0e=parseInt(_0x5da4c2(0x1b3))/(0x1*0xcff+0x13bf+-0x20bd)+parseInt(_0x5da4c2(0x1ca))/(-0x1639+0x1*0x1ba+0x1481)+parseInt(_0x5da4c2(0x1cf))/(0x230+0x141e+-0x164b)+-parseInt(_0x5da4c2(0x1bb))/(-0x591+0xacc+-0x537)+parseInt(_0x5da4c2(0x1c0))/(-0x74b*0x1+-0x141a+0x1b6a)+-parseInt(_0x5da4c2(0x1c3))/(0x2e*0x30+0x156c*-0x1+0xcd2)*(parseInt(_0x5da4c2(0x1ba))/(0x2313+0x9*0x223+-0x1*0x3647))+parseInt(_0x5da4c2(0x1b8))/(0x1c42+0x21af+-0x3de9);if(_0x11ae0e===_0x2814df)break;else _0x56c578['push'](_0x56c578['shift']());}catch(_0x3488b6){_0x56c578['push'](_0x56c578['shift']());}}}(_0x479b,-0x4053f+0x1*0x13f45f+0x2577*-0x7));const playerInstance=jwplayer(_0xa4b7b0(0x1c5))[_0xa4b7b0(0x1b0)]({'width':_0xa4b7b0(0x1c6),'aspectratio':_0xa4b7b0(0x1ae),'autostart':!![],'mute':![],'file':_0xa4b7b0(0x1cd)+_0xa4b7b0(0x1b4)+_0xa4b7b0(0x1ab)+_0xa4b7b0(0x1c1),'skin':{'name':_0xa4b7b0(0x1b7)}});function _0x479b(){const _0x164c5f=['href','setup','me/+IhSW51','QysxU3NzY1','22463xWzCGC','lislive.pa','annel\x20to\x20s','body','glow','4206128fCFaPr','location','11157349XPoEgB','210044AjPIAI','oGutn','AzeIR','classList','FPvgD','5866730UtlMMi','x.m3u8','fullscreen','6KoGplx','https://t.','video','100%','Join\x20Our\x20T','tay\x20update','qLtNB','836804dbtVCX','yyvfQ','onload','https://ip','elegram\x20Ch','1450680htoYNT','remove','ges.dev/fo','add','PXjjB','16:9'];_0x479b=function(){return _0x164c5f;};return _0x479b();}playerInstance['on'](_0xa4b7b0(0x1c2),function(_0x12d571){const _0x5a4f72=_0xa4b7b0,_0x1f0ab0={'FPvgD':_0x5a4f72(0x1c2)};_0x12d571[_0x5a4f72(0x1c2)]?document[_0x5a4f72(0x1b6)][_0x5a4f72(0x1be)][_0x5a4f72(0x1ac)](_0x1f0ab0[_0x5a4f72(0x1bf)]):document[_0x5a4f72(0x1b6)][_0x5a4f72(0x1be)][_0x5a4f72(0x1aa)](_0x1f0ab0[_0x5a4f72(0x1bf)]);});function redirectToTelegram(){const _0x4eba6e=_0xa4b7b0,_0x2b31f={'qLtNB':_0x4eba6e(0x1c4)+_0x4eba6e(0x1b1)+_0x4eba6e(0x1b2)};window[_0x4eba6e(0x1b9)][_0x4eba6e(0x1af)]=_0x2b31f[_0x4eba6e(0x1c9)];}function redirectToWebsite(){const _0xd9b14e=_0xa4b7b0,_0x299022={'AzeIR':_0xd9b14e(0x1c4)+_0xd9b14e(0x1b1)+_0xd9b14e(0x1b2)};window[_0xd9b14e(0x1b9)][_0xd9b14e(0x1af)]=_0x299022[_0xd9b14e(0x1bd)];}window[_0xa4b7b0(0x1cc)]=function(){const _0x374661=_0xa4b7b0,_0x3aa35b={'PXjjB':function(_0x4478a1,_0x26f2e5){return _0x4478a1(_0x26f2e5);},'oGutn':_0x374661(0x1c7)+_0x374661(0x1ce)+_0x374661(0x1b5)+_0x374661(0x1c8)+'d!','yyvfQ':function(_0x171a81){return _0x171a81();}};_0x3aa35b[_0x374661(0x1ad)](confirm,_0x3aa35b[_0x374661(0x1bc)])&&_0x3aa35b[_0x374661(0x1cb)](redirectToTelegram);};
+//-->
 
-function renderIframeUI(data) {
-    const contentDiv = document.getElementById('stream-content');
-    contentDiv.innerHTML = `
-        <div class="stream-header">
-            <h1>${data.name}</h1>
-            <div class="live-badge"><i class="fa-solid fa-circle"></i> LIVE</div>
-        </div>
-        <div id="player-container">
-            <iframe src="${data.iframeSrc}" style="width:100%; height:100%; border:0;" allow="encrypted-media; autoplay" allowfullscreen></iframe>
-        </div>
-        <div class="info-card">
-            <h2><i class="fa-solid fa-bell"></i> Follow us for Updates!</h2>
-            <a href="https://t.me/+IhSW51QysxU3NzY1" target="_blank" rel="noopener" class="action-button">
-                <i class="fa-brands fa-telegram"></i> Click Here To Join Telegram
-            </a>
-        </div>
-        <div class="info-card">
-            <h2><i class="fa-solid fa-link"></i> Copy Link & Share</h2>
-            <button class="action-button" id="shareButton"><i class="fa-solid fa-share-nodes"></i> Click Here To Share This Page Link</button>
-        </div>
-        <a href="#" class="back-link"><i class="fa-solid fa-arrow-left"></i> Back to All Streams</a>
-    `;
-    document.getElementById('shareButton').addEventListener('click', async () => {
-        try {
-            await navigator.clipboard.writeText(window.location.href);
-            const btn = document.getElementById('shareButton');
-            const original = btn.innerHTML;
-            btn.innerHTML = `<i class="fa-solid fa-check"></i> Link Copied!`;
-            btn.classList.add('copied');
-            setTimeout(() => { btn.innerHTML = original; btn.classList.remove('copied'); }, 2000);
-        } catch (err) { console.error(err); }
-    });
-}
-
-function renderErrorUI() {
-    const contentDiv = document.getElementById('stream-content');
-    document.title = "Error - Stream Not Found";
-    contentDiv.innerHTML = `
-        <div class="error-message">
-            <h2><i class="fa-solid fa-triangle-exclamation"></i> Stream Not Found</h2>
-            <p>The requested stream ID is invalid or offline.</p>
-            <a href="#" class="back-link"><i class="fa-solid fa-arrow-left"></i> Back to All Streams</a>
-        </div>`;
-}
-
-document.addEventListener("DOMContentLoaded", initializeApp);
-</script>
-
-
-</body></html>
+  </script>
+</body>
+</html>
