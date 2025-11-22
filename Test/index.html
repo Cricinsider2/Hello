@@ -135,13 +135,13 @@
       player.configure({
         drm: {
           clearKeys: {
-            'd9212e1a16d13436a48c3c26c7586ba2': "36d31124d5fbeffb1827daf7e9a4b48d"
+            'aefc2c8d1c8840f1b6981f856c9269ba': "cf8ea114c45b4d6596b2748258ab74d6"
           }
         }
       });
 
       try {
-        await player.load("https://abmyxykaaaaaaaamkyvb65fuqebyg.7a77200bf98444ac997a89ed83775793.emt.cf.ww.aiv-cdn.net/iad-nitro/live/dash/enc/3vexfm2n2o/out/v1/60518e19ea6e47c3a800aa9ce114242b/cenc.mpd");
+        await player.load("https://dice-live-oc.akamaized.net/hdntl=exp=1763777716~acl=%2f*~id=f6e21acb-cdd4-4d63-93f8-16207592839b~data=hdntl,dWlkPXNWa2pnc3w2ZjZmZTIwMS02NWUyLTRmNWMtOWY3OC01MTBlNDU0NzY0YWUmaXA9MjAzLjk2LjIxOC4yNCZleHA9MTc2Mzc3Nzc0NiZlaWQ9MjE5MDI2JmNpZD1kY2Uuc2t5bnomb2lkPTMxOCZ0eXBlPUxJVkU~hmac=347c9bc1165e717e1c7c30eeec13083dc49cd84c54dd0ee512a63b8b5158b59d/dash/live/2093662/219026-311262/manifest-d.mpd");
         console.log("✅ The video has now been loaded!");
 
         video.addEventListener('playing', () => {
