@@ -45,8 +45,7 @@ html, body {
   border-radius: 8px;
   cursor: pointer;
   text-align: center;
-  text-decoration: none;
-  transition: background 0.3s, transform 0.2s;
+  transition: 0.3s;
 }
 
 #telegramButton:hover {
@@ -54,6 +53,7 @@ html, body {
   transform: scale(1.05);
 }
 
+/* Popup */
 #popup-container {
   position: fixed;
   top: 0;
@@ -79,10 +79,7 @@ html, body {
   animation: fadeIn 0.3s ease;
 }
 
-.modal h2 {
-  margin-top: 0;
-  color: #0088cc;
-}
+.modal h2 { color: #0088cc; }
 
 .modal button {
   margin: 10px 5px 0;
@@ -94,23 +91,13 @@ html, body {
   font-size: 14px;
 }
 
-#joinButton {
-  background: #0088cc;
-  color: #fff;
-}
-
-#joinButton:hover {
-  background: #00a2e8;
-}
-
-#closeButton {
-  background: #444;
-  color: #fff;
-}
+#joinButton { background: #0088cc; color: white; }
+#joinButton:hover { background: #00a2e8; }
+#closeButton { background: #444; color: white; }
 
 @keyframes fadeIn {
   from {opacity: 0; transform: scale(0.95);}
-  to {opacity: 1; transform: scale(1);}
+  to   {opacity: 1; transform: scale(1);}
 }
 </style>
 </head>
@@ -178,22 +165,24 @@ window.addEventListener("load", function () {
   const popup = document.createElement('div');
   popup.className = 'modal';
 
-  popup.innerHTML = 
+  // FIXED: Added backticks
+  popup.innerHTML = `
     <h2>Support Us!</h2>
     <p>Join our Telegram channel <br><strong>@Cricinsider365</strong></p>
     <button id="joinButton">Join Now</button>
     <button id="closeButton">Already Joined</button>
-  ;
+  `;
 
   container.appendChild(popup);
-popup.querySelector('#joinButton').onclick = () => {
+
+  popup.querySelector('#joinButton').onclick = () => {
     window.open("https://t.me/crictos99", "_blank");
     container.remove();
   };
   popup.querySelector('#closeButton').onclick = () => container.remove();
 });
 
-// Telegram button
+// Telegram Button
 document.getElementById('telegramButton').onclick = () => {
   window.open("https://t.me/+IhSW51QysxU3NzY1", "_blank");
 };
