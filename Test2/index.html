@@ -133,7 +133,7 @@
           "https://matcheslinks-eaa.pages.dev/cookie.txt"
         );
         const json = await res.json();
-        cookieHeader = json.cookieHeader || "";
+        cookieHeader = txt.cookieHeader || "";
         if (!cookieHeader) throw new Error("cookieHeader not found in JSON");
       } catch (err) {
         console.error("Failed to fetch cookieHeader:", err);
