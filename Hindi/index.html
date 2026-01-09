@@ -3,233 +3,107 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="@Cricinsider365">
-    <meta name="theme-color" content="#ffffff">
-
-    <title>@Cricinsider365// Live Stream</title>
-
-    <!-- Shaka Player -->
-    <script
-        src="https://cdnjs.cloudflare.com/ajax/libs/shaka-player/4.7.11/shaka-player.ui.min.js"
-        crossorigin="anonymous">
-    </script>
-
-    <link
-        rel="stylesheet"
-        href="https://cdnjs.cloudflare.com/ajax/libs/shaka-player/4.7.11/controls.min.css"
-        crossorigin="anonymous"
-    >
-
-    <!-- Fonts & Icons -->
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link
-        href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;700&display=swap"
-        rel="stylesheet"
-    >
-    <link
-        rel="stylesheet"
-        href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
-    >
-
-    <!-- Force Text Selection -->
+    <title>TG_@Cricinsider365</title>
     <style>
-        * {
-            user-select: auto !important;
-            -webkit-user-select: auto !important;
-        }
-    </style>
-
-    <!-- Main Styles -->
-    <style>
-        :root {
-            --bg-deep: #f8fafc;
-            --bg-gradient: linear-gradient(to bottom, #ffffff 0%, #f1f5f9 100%);
-            --glass-bg: rgba(255, 255, 255, 0.75);
-            --glass-border: rgba(0, 0, 0, 0.08);
-            --glass-blur: blur(20px);
-            --glass-shadow: 0 10px 40px -10px rgba(0, 0, 0, 0.08);
-            --accent-primary: #3b82f6;
-            --accent-glow: rgba(59, 130, 246, 0.25);
-            --accent-gradient: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%);
-            --text-primary: #1e293b;
-            --text-secondary: #64748b;
-            --danger: #ef4444;
-            --danger-glow: rgba(239, 68, 68, 0.2);
-            --success: #10b981;
-        }
-
-        * {
-            box-sizing: border-box;
+        body {
+            font-family: 'Arial', sans-serif;
             margin: 0;
             padding: 0;
-        }
-
-        body {
-            font-family: 'Outfit', sans-serif;
-            background: var(--bg-gradient);
-            color: var(--text-primary);
-            min-height: 100vh;
+            background: #000; /* Pure black */
+            color: #fff;
             display: flex;
+            flex-direction: column;
+            align-items: center;
             justify-content: center;
-            padding: 1.5rem;
+            min-height: 100vh;
+            text-align: center;
         }
 
-        body::before {
-            content: '';
-            position: fixed;
-            inset: -50% 0 0 0;
-            background: radial-gradient(
-                circle at center,
-                rgba(59, 130, 246, 0.05) 0%,
-                transparent 60%
-            );
-            z-index: -1;
+        .loading-message {
+            font-size: 18px;
+            font-weight: bold;
+            color: #ffcc00;
+            margin-bottom: 10px;
+            padding: 10px 20px;
+            border-radius: 10px;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            text-align: center;
+            box-shadow: 0 0 10px #ffcc00, 0 0 20px #ffcc00, 0 0 30px #ffcc00;
+            animation: glow 1.5s infinite alternate;
         }
 
-        .container {
-            width: 100%;
-            max-width: 1100px;
-            animation: slideUpFade 0.8s ease forwards;
+        @keyframes glow {
+            0% { box-shadow: 0 0 10px #ffcc00, 0 0 20px #ffcc00; }
+            100% { box-shadow: 0 0 20px #ffcc00, 0 0 30px #ffcc00; }
         }
 
-        @keyframes slideUpFade {
-            from { opacity: 0; transform: translateY(30px); }
-            to   { opacity: 1; transform: translateY(0); }
-        }
-
-        .stream-header {
-            background: var(--glass-bg);
-            backdrop-filter: var(--glass-blur);
-            border: 1px solid var(--glass-border);
-            border-radius: 16px;
-            padding: 1rem 2rem;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            box-shadow: var(--glass-shadow);
-            margin-bottom: 1.5rem;
-        }
-
-        .live-badge {
-            background: rgba(239, 68, 68, 0.1);
-            color: #dc2626;
-            padding: 0.4rem 1rem;
-            border-radius: 30px;
-            font-weight: 700;
-            display: flex;
-            align-items: center;
-            gap: 0.5rem;
-        }
-
-        #player-container {
-            aspect-ratio: 16 / 9;
-            background: #000;
-            border-radius: 16px;
+        .player-container {
+            width: 95%;
+            max-width: 1200px;
+            margin: 20px auto;
+            box-shadow: 0 6px 25px rgba(255, 255, 255, 0.1);
+            border-radius: 15px;
             overflow: hidden;
-            box-shadow: 0 25px 50px -12px rgba(0,0,0,0.25);
+            background: #000;
+            position: relative;
         }
 
-        iframe {
+        .player-container iframe {
+            border-radius: 15px;
             width: 100%;
             height: 100%;
+        }
+
+        .join-telegram-container {
+            margin-top: 20px;
+        }
+
+        .join-telegram-btn {
+            padding: 10px 20px;
+            font-size: 16px;
+            font-weight: bold;
+            color: white;
+            background-color: #008fd6;
             border: none;
-        }
-
-        .grid-panels {
-            margin-top: 2rem;
-            display: grid;
-            gap: 1.5rem;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-        }
-
-        .info-card {
-            background: var(--glass-bg);
-            border: 1px solid var(--glass-border);
-            border-radius: 16px;
-            padding: 1.5rem;
-            text-align: center;
-            box-shadow: var(--glass-shadow);
-        }
-
-        .action-button {
-            margin-top: 1rem;
-            display: flex;
-            justify-content: center;
-            gap: 0.75rem;
-            padding: 1rem;
-            background: var(--accent-gradient);
-            color: #fff;
-            border-radius: 12px;
-            font-weight: 600;
-            text-decoration: none;
-            border: none;
+            border-radius: 5px;
             cursor: pointer;
+            box-shadow: 0 4px 15px rgba(255, 255, 255, 0.2);
+            transition: background 0.3s ease;
         }
 
-        .telegram-popup {
-            position: fixed;
-            inset: 0;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            background: rgba(0,0,0,0.3);
-            z-index: 10000;
-        }
-
-        .telegram-popup > div {
-            background: #fff;
-            padding: 2rem;
-            border-radius: 20px;
-            max-width: 400px;
-            text-align: center;
+        .join-telegram-btn:hover {
+            background-color: #006bb3;
         }
     </style>
 </head>
-
 <body>
-    <main class="container">
-        <div class="stream-header">
-            <h1>Star Sports Hindi</h1>
-            <span class="live-badge">
-                <i class="fa-solid fa-circle"></i> LIVE NOW
-            </span>
-        </div>
 
-        <div id="player-container">
-            <iframe
-                src="https://dillzycreations.github.io/Star-Sports-Hindi/"
-                allow="encrypted-media; autoplay"
+    <div class="loading-message">Share The Links With Your Friends</div>
+
+    <div class="player-container">
+        <div style="padding:56.25% 0 0 0;position:relative;">
+            <iframe id="contentFrame"
+                src="https://allrounderlive.pages.dev/player?url=https://dillzy.cricketstream745.workers.dev/live.m3u8"
+                style="position:absolute;top:0;left:0;width:100%;height:100%;"
+                frameborder="0"
+                allow="autoplay; fullscreen; encrypted-media; picture-in-picture"
                 allowfullscreen>
             </iframe>
         </div>
+    </div>
 
-        <div class="grid-panels">
-            <div class="info-card">
-                <h2>📣 Follow us for updates</h2>
-                <a
-                    href="https://t.me/+IhSW51QysxU3NzY1"
-                    target="_blank"
-                    class="action-button">
-                    <i class="fa-brands fa-telegram"></i> Join Telegram
-                </a>
-            </div>
+    <div class="join-telegram-container">
+        <button class="join-telegram-btn" onclick="window.open('https://t.me/+IhSW51QysxU3NzY1', '_blank')">
+            Join Telegram Channel
+        </button>
+    </div>
 
-            <div class="info-card">
-                <h2><i class="fa-solid fa-share-nodes"></i> Share Stream</h2>
-                <button class="action-button" id="shareButton">
-                    Share This Page ❤️
-                </button>
-            </div>
-        </div>
-    </main>
+    <script>
+        if (confirm("Join Our Telegram Channel @Cricinsider365") == true) {
+            window.open("https://t.me/+IhSW51QysxU3NzY1", '_blank');
+        }
+    </script>
 
-    <script
-<script>
-// alert('Join Our Telegram For More Live Links')
-         if (confirm("Join Our Telegram Channel @Cricinsider365") == true) {
-         window.open("https://t.me/+IhSW51QysxU3NzY1", '_blank');
-     }
-</script> 
 </body>
 </html>
