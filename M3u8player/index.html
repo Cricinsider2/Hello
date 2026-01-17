@@ -1,0 +1,153 @@
+<!DOCTYPE html><html lang="en"><head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+    <meta name="referrer" content="no-referrer">
+    <title>TG_@Cticinsider365</title>
+
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/plyr@3.7.8/dist/plyr.css">
+    <script src="https://cdn.jsdelivr.net/npm/hls.js@latest"></script>
+    <script src="https://cdn.jsdelivr.net/npm/plyr@3.7.8/dist/plyr.polyfilled.js"></script>
+
+    <style>
+        :root { --plyr-color-main: #ff0000; }
+        body, html { 
+            margin: 0; padding: 0; width: 100%; height: 100%; 
+            background: #000; display: flex; align-items: center; justify-content: center;
+            overflow: hidden; font-family: sans-serif;
+        }
+
+        #video-container { width: 100%; max-width: 1000px; position: relative; }
+        
+        /* Modern UI Design */
+        .plyr { aspect-ratio: 16/9; background: #000; }
+        .plyr__control--screenshot svg { width: 20px !important; height: 20px !important; stroke: white; }
+        
+        /* Fast Load Smoothness */
+        video { opacity: 0; transition: opacity 0.5s ease; }
+        video.ready { opacity: 1; }
+        canvas { display: none; }
+
+        /* Mobile Optimization */
+        @media (max-width: 768px) {
+            #video-container { width: 100vw; height: auto; }
+        }
+    </style>
+<style type="text/css">* {user-select: auto !important; -webkit-user-select: auto !important;}</style><input type="hidden" id="inject_idm_text_selection"></head>
+<body>
+
+<div id="video-container">
+    <video id="player" playsinline="" controls="" crossorigin="anonymous"></video>
+</div>
+
+<canvas id="screenshot-canvas"></canvas>
+
+<script>
+    const video = document.getElementById('player');
+    const canvas = document.getElementById('screenshot-canvas');
+    
+    // URL se link aur headers nikalna
+    const fullUrl = window.location.href.split('?url=')[1];
+
+    if (fullUrl) {
+        // Hotstar link mein '|' ke baad headers hote hain, unhe handle karna
+        const parts = decodeURIComponent(fullUrl).split('|');
+        const m3u8Link = parts[0];
+
+        if (Hls.isSupported()) {
+            const hls = new Hls({
+                enableWorker: true,
+                lowLatencyMode: true,
+                // Headers pass karne ka advanced tarika
+                xhrSetup: function(xhr, url) {
+                    if (parts[1]) {
+                        const headers = parts[1].split('&');
+                        headers.forEach(h => {
+                            const kv = h.split('=');
+                            if(kv[0].toLowerCase() !== 'user-agent') { // Browser restricted headers skip
+                                xhr.setRequestHeader(kv[0], kv[1]);
+                            }
+                        });
+                    }
+                }
+            });
+
+            hls.loadSource(m3u8Link);
+            hls.attachMedia(video);
+            
+            hls.on(Hls.Events.MANIFEST_PARSED, (event, data) => {
+                const qualities = data.levels.map(l => l.height);
+                initPlayer(qualities, hls);
+                video.classList.add('ready');
+            });
+        } else {
+            video.src = m3u8Link;
+            video.classList.add('ready');
+            initPlayer();
+        }
+    }
+
+    function initPlayer(qualities = [], hlsInstance = null) {
+        const player = new Plyr(video, {
+            autoplay: true,
+            settings: ['quality', 'speed'],
+            quality: {
+                default: qualities[0] || 720,
+                options: qualities,
+                forced: true,
+                onChange: (q) => {
+                    if (hlsInstance) {
+                        hlsInstance.levels.forEach((lv, idx) => {
+                            if (lv.height === q) hlsInstance.currentLevel = idx;
+                        });
+                    }
+                }
+            },
+            controls: ['play-large', 'play', 'progress', 'current-time', 'mute', 'volume', 'settings', 'fullscreen']
+        });
+
+        // Screenshot logic settings ke baju mein
+        player.on('ready', () => {
+            const settingsBtn = document.querySelector('[data-plyr="settings"]');
+            if (settingsBtn && !document.querySelector('.plyr__control--screenshot')) {
+                const ssBtn = document.createElement('button');
+                ssBtn.type = 'button';
+                ssBtn.className = 'plyr__control plyr__control--screenshot';
+                ssBtn.innerHTML = `
+                    <svg viewBox="0 0 24 24" fill="none" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"></path>
+                        <circle cx="12" cy="13" r="4"></circle>
+                    </svg>`;
+                
+                settingsBtn.before(ssBtn);
+
+                ssBtn.onclick = () => {
+                    canvas.width = video.videoWidth;
+                    canvas.height = video.videoHeight;
+                    const ctx = canvas.getContext('2d');
+                    try {
+                        ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
+                        const link = document.createElement('a');
+                        link.download = `CricketYoddha_SS_${Date.now()}.png`;
+                        link.href = canvas.toDataURL('image/png');
+                        link.click();
+                    } catch(e) { 
+                        alert("Screenshot saved to downloads!"); 
+                    }
+                };
+            }
+        });
+    }
+
+    // Auto-Landscape Fullscreen
+    document.addEventListener('fullscreenchange', () => {
+        if (document.fullscreenElement && screen.orientation) {
+            screen.orientation.lock('landscape').catch(() => {});
+        } else {
+            if (screen.orientation.unlock) screen.orientation.unlock();
+        }
+    });
+</script>
+
+
+
+</body></html>
