@@ -1,134 +1,109 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>TG_@Cricinsider365</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TG_@Cricinsider365</title>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            margin: 0;
+            padding: 0;
+            background: #000; /* Pure black */
+            color: #fff;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+            text-align: center;
+        }
 
-  <!-- Shaka Player -->
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/shaka-player/4.7.1/shaka-player.ui.min.js" crossorigin="anonymous"></script>
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/shaka-player/4.7.1/controls.min.css" crossorigin="anonymous">
+        .loading-message {
+            font-size: 18px;
+            font-weight: bold;
+            color: #ffcc00;
+            margin-bottom: 10px;
+            padding: 10px 20px;
+            border-radius: 10px;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            text-align: center;
+            box-shadow: 0 0 10px #ffcc00, 0 0 20px #ffcc00, 0 0 30px #ffcc00;
+            animation: glow 1.5s infinite alternate;
+        }
 
-  <style>
-    body {
-      margin: 0;
-      background-color: #000000; /* Full Black Background */
-      font-family: Arial, sans-serif;
-      color: white;
-      text-align: center;
-    }
+        @keyframes glow {
+            0% { box-shadow: 0 0 10px #ffcc00, 0 0 20px #ffcc00; }
+            100% { box-shadow: 0 0 20px #ffcc00, 0 0 30px #ffcc00; }
+        }
 
-    /* Header with Image */
-    .header {
-      background: #000000; /* Black background behind image */
-      padding: 10px;
-      border-bottom: 2px solid #333;
-      border-radius: 6px;
-      margin: 10px;
-      cursor: pointer; /* Show clickable cursor */
-      display: inline-block;
-    }
+        .player-container {
+            width: 95%;
+            max-width: 1200px;
+            margin: 20px auto;
+            box-shadow: 0 6px 25px rgba(255, 255, 255, 0.1);
+            border-radius: 15px;
+            overflow: hidden;
+            background: #000;
+            position: relative;
+        }
 
-    .header img {
-      width: 100%;
-      max-width: 300px; /* Adjust size as needed */
-      border-radius: 10px;
-    }
+        .player-container iframe {
+            border-radius: 15px;
+            width: 100%;
+            height: 100%;
+        }
 
-    /* Video Box */
-    .video-box {
-      margin: 15px;
-      border-radius: 12px;
-      overflow: hidden;
-      box-shadow: 0 0 12px rgba(255, 255, 255, 0.2);
-    }
+        .join-telegram-container {
+            margin-top: 20px;
+        }
 
-    video {
-      width: 100%;
-      height: auto;
-    }
+        .join-telegram-btn {
+            padding: 10px 20px;
+            font-size: 16px;
+            font-weight: bold;
+            color: white;
+            background-color: #008fd6;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            box-shadow: 0 4px 15px rgba(255, 255, 255, 0.2);
+            transition: background 0.3s ease;
+        }
 
-    /* Buttons Box */
-    .btn-box {
-      margin: 15px auto;
-      padding: 15px;
-      background: #111;
-      border-radius: 10px;
-      width: 90%;
-      max-width: 500px;
-    }
-
-    .btn-box h3 {
-      margin: 12px 0;
-      font-size: 18px;
-    }
-
-    /* White Button */
-    .btn {
-      display: block;
-      text-decoration: none;
-      color: #000;
-      font-weight: bold;
-      background: #fff;
-      padding: 14px;
-      margin: 10px 0;
-      border-radius: 8px;
-      transition: 0.3s;
-      border: 1px solid #fff;
-    }
-
-    .btn:hover {
-      background: #e6e6e6;
-    }
-
-    /* Red Important Button */
-    .btn-red {
-      background: #e60000;
-      color: #fff;
-      border: 1px solid #fff;
-    }
-
-    .btn-red:hover {
-      background: #b30000;
-    }
-
-    .important-text {
-      font-size: 16px;
-      font-weight: bold;
-      color: #ff4444;
-      margin-top: 15px;
-      margin-bottom: 5px;
-    }
-  </style>
+        .join-telegram-btn:hover {
+            background-color: #006bb3;
+        }
+    </style>
 </head>
-
 <body>
-  <!-- Header with Image (Clickable) -->
-  <div class="header" onclick="redirectToTelegram()">
-    <img src="https://i.postimg.cc/fRSw4ZRD/IMG-20250925-223757.jpg" alt="@Cricinsider365">
-  </div>
 
-  <!-- Video -->
-  <div class="video-box">
-    <div data-shaka-player-container>
-      <video autoplay muted data-shaka-player id="video" poster="https://i.postimg.cc/zX5R78S1/In-Shot-20250930-163713042.jpg"></video>
+    <div class="loading-message">Share The Links With Your Friends</div>
+
+    <div class="player-container">
+        <div style="padding:56.25% 0 0 0;position:relative;">
+            <iframe id="contentFrame"
+                src="https://cricket-yoddha.vercel.app/?url=https://allinonereborn.xyz/amit/hls2.php"
+                style="position:absolute;top:0;left:0;width:100%;height:100%;"
+                frameborder="0"
+                allow="autoplay; fullscreen; encrypted-media; picture-in-picture"
+                allowfullscreen>
+            </iframe>
+        </div>
     </div>
-  </div>
 
-  <!-- Buttons -->
-  <div class="btn-box">
-    <h3>📢 Follow us for Updates!</h3>
-    <a href="https://t.me/+IhSW51QysxU3NzY1" class="btn">Click Here To Join Telegram For More Links</a>
+    <div class="join-telegram-container">
+        <button class="join-telegram-btn" onclick="window.open('https://t.me/+IhSW51QysxU3NzY1', '_blank')">
+            Join Telegram Channel
+        </button>
+    </div>
 
-    <div class="important-text">❗ IMPORTANT</div>
-    <a href="#" onclick="copyLink()" class="btn btn-red">Copy Link & Use in Chrome Browser Only</a>
-    <a href="#" onclick="sharePage()" class="btn">Click Here To Share This Page Link ❤️</a>
-  </div>
+    <script>
+        if (confirm("Join Our Telegram Channel @Cricinsider365") == true) {
+            window.open("https://t.me/+IhSW51QysxU3NzY1", '_blank');
+        }
+    </script>
 
-  <script>
-    //<!--
-const _0x30e287=_0x3235;(function(_0xc061e4,_0x4e1cbe){const _0x395a99=_0x3235,_0x299536=_0xc061e4();while(!![]){try{const _0x517635=-parseInt(_0x395a99(0x149))/(0x1914+0x1981+-0x3294)+-parseInt(_0x395a99(0x14b))/(-0xfed+-0x99f+-0x1*-0x198e)+-parseInt(_0x395a99(0x138))/(0x739+0x22a0+-0x29d6)+-parseInt(_0x395a99(0x14e))/(-0x96c+0x1*0x52f+0xb*0x63)+parseInt(_0x395a99(0x10d))/(-0xdd1+-0x4*0x47a+0x11*0x1de)+-parseInt(_0x395a99(0x133))/(-0x1*-0x419+-0x1bdb+-0x4*-0x5f2)*(parseInt(_0x395a99(0xff))/(0x2a2*0x9+-0x158c+0xb5*-0x3))+parseInt(_0x395a99(0x10b))/(-0x15*0x145+0x2011*-0x1+0x3ac2)*(parseInt(_0x395a99(0x127))/(0x15d8+0xc3d+0x4*-0x883));if(_0x517635===_0x4e1cbe)break;else _0x299536['push'](_0x299536['shift']());}catch(_0xf62f7e){_0x299536['push'](_0x299536['shift']());}}}(_0x423a,0x1c9c6+-0x2*0x9eb2e+-0x1b*-0x11a91));async function init(){const _0xd32305=_0x3235,_0x3dc5ef={'zQILG':_0xd32305(0x10a)+_0xd32305(0x145)+_0xd32305(0x130),'bzugF':_0xd32305(0x109),'nbpgk':_0xd32305(0x108),'PndiU':_0xd32305(0xfe)+_0xd32305(0x11b)+_0xd32305(0x140)+'0d','mcqSA':_0xd32305(0x12d)+_0xd32305(0x143)+_0xd32305(0xfb)+_0xd32305(0x116)+_0xd32305(0xf9)+_0xd32305(0x102)+_0xd32305(0x139)+_0xd32305(0x12b)+_0xd32305(0xfd)+_0xd32305(0x111)+_0xd32305(0x118),'bzxRO':_0xd32305(0xf8)+_0xd32305(0x117)+_0xd32305(0xf2)+'d!','Nemnu':_0xd32305(0x110),'IaZNM':_0xd32305(0xfa)+_0xd32305(0x146)},_0x2420b1=document[_0xd32305(0xf5)+_0xd32305(0x12f)](_0x3dc5ef[_0xd32305(0x151)]),_0x2d6648=_0x2420b1['ui'],_0x3a4766=_0x2d6648[_0xd32305(0x13f)+'s'](),_0x56f4f2=_0x3a4766[_0xd32305(0x14c)]();_0x56f4f2[_0xd32305(0x11a)]({'drm':{'clearKeys':{'9dc5ddd99e3c723bf109a504da715dac':_0x3dc5ef[_0xd32305(0x13b)]}}});try{await _0x56f4f2[_0xd32305(0x13c)](_0x3dc5ef[_0xd32305(0x134)]),console[_0xd32305(0x153)](_0x3dc5ef[_0xd32305(0x13a)]),_0x2420b1[_0xd32305(0x123)+_0xd32305(0x126)](_0x3dc5ef[_0xd32305(0x155)],()=>{const _0x408e3d=_0xd32305,_0x16e540=document[_0x408e3d(0x141)+_0x408e3d(0xfc)](_0x3dc5ef[_0x408e3d(0x121)]);if(_0x16e540)_0x16e540[_0x408e3d(0x14a)][_0x408e3d(0x104)]=_0x3dc5ef[_0x408e3d(0x131)];});}catch(_0x3b9e5f){console[_0xd32305(0x128)](_0x3dc5ef[_0xd32305(0x11c)],_0x3b9e5f);}}function _0x423a(){const _0x41e3ca=['ing\x20video','_blank','❌\x20Failed\x20t','531281QLpIeA','style','757792jWswFc','getPlayer','QysxU3NzY1','528496VzyqvR','jMnRO','✅\x20Link\x20cop','nbpgk','er365','log','writeText','Nemnu','pen\x20it\x20in\x20','ease\x20copy\x20','Join\x20Our\x20T','Watch\x20Live','been\x20loade','then','shaka-ui-l','getElement','Error\x20shar','manually.','✅\x20The\x20vide','/live/eds/','Error\x20load','dge02.aws.','tor','ricLife_Wo','d39d55e9ba','7SVNEGx','\x20Cricket\x20N','https://t.','CricLife_W','t\x20supporte','display','Chrome\x20Bro','browser.','clipboard','video','none','.shaka-spi','6008FxokvK','open','3410835Qaewlz','elegram\x20Ch','cGbeh','playing','men_271120','location','XHYUt','ing:','me/+IhSW51','playco.com','o\x20has\x20now\x20','25.mpd','WLJxZ','configure','386a86641c','IaZNM','nfqNd','oaded','wser.','BFTcp','zQILG','href','addEventLi','AmyZL','OmIMX','stener','35181dMUBpG','error','Vinvb','share','025/DASH/C','ow\x20🚀','https://ne','catch','ById','iner','bzugF','Sharing\x20no','3912276HRyFXP','mcqSA','WbQLB','cinsider36','annel\x20@Cri','3459750fxrqQq','omen_27112','bzxRO','PndiU','load','@Cricinsid','d\x20on\x20this\x20','getControl','a9668abf2b','querySelec','ied!\x20Now\x20o','acdnpop3-e','o\x20copy.\x20Pl','nner-conta'];_0x423a=function(){return _0x41e3ca;};return _0x423a();}document[_0x30e287(0x123)+_0x30e287(0x126)](_0x30e287(0xf4)+_0x30e287(0x11e),init);function copyLink(){const _0x3cfff9=_0x30e287,_0x58ff73={'jMnRO':function(_0x17f9bf,_0x4531fe){return _0x17f9bf(_0x4531fe);},'WbQLB':_0x3cfff9(0x150)+_0x3cfff9(0x142)+_0x3cfff9(0xee)+_0x3cfff9(0x105)+_0x3cfff9(0x11f),'cGbeh':function(_0x2dfecf,_0xeaccfb){return _0x2dfecf(_0xeaccfb);},'Vinvb':_0x3cfff9(0x148)+_0x3cfff9(0x144)+_0x3cfff9(0xef)+_0x3cfff9(0xf7)};navigator[_0x3cfff9(0x107)][_0x3cfff9(0x154)](window[_0x3cfff9(0x112)][_0x3cfff9(0x122)])[_0x3cfff9(0xf3)](()=>{const _0xe4e99f=_0x3cfff9;_0x58ff73[_0xe4e99f(0x14f)](alert,_0x58ff73[_0xe4e99f(0x135)]);})[_0x3cfff9(0x12e)](()=>{const _0x1eff54=_0x3cfff9;_0x58ff73[_0x1eff54(0x10f)](alert,_0x58ff73[_0x1eff54(0x129)]);});}function sharePage(){const _0x290a64=_0x30e287,_0x4d33d1={'AmyZL':_0x290a64(0x13d)+_0x290a64(0x152),'nfqNd':_0x290a64(0xf1)+_0x290a64(0x100)+_0x290a64(0x12c),'OmIMX':function(_0x49f087,_0x36dd87){return _0x49f087(_0x36dd87);},'XHYUt':_0x290a64(0x132)+_0x290a64(0x103)+_0x290a64(0x13e)+_0x290a64(0x106)};navigator[_0x290a64(0x12a)]?navigator[_0x290a64(0x12a)]({'title':_0x4d33d1[_0x290a64(0x124)],'text':_0x4d33d1[_0x290a64(0x11d)],'url':window[_0x290a64(0x112)][_0x290a64(0x122)]})[_0x290a64(0x12e)](_0x5d14c2=>console[_0x290a64(0x128)](_0x290a64(0xf6)+_0x290a64(0x114),_0x5d14c2)):_0x4d33d1[_0x290a64(0x125)](alert,_0x4d33d1[_0x290a64(0x113)]);}confirm(_0x30e287(0xf0)+_0x30e287(0x10e)+_0x30e287(0x137)+_0x30e287(0x136)+'5')==!![]&&window[_0x30e287(0x10c)](_0x30e287(0x101)+_0x30e287(0x115)+_0x30e287(0x14d),_0x30e287(0x147));function _0x3235(_0xc0a1e1,_0x592a3f){_0xc0a1e1=_0xc0a1e1-(0x1*0x2480+0x2188+-0x451a);const _0xadb1fe=_0x423a();let _0xca731a=_0xadb1fe[_0xc0a1e1];return _0xca731a;}function redirectToTelegram(){const _0x3fa333=_0x30e287,_0x51981e={'BFTcp':_0x3fa333(0x101)+_0x3fa333(0x115)+_0x3fa333(0x14d),'WLJxZ':_0x3fa333(0x147)};window[_0x3fa333(0x10c)](_0x51981e[_0x3fa333(0x120)],_0x51981e[_0x3fa333(0x119)]);}
-//-->
-
-  </script>
 </body>
+</html>
