@@ -135,13 +135,13 @@
       player.configure({
         drm: {
           clearKeys: {
-            '03c71fb5e7ca7f88def2e988ef390c26': "0a2ebb5b953aa99dd31e9c7ebf86b657"
+            '4e8b5ddac5332a4e66c002b4c0f22322': "d06de29b0eacb81ac6e3f325849047e8"
           }
         }
       });
 
       try {
-        await player.load("https://a201aivottlinear-a.akamaihd.net/OTTB/lhr-nitro/clients/dash/enc/hrnuswtzcw/out/v1/ff22892ec10049e39572291600b150a0/cenc.mpd");
+        await player.load("https://ev-fast-mpd.starzplayarabia.com/live/eds/Criclife_3/DASH/Criclife_3.mpd");
         console.log("✅ The video has now been loaded!");
 
         video.addEventListener('playing', () => {
