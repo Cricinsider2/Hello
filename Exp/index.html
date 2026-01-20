@@ -18,6 +18,7 @@
     body {
       background-color: #000;
       color: #fff;
+      padding-bottom: 90px; /* space for bottom button */
     }
 
     /* HEADER */
@@ -170,6 +171,27 @@
       border-radius: 6px;
       cursor: pointer;
     }
+
+    /* TELEGRAM BUTTON */
+    .telegram-btn {
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      width: 100%;
+      padding: 18px;
+      background: linear-gradient(90deg, #0088cc, #00aaff);
+      text-align: center;
+      font-size: 1.1rem;
+      font-weight: 700;
+      color: #fff;
+      text-decoration: none;
+      z-index: 1000;
+      box-shadow: 0 -4px 15px rgba(0, 136, 204, 0.6);
+    }
+
+    .telegram-btn:hover {
+      background: linear-gradient(90deg, #00aaff, #0088cc);
+    }
   </style>
 </head>
 
@@ -181,19 +203,6 @@
   </header>
 
   <div class="container">
-
-    <div class="card">
-      <img src="https://i.postimg.cc/nLzkZhx7/1768821872539-h.jpg">
-      <div class="card-content">
-        <h2>ICC WOMEN'S WORLD CUP 2025</h2>
-        <div class="btn-group">
-          <a href="http://insiderlivehd.pages.dev/Willow" class="btn btn-hindi">Hindi 🎙️</a>
-          <a href="http://insiderlivehd.pages.dev/Willow" class="btn btn-english">English 🎧</a>
-        </div>
-        <p>Watch Live Tap On Button Hindi Or English</p>
-      </div>
-    </div>
-<div class="container">
 
     <div class="card">
       <img src="https://i.postimg.cc/nLzkZhx7/1768821872539-h.jpg">
@@ -229,36 +238,23 @@
         are hosted by third-party websites over which we have no control.
       </p>
 
-      <p><strong>No Hosting of Content</strong><br>
-        We do not host live match streams, control any streaming servers,
-        upload copyrighted content, or modify third-party websites.
-      </p>
+      <p><strong>No Hosting of Content</strong></p>
+      <p>We do not host live match streams, control servers, or upload copyrighted content.</p>
 
-      <p>
-        <strong>External Links Disclaimer</strong><br>
-        Links provided are for redirection only. We do not guarantee accuracy,
-        availability, or legality of third-party streams.
-      </p>
-
-      <p>
-        <strong>Fair Use and Copyright</strong><br>
-        All trademarks, logos, team names, and content belong to their respective owners.
-      </p>
-
-      <p>
-        <strong>Limitation of Liability</strong><br>
-        Cricinsider365 will not be liable for any loss or damage resulting from
-        reliance on third-party content or external websites.
-      </p>
-
+      <p><strong>Limitation of Liability</strong></p>
+      <p>Cricinsider365 is not responsible for third-party websites or content.</p>
     </div>
   </div>
+
+  <!-- JOIN TELEGRAM BUTTON -->
+  <a href="https://t.me/Cricinsider365" target="_blank" class="telegram-btn">
+    🚀 JOIN TELEGRAM FOR LIVE UPDATES
+  </a>
 
   <script>
     function openModal() {
       document.getElementById("disclaimerModal").style.display = "block";
     }
-
     function closeModal() {
       document.getElementById("disclaimerModal").style.display = "none";
     }
