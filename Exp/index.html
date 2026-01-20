@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>TG_@Cricinsider365</title>
+  <title>Cricinsider365</title>
 
   <link rel="icon" href="https://upload.wikimedia.org/wikipedia/commons/3/35/Superman_logo.svg">
 
@@ -22,22 +22,40 @@
 
     /* HEADER */
     header {
+      position: relative;
       display: flex;
       justify-content: center;
       align-items: center;
-      padding: 20px 20px;
+      padding: 20px;
       background: #111;
       border-bottom: 2px solid #ff3c00;
     }
 
     header img {
-      width: 130px;          /* HEADER IMAGE SIZE */
-      max-width: 40vw;       /* RESPONSIVE */
+      width: 130px;
+      max-width: 40vw;
       border-radius: 16px;
       box-shadow: 0 0 22px rgba(255, 60, 0, 0.9);
     }
 
-    /* MAIN CONTAINER */
+    /* ABOUT BUTTON */
+    .about-btn {
+      position: absolute;
+      left: 15px;
+      top: 50%;
+      transform: translateY(-50%);
+      padding: 8px 14px;
+      font-size: 0.85rem;
+      font-weight: 600;
+      border-radius: 6px;
+      background: linear-gradient(90deg, #ff3c00, #ff6600);
+      color: #fff;
+      border: none;
+      cursor: pointer;
+      box-shadow: 0 0 10px rgba(255, 60, 0, 0.6);
+    }
+
+    /* CONTAINER */
     .container {
       padding: 20px;
       display: flex;
@@ -60,7 +78,6 @@
 
     .card img {
       width: 100%;
-      display: block;
     }
 
     .card-content {
@@ -92,64 +109,147 @@
       font-weight: 600;
       border-radius: 8px;
       color: #fff;
-      cursor: pointer;
       text-decoration: none;
       transition: 0.3s;
     }
 
     .btn-hindi {
       background: linear-gradient(90deg, #ff3c00, #ff6600);
-      box-shadow: 0 0 10px rgba(255, 60, 0, 0.5);
     }
 
     .btn-english {
       background: linear-gradient(90deg, #0047ff, #009dff);
-      box-shadow: 0 0 10px rgba(0, 100, 255, 0.4);
     }
 
     .btn:hover {
       transform: scale(1.05);
+    }
+
+    /* MODAL */
+    .modal {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,0.9);
+      z-index: 999;
+      padding: 20px;
+      overflow-y: auto;
+    }
+
+    .modal-content {
+      max-width: 900px;
+      margin: auto;
+      background: #111;
+      padding: 25px;
+      border-radius: 12px;
+      box-shadow: 0 0 20px rgba(255, 60, 0, 0.6);
+    }
+
+    .modal-content h2 {
+      color: #ff6600;
+      margin-bottom: 15px;
+    }
+
+    .modal-content p {
+      font-size: 0.9rem;
+      color: #ddd;
+      line-height: 1.6;
+      margin-bottom: 12px;
+    }
+
+    .close-btn {
+      text-align: right;
+      margin-bottom: 10px;
+    }
+
+    .close-btn button {
+      background: #ff3c00;
+      border: none;
+      color: #fff;
+      padding: 6px 12px;
+      border-radius: 6px;
+      cursor: pointer;
     }
   </style>
 </head>
 
 <body>
 
-  <!-- HEADER IMAGE CENTER -->
   <header>
+    <button class="about-btn" onclick="openModal()">About</button>
     <img src="https://i.postimg.cc/fRSw4ZRD/IMG-20250925-223757.jpg" alt="Cricinsider365 Logo">
   </header>
 
-  <!-- CONTENT -->
   <div class="container">
 
-    <!-- CARD 1 -->
     <div class="card">
-      <img src="https://i.postimg.cc/nLzkZhx7/1768821872539-h.jpg" alt="ICC Womens World Cup 2025">
+      <img src="https://i.postimg.cc/nLzkZhx7/1768821872539-h.jpg">
       <div class="card-content">
         <h2>ICC WOMEN'S WORLD CUP 2025</h2>
         <div class="btn-group">
-          <a href="http://insiderlivehd.pages.dev/Willow2" class="btn btn-hindi" target="_blank">Hindi 🎙️</a>
-          <a href="http://insiderlivehd.pages.dev/Willow2" class="btn btn-english" target="_blank">English 🎧</a>
-        </div>
-        <p>Watch Live Tap On Button Hindi Or English</p>
-      </div>
-    </div>
-
-    <!-- CARD 2 -->
-    <div class="card">
-      <img src="https://i.postimg.cc/zX5R78S1/In-Shot-20250930-163713042.jpg" alt="IND tour of AUS 2025">
-      <div class="card-content">
-        <h2>IND TOUR OF AUS 2025</h2>
-        <div class="btn-group">
-          <a href="http://insiderlivehd.pages.dev/Willow2" class="btn btn-hindi" target="_blank">Hindi 🎙️</a>
-          <a href="http://insiderlivehd.pages.dev/Willow2" class="btn btn-english" target="_blank">English 🎧</a>
+          <a href="#" class="btn btn-hindi">Hindi 🎙️</a>
+          <a href="#" class="btn btn-english">English 🎧</a>
         </div>
         <p>Watch Live Tap On Button Hindi Or English</p>
       </div>
     </div>
 
   </div>
+
+  <!-- DISCLAIMER MODAL -->
+  <div class="modal" id="disclaimerModal">
+    <div class="modal-content">
+      <div class="close-btn">
+        <button onclick="closeModal()">Close</button>
+      </div>
+
+      <h2>Disclaimer – Cricinsider365</h2>
+
+      <p>
+        Cricinsider365, accessible at Cricinsider.tech, provides users with links
+        that redirect to third-party websites where live match streams may be available.
+        Cricinsider365 does not host, upload, broadcast, or stream any content on its own servers.
+      </p>
+
+      <p>
+        All live streams, videos, media files, and content accessible through external links
+        are hosted by third-party websites over which we have no control.
+      </p>
+
+      <p><strong>No Hosting of Content</strong><br>
+        We do not host live match streams, control any streaming servers,
+        upload copyrighted content, or modify third-party websites.
+      </p>
+
+      <p>
+        <strong>External Links Disclaimer</strong><br>
+        Links provided are for redirection only. We do not guarantee accuracy,
+        availability, or legality of third-party streams.
+      </p>
+
+      <p>
+        <strong>Fair Use and Copyright</strong><br>
+        All trademarks, logos, team names, and content belong to their respective owners.
+      </p>
+
+      <p>
+        <strong>Limitation of Liability</strong><br>
+        Cricinsider365 will not be liable for any loss or damage resulting from
+        reliance on third-party content or external websites.
+      </p>
+
+    </div>
+  </div>
+
+  <script>
+    function openModal() {
+      document.getElementById("disclaimerModal").style.display = "block";
+    }
+
+    function closeModal() {
+      document.getElementById("disclaimerModal").style.display = "none";
+    }
+  </script>
 
 </body>
 </html>
