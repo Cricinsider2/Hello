@@ -18,7 +18,7 @@
     body {
       background-color: #000;
       color: #fff;
-      padding-bottom: 80px;
+      padding-bottom: 80px; /* bottom bar space */
     }
 
     /* HEADER */
@@ -33,8 +33,8 @@
     }
 
     header img {
-      width: 130px;
-      max-width: 40vw;
+      width: 150px;
+      max-width: 45vw;
       border-radius: 16px;
       box-shadow: 0 0 22px rgba(255, 60, 0, 0.9);
     }
@@ -67,9 +67,9 @@
     /* CARD */
     .card {
       background: linear-gradient(to bottom, #2a0000, #000);
-      border-radius: 12px;
+      border-radius: 14px;
       overflow: hidden;
-      box-shadow: 0 0 10px rgba(255, 60, 0, 0.4);
+      box-shadow: 0 0 12px rgba(255, 60, 0, 0.45);
       transition: 0.3s;
     }
 
@@ -79,6 +79,7 @@
 
     .card img {
       width: 100%;
+      display: block;
     }
 
     .card-content {
@@ -112,6 +113,7 @@
       color: #fff;
       text-decoration: none;
       transition: 0.3s;
+      font-size: 0.9rem;
     }
 
     .btn-hindi {
@@ -155,33 +157,27 @@
       background: #ff3c00;
       border: none;
       color: #fff;
-      padding: 6px 12px;
+      padding: 6px 14px;
       border-radius: 6px;
       cursor: pointer;
+      font-weight: 600;
     }
 
-    /* TELEGRAM BUTTON – CLEAN VERSION */
+    /* TELEGRAM FIXED BOTTOM BAR */
     .telegram-btn {
       position: fixed;
-      bottom: 15px;
-      left: 50%;
-      transform: translateX(-50%);
-      padding: 12px 26px;
+      bottom: 0;
+      left: 0;
+      width: 100%;
+      padding: 14px 10px;
       background: linear-gradient(90deg, #0088cc, #00aaff);
-      border-radius: 40px;
-      font-size: 0.95rem;
+      font-size: 1rem;
       font-weight: 600;
       color: #fff;
       text-decoration: none;
-      display: flex;
-      align-items: center;
-      gap: 10px;
+      text-align: center;
       z-index: 1000;
-      box-shadow: 0 6px 15px rgba(0, 136, 204, 0.4);
-    }
-
-    .telegram-btn:hover {
-      box-shadow: 0 8px 20px rgba(0, 136, 204, 0.6);
+      box-shadow: 0 -4px 15px rgba(0, 136, 204, 0.5);
     }
   </style>
 </head>
@@ -195,6 +191,7 @@
 
   <div class="container">
 
+    <!-- MATCH CARD 1 -->
     <div class="card">
       <img src="https://i.postimg.cc/nLzkZhx7/1768821872539-h.jpg">
       <div class="card-content">
@@ -203,10 +200,11 @@
           <a href="http://insiderlivehd.pages.dev/Willow" class="btn btn-hindi">Hindi 🎙️</a>
           <a href="http://insiderlivehd.pages.dev/Willow" class="btn btn-english">English 🎧</a>
         </div>
-        <p>Watch Live Tap On Button Hindi Or English</p>
+        <p>Watch Live • Tap Hindi or English</p>
       </div>
     </div>
 
+    <!-- MATCH CARD 2 -->
     <div class="card">
       <img src="https://i.postimg.cc/zX5R78S1/In-Shot-20250930-163713042.jpg">
       <div class="card-content">
@@ -215,15 +213,15 @@
           <a href="http://insiderlivehd.pages.dev/Willow" class="btn btn-hindi">Hindi 🎙️</a>
           <a href="http://insiderlivehd.pages.dev/Willow" class="btn btn-english">English 🎧</a>
         </div>
-        <p>Watch Live Tap On Button Hindi Or English</p>
+        <p>Watch Live • Tap Hindi or English</p>
       </div>
     </div>
 
   </div>
 
-  <!-- JOIN TELEGRAM BUTTON -->
+  <!-- JOIN TELEGRAM FIXED BAR -->
   <a href="https://t.me/Cricinsider365" target="_blank" class="telegram-btn">
-    📢 Join Our Telegram For Free Live Links
+    📢 Join Our Telegram For Free Live Match Links
   </a>
 
   <!-- DISCLAIMER MODAL -->
@@ -233,7 +231,8 @@
         <button onclick="closeModal()">Close</button>
       </div>
       <p>
-        Cricinsider365 does not host any content. All links are third-party websites available on internet.
+        Cricinsider365 does not host, upload or stream any content.  
+        All links redirect to third-party websites available publicly on the internet.
       </p>
     </div>
   </div>
