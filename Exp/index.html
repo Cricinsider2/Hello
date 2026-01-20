@@ -18,7 +18,7 @@
     body {
       background-color: #000;
       color: #fff;
-      padding-bottom: 90px; /* space for bottom button */
+      padding-bottom: 80px;
     }
 
     /* HEADER */
@@ -45,15 +45,15 @@
       left: 15px;
       top: 50%;
       transform: translateY(-50%);
-      padding: 8px 14px;
-      font-size: 0.85rem;
+      padding: 7px 14px;
+      font-size: 0.8rem;
       font-weight: 600;
-      border-radius: 6px;
+      border-radius: 20px;
       background: linear-gradient(90deg, #ff3c00, #ff6600);
       color: #fff;
       border: none;
       cursor: pointer;
-      box-shadow: 0 0 10px rgba(255, 60, 0, 0.6);
+      box-shadow: 0 0 8px rgba(255, 60, 0, 0.6);
     }
 
     /* CONTAINER */
@@ -97,7 +97,7 @@
       margin-top: 10px;
     }
 
-    /* BUTTONS */
+    /* MATCH BUTTONS */
     .btn-group {
       display: flex;
       justify-content: center;
@@ -146,18 +146,6 @@
       box-shadow: 0 0 20px rgba(255, 60, 0, 0.6);
     }
 
-    .modal-content h2 {
-      color: #ff6600;
-      margin-bottom: 15px;
-    }
-
-    .modal-content p {
-      font-size: 0.9rem;
-      color: #ddd;
-      line-height: 1.6;
-      margin-bottom: 12px;
-    }
-
     .close-btn {
       text-align: right;
       margin-bottom: 10px;
@@ -172,25 +160,28 @@
       cursor: pointer;
     }
 
-    /* TELEGRAM BUTTON */
+    /* TELEGRAM BUTTON – CLEAN VERSION */
     .telegram-btn {
       position: fixed;
-      bottom: 0;
-      left: 0;
-      width: 100%;
-      padding: 18px;
+      bottom: 15px;
+      left: 50%;
+      transform: translateX(-50%);
+      padding: 12px 26px;
       background: linear-gradient(90deg, #0088cc, #00aaff);
-      text-align: center;
-      font-size: 1.1rem;
-      font-weight: 700;
+      border-radius: 40px;
+      font-size: 0.95rem;
+      font-weight: 600;
       color: #fff;
       text-decoration: none;
+      display: flex;
+      align-items: center;
+      gap: 10px;
       z-index: 1000;
-      box-shadow: 0 -4px 15px rgba(0, 136, 204, 0.6);
+      box-shadow: 0 6px 15px rgba(0, 136, 204, 0.4);
     }
 
     .telegram-btn:hover {
-      background: linear-gradient(90deg, #00aaff, #0088cc);
+      box-shadow: 0 8px 20px rgba(0, 136, 204, 0.6);
     }
   </style>
 </head>
@@ -216,7 +207,24 @@
       </div>
     </div>
 
+    <div class="card">
+      <img src="https://i.postimg.cc/zX5R78S1/In-Shot-20250930-163713042.jpg">
+      <div class="card-content">
+        <h2>IND TOUR OF AUS 2025</h2>
+        <div class="btn-group">
+          <a href="http://insiderlivehd.pages.dev/Willow" class="btn btn-hindi">Hindi 🎙️</a>
+          <a href="http://insiderlivehd.pages.dev/Willow" class="btn btn-english">English 🎧</a>
+        </div>
+        <p>Watch Live Tap On Button Hindi Or English</p>
+      </div>
+    </div>
+
   </div>
+
+  <!-- JOIN TELEGRAM BUTTON -->
+  <a href="https://t.me/Cricinsider365" target="_blank" class="telegram-btn">
+    📢 Join Telegram
+  </a>
 
   <!-- DISCLAIMER MODAL -->
   <div class="modal" id="disclaimerModal">
@@ -224,32 +232,11 @@
       <div class="close-btn">
         <button onclick="closeModal()">Close</button>
       </div>
-
-      <h2>Disclaimer – Cricinsider365</h2>
-
       <p>
-        Cricinsider365, accessible at Cricinsider.tech, provides users with links
-        that redirect to third-party websites where live match streams may be available.
-        Cricinsider365 does not host, upload, broadcast, or stream any content on its own servers.
+        Cricinsider365 does not host any content. All links redirect to third-party websites.
       </p>
-
-      <p>
-        All live streams, videos, media files, and content accessible through external links
-        are hosted by third-party websites over which we have no control.
-      </p>
-
-      <p><strong>No Hosting of Content</strong></p>
-      <p>We do not host live match streams, control servers, or upload copyrighted content.</p>
-
-      <p><strong>Limitation of Liability</strong></p>
-      <p>Cricinsider365 is not responsible for third-party websites or content.</p>
     </div>
   </div>
-
-  <!-- JOIN TELEGRAM BUTTON -->
-  <a href="https://t.me/Cricinsider365" target="_blank" class="telegram-btn">
-    🚀 JOIN TELEGRAM FOR LIVE UPDATES
-  </a>
 
   <script>
     function openModal() {
