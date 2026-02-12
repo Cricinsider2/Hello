@@ -135,13 +135,13 @@
       player.configure({
         drm: {
           clearKeys: {
-            '2904b17cb64c996dbc254981b7602863': "66a7ef671b84498e64f94e8401fe8cb9"
+            '225c55ce3bff3d02b71b5dbd42209860': "cb5d16c706bbf565df2afa108eccb879"
           }
         }
       });
 
       try {
-        await player.load("https://a201aivottlinear-a.akamaihd.net/OTTB/lhr-nitro/live/dash/enc/0q80caubnh/out/v1/d61c7af3122d4cffb059904a26835baa/cenc.mpd");
+        await player.load("https://livem-d-01-icc-we.akamaized.net/variant/v1/dai-event-prd-pal-north/vcg-01-d/DASH_DASH/Live/channel(vcg-01-ch-hd-04)/manifest.mpd");
         console.log("✅ The video has now been loaded!");
 
         video.addEventListener('playing', () => {
