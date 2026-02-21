@@ -135,13 +135,13 @@
       player.configure({
         drm: {
           clearKeys: {
-            '2904b17cb64c996dbc254981b7602863': "66a7ef671b84498e64f94e8401fe8cb9"
+            '29256eae859c52928db4c3fc77b01588': "0371f71ce2e897e893a9532e540fbc0f"
           }
         }
       });
 
       try {
-        await player.load("https://otte.live.fly.ww.aiv-cdn.net/syd-nitro/live/dash/enc/dznewfsjjw/out/v1/2298afadf64943adb0b44dc540ace1ce/cenc.mpd");
+        await player.load("https://ml-pull-rtmp-pk1.myco.io/Clean2/dash/index.mpd");
         console.log("✅ The video has now been loaded!");
 
         video.addEventListener('playing', () => {
