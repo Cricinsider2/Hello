@@ -1,12 +1,9 @@
-
-
-
 <!DOCTYPE html>
 <html>
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Star Hindi</title>
+  <title>@Cricinsider365</title>
 
   <script src="https://cdnjs.cloudflare.com/ajax/libs/shaka-player/4.7.11/shaka-player.ui.min.js" crossorigin="anonymous"></script>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/shaka-player/4.7.11/controls.min.css" crossorigin="anonymous">
@@ -106,8 +103,7 @@
       <button id="closeButton" class="btn" type="button">Maybe Later</button>
     </div>
   </div>
-
-  <!-- Chrome Only Modal -->
+<!-- Chrome Only Modal -->
   <div id="chromeModal" class="modal hidden" role="dialog" aria-modal="true">
     <div class="modal-content">
       <h2>Please Open in Chrome</h2>
@@ -130,12 +126,48 @@
         return; // block video setup in non-Chrome
       }
 
+      /********** Enable autoplay with audio **********/
+      // Try to enable autoplay with audio
+      const video = document.querySelector('video');
+
+      // Function to handle autoplay
+      const enableAutoplay = async () => {
+        try {
+          // Try to play with audio
+          await video.play();
+          console.log('Autoplay with audio succeeded');
+        } catch (error) {
+          console.log('Autoplay with audio failed, trying with muted autoplay first:', error);
+
+          // If autoplay with audio fails, try muted autoplay first
+          video.muted = true;
+          try {
+            await video.play();
+            console.log('Muted autoplay succeeded');
+
+            // After muted autoplay succeeds, try to unmute
+            setTimeout(async () => {
+              try {
+                video.muted = false;
+                // Try to play again with audio
+                await video.play();
+                console.log('Successfully unmuted');
+              } catch (unmuteError) {
+                console.log('Could not unmute automatically, user interaction needed');
+              }
+            }, 1000);
+          } catch (mutedError) {
+            console.log('Muted autoplay also failed:', mutedError);
+          }
+        }
+      };
+
       /********** HDNEA cookie management **********/
-      const COOKIE_URL = 'https://raw.githubusercontent.com/valverdeae/auto-cookie-fetcher/refs/heads/main/cookie.txt';
+      const COOKIE_URL = 'https://raw.githubusercontent.com/24sports-net/cookie-updater/refs/heads/main/cookie.json';
       const COOKIE_REFRESH_INTERVAL = 5 * 60 * 1000; // 5 minutes in milliseconds
-      
+
       let cookieHeader = '';
-      
+
       // Function to fetch and update the HDNEA cookie
       async function fetchAndUpdateCookie() {
         try {
@@ -144,9 +176,18 @@
           if (!response.ok) {
             throw new Error(`Failed to fetch cookie: ${response.status}`);
           }
-          const cookieText = await response.text();
-          cookieHeader = cookieText.trim();
-          console.log('HDNEA fetched successfully:', cookieHeader);
+
+          // Parse the JSON response
+          const cookieData = await response.json();
+
+          // Extract the cookie value from the cookieHeader property
+          if (cookieData && cookieData.cookieHeader) {
+            cookieHeader = cookieData.cookieHeader;
+            console.log('HDNEA fetched successfully:', cookieHeader);
+          } else {
+            console.error('Invalid cookie data format:', cookieData);
+          }
+
           return cookieHeader;
         } catch (error) {
           console.error('Error fetching HDNEA cookie:', error);
@@ -155,20 +196,18 @@
             console.log('Using previously fetched cookie due to error');
             return cookieHeader;
           }
-          throw error;
+          return null; // Return null instead of throwing to prevent breaking the player
         }
       }
-      
+
       // Set up periodic cookie refresh
       setInterval(fetchAndUpdateCookie, COOKIE_REFRESH_INTERVAL);
 
       /********** Your original Shaka player code **********/
       shaka.polyfill.installAll();
-
-      if (!shaka.Player.isBrowserSupported()) {
+if (!shaka.Player.isBrowserSupported()) {
         console.error('Browser not supported');
       } else {
-        const video = document.querySelector('video');
         const player = new shaka.Player();
         await player.attach(video);
 
@@ -195,11 +234,11 @@
 
         let drmConfig = {
           clearKeys: {
-            "fc3aafe80845584199a637249fad2ffa": "ca4474972fdb4bf8ecb164482853c692"
+            "bd1ea6a1c1fb5dcdb709434e0826bbc0": "f57f22cba32739ce7beb1fab3f3d060b"
           }
         };
-        
-        let streamUrl = "https://jiotvpllive.cdn.jio.com/bpk-tv/Star_Sports_2_BTS/output/index.mpd";
+
+        let streamUrl = "https://jiotvmblive.cdn.jio.com/bpk-tv/Sports18_1_HD_BTS/output/index.mpd";
 
         // Fetch initial cookie before setting up player
         try {
@@ -226,21 +265,31 @@
         player.getNetworkingEngine().registerRequestFilter((type, request) => {
           request.headers['Referer'] = 'https://www.jiotv.com/';
           request.headers['User-Agent'] = "plaYtv/7.1.5 (Linux;Android 13) ExoPlayerLib/2.11.6";
-          request.headers['Cookie'] = cookieHeader;
 
-          if (
-            (type === shaka.net.NetworkingEngine.RequestType.MANIFEST ||
-             type === shaka.net.NetworkingEngine.RequestType.SEGMENT) &&
-            request.uris[0] && !request.uris[0].includes('__hdnea__=')
-          ) {
-            const separator = request.uris[0].includes('?') ? '&' : '?';
-            request.uris[0] += separator + cookieHeader;
+          // Only set cookie header if we have a valid cookie
+          if (cookieHeader) {
+            request.headers['Cookie'] = cookieHeader;
+
+            if (
+              (type === shaka.net.NetworkingEngine.RequestType.MANIFEST ||
+               type === shaka.net.NetworkingEngine.RequestType.SEGMENT) &&
+              request.uris[0] && !request.uris[0].includes('__hdnea__=')
+            ) {
+              const separator = request.uris[0].includes('?') ? '&' : '?';
+              request.uris[0] += separator + cookieHeader;
+            }
+          } else {
+            console.warn('No cookie header available for request');
           }
         });
 
         try {
           await player.load(streamUrl);
           console.log('Player loaded successfully');
+
+          // Try to enable autoplay after player is loaded
+          await enableAutoplay();
+
         } catch (error) {
           console.error('Load error:', error);
         }
@@ -255,10 +304,14 @@
         if (!modal.classList.contains('hidden')) {
           modal.classList.add('hidden');
           modal.setAttribute('aria-hidden', 'true');
+
+          // Try to play again when modal is closed (user interaction)
+          if (video) {
+            video.play().catch(e => console.log('Play after modal close failed:', e));
+          }
         }
       }
-
-      if (closeButton) {
+if (closeButton) {
         closeButton.addEventListener('click', (e) => { e.preventDefault(); hideModal(); });
       }
       if (joinLink) {
