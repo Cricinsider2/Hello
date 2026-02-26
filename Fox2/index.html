@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Cric Hype - Live Stream</title>
+<title>Cric Hype - Live</title>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/shaka-player/4.7.1/shaka-player.ui.min.js" crossorigin="anonymous"></script>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/shaka-player/4.7.1/controls.min.css" crossorigin="anonymous">
@@ -11,19 +11,19 @@
 <style>
 body{
   margin:0;
-  font-family: 'Segoe UI', sans-serif;
+  font-family: Arial, sans-serif;
   background: linear-gradient(180deg,#0f172a,#020617);
   color:white;
 }
 
-/* Top Header */
+/* Header */
 .top-bar{
   display:flex;
-  align-items:center;
   justify-content:space-between;
+  align-items:center;
   padding:15px;
   font-size:18px;
-  font-weight:600;
+  font-weight:bold;
 }
 
 .live-badge{
@@ -35,13 +35,12 @@ body{
   border:1px solid #ff4d4d;
 }
 
-/* Video Card */
-.video-card{
+/* Video */
+.video-box{
   margin:15px;
   border-radius:18px;
   overflow:hidden;
-  background:#0f172a;
-  box-shadow:0 0 25px rgba(0,0,0,0.6);
+  box-shadow:0 0 20px rgba(0,0,0,0.6);
 }
 
 video{
@@ -49,27 +48,15 @@ video{
   height:auto;
 }
 
-/* Section Card */
+/* Cards */
 .card{
   margin:15px;
   padding:20px;
   background:rgba(255,255,255,0.05);
   border-radius:20px;
-  backdrop-filter:blur(12px);
   border:1px solid rgba(255,255,255,0.08);
 }
 
-.card h3{
-  margin:0 0 10px 0;
-  font-size:18px;
-}
-
-.card p{
-  font-size:14px;
-  opacity:0.8;
-}
-
-/* Buttons */
 .btn{
   display:inline-block;
   padding:12px 18px;
@@ -81,7 +68,7 @@ video{
 }
 
 .telegram{
-  background:#1da1f2;
+  background:#229ED9;
 }
 
 .instagram{
@@ -107,32 +94,29 @@ video{
   <div class="live-badge">● LIVE STREAM</div>
 </div>
 
-<!-- Video -->
-<div class="video-card">
+<!-- IMPORTANT: SAME SHAKA STRUCTURE -->
+<div class="video-box">
   <div data-shaka-player-container>
-    <video autoplay muted data-shaka-player id="video"></video>
+    <video autoplay muted playsinline data-shaka-player id="video"></video>
   </div>
 </div>
 
-<!-- Join Community -->
 <div class="card">
   <h3>📢 Join Community</h3>
   <p>Join our official channels for backup links and schedules.</p>
-
   <a href="https://t.me/+IhSW51QysxU3NzY1" class="btn telegram">Telegram</a>
   <a href="#" class="btn instagram">Instagram</a>
 </div>
 
-<!-- Support -->
 <div class="card">
   <h3>ℹ Support Us</h3>
-  <p>For best experience, use Google Chrome. If stream lags, try refreshing the page.</p>
-
+  <p>For best experience use Google Chrome.</p>
   <a href="#" onclick="sharePage()" class="share-btn">🔗 Share Link with Friends</a>
 </div>
 
 <script>
-async function init() {
+document.addEventListener("shaka-ui-loaded", async () => {
+
   const video = document.getElementById("video");
   const ui = video.ui;
   const controls = ui.getControls();
@@ -148,22 +132,21 @@ async function init() {
 
   try {
     await player.load("https://a96aivottlinear-a.akamaihd.net/OTTB/iad-nitro/enc/rsezvlsysm/out/v1/abf442903f5b429581bf54e219a7dfc9/cenc.mpd");
+    console.log("Video Loaded ✅");
   } catch (error) {
     console.error("Error loading video", error);
   }
-}
+});
 
-document.addEventListener("shaka-ui-loaded", init);
-
-function sharePage() {
-  if (navigator.share) {
+function sharePage(){
+  if(navigator.share){
     navigator.share({
-      title: "Cric Hype Live",
-      text: "Watch Live Cricket Now 🚀",
-      url: window.location.href
+      title:"Cric Hype Live",
+      text:"Watch Live Cricket",
+      url:window.location.href
     });
-  } else {
-    alert("Sharing not supported on this browser.");
+  }else{
+    alert("Sharing not supported");
   }
 }
 </script>
