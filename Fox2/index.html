@@ -1,92 +1,73 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
+<!DOCTYPE html><html lang="en"><head>
   <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="referrer" content="no-referrer">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
   <title>Star Sports 1 Hindi // Sayan 2026</title>
+  <meta name="referrer" content="no-referrer">
 
-  <!-- Shaka Player -->
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/shaka-player/4.7.11/shaka-player.ui.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/shaka-player/4.7.11/shaka-player.ui.min.js"></script><style type="text/css">* {user-select: auto !important; -webkit-user-select: auto !important;}</style><input type="hidden" id="inject_idm_text_selection">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/shaka-player/4.7.11/controls.min.css">
+  <!-- Google tag (gtag.js) -->
+<script async="" src=""></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
 
-  <!-- Google Analytics -->
-  <script async src="https://www.googletagmanager.com/gtag/js?id=G-FMP9REY96D"></script>
-  <script>
-    window.dataLayer = window.dataLayer || [];
-    function gtag(){dataLayer.push(arguments);}
-    gtag('js', new Date());
-    gtag('config', 'G-FMP9REY96D');
-  </script>
-
+  gtag('config', 'G-FMP9REY96D');
+</script>
   <style>
-    * {
-      margin: 0;
-      padding: 0;
-      box-sizing: border-box;
+    *{margin:0;padding:0;box-sizing:border-box}
+    html,body{width:100%;height:100%;background:#000;overflow:hidden;font-family:'Segoe UI', Roboto, Helvetica, Arial, sans-serif}
+
+    .shaka-video-container{
+      position:fixed;
+      inset:0;
+      background:#000;
+      display:flex;
+      align-items:center;
+      justify-content:center;
     }
 
-    html, body {
-      width: 100%;
-      height: 100%;
-      background: #000;
-      overflow: hidden;
-      font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+    video{
+      width:100%;
+      height:100%;
+      object-fit:contain;
+      background:#000;
     }
 
-    .shaka-video-container {
-      position: fixed;
-      inset: 0;
-      background: #000;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-    }
-
-    video {
-      width: 100%;
-      height: 100%;
-      object-fit: contain;
-      background: #000;
-    }
-
-    .custom-watermark {
-      position: absolute;
-      z-index: 40;
-      pointer-events: none;
-      top: 65%;
-      left: 6%;
+    .custom-watermark{
+      position:absolute;
+      z-index:40;
+      pointer-events:none;
+      top:65%;
+      left:6%;
       transform: translateY(-50%);
-      font-size: 11px;
-      font-weight: 600;
+      font-size:11px;
+      font-weight:600;
       color: rgba(255, 255, 255, 0.12);
     }
 
-    @media (max-width: 700px) {
-      .custom-watermark {
-        font-size: 9px;
-        top: 60%;
-        left: 16%;
-      }
+    @media(max-width:700px){
+      .custom-watermark{ font-size:9px; top:60%; left:16%; }
     }
   </style>
 </head>
-
 <body>
 
-  <div class="shaka-video-container" id="player-container">
-    <video id="video" autoplay playsinline preload="metadata"></video>
-    <div class="custom-watermark"></div>
-  </div>
+  <div class="shaka-video-container shaka-mobile" id="player-container" data-shaka-player-container="" shaka-controls="true">
+    <video id="video" autoplay="" playsinline="" preload="metadata" src="blob:https://allrounder-live.pages.dev/70422042-58f4-4bf0-ac25-5bcb8a7f0c24" class="shaka-video"></video>
+    <div class="custom-watermark"> </div>
+  <div class="shaka-controls-container" shown="true"><div class="shaka-scrim-container"></div><div class="shaka-play-button-container"><button type="button" class="shaka-play-button shaka-no-propagation" icon="play" aria-label="Play"></button></div><div class="shaka-hidden-fast-forward-container"><div class="shaka-fast-foward-container"><span>0s</span><span class="shaka-forward-rewind-container-icon">fast_forward</span></div></div><div class="shaka-hidden-rewind-container"><div class="shaka-rewind-container"><span>0s</span><span class="shaka-forward-rewind-container-icon">fast_rewind</span></div></div><div class="shaka-server-side-ad-container"></div><div class="shaka-bottom-controls shaka-no-propagation"><div class="shaka-ad-controls shaka-hidden"><div class="shaka-ad-position shaka-hidden"><span class="shaka-ad-position-span"></span></div><div class="shaka-ad-counter"><span class="shaka-ad-counter-span"></span></div></div><div class="shaka-controls-button-panel shaka-show-controls-on-mouse-over"><button type="button" class="shaka-small-play-button material-icons-round shaka-tooltip" aria-label="Play">play_arrow</button><button type="button" class="shaka-current-time" aria-label="Skip ahead to live">- 0:02</button><div class="shaka-spacer" aria-hidden="true"></div><button type="button" class="shaka-overflow-button shaka-language-button shaka-tooltip-status shaka-hidden" aria-label="Language" shaka-status="हिन्दी"><i class="material-icons-round">language</i><label class="shaka-overflow-button-label shaka-overflow-menu-only"><span>Language</span><span class="shaka-current-selection-span">हिन्दी</span></label></button><button type="button" class="shaka-overflow-button shaka-caption-button shaka-tooltip-status shaka-hidden" aria-pressed="false" aria-label="Captions" shaka-status="Off"><i class="material-icons-round">closed_caption_disabled</i><label class="shaka-overflow-button-label shaka-overflow-menu-only"><span>Captions</span><span class="shaka-current-selection-span">Off</span></label></button><button type="button" class="shaka-pip-button shaka-tooltip shaka-hidden" aria-label="Enter Picture-in-Picture"><i class="material-icons-round">picture_in_picture_alt</i><label class="shaka-overflow-button-label shaka-overflow-menu-only"><span>Picture-in-Picture</span><span class="shaka-current-selection-span">Off</span></label></button><button type="button" class="shaka-overflow-button shaka-resolution-button shaka-tooltip-status" shaka-status="Auto" aria-label="Resolution"><i class="material-icons-round">settings</i><label class="shaka-overflow-button-label shaka-overflow-menu-only"><span>Resolution</span><span class="shaka-current-selection-span">Auto</span></label></button><button type="button" class="shaka-fullscreen-button material-icons-round shaka-tooltip" aria-label="Full screen">fullscreen</button></div><div class="shaka-range-container shaka-seek-bar-container" style="background: linear-gradient(to right, green 94.5606%, green 94.5606%, green 95.0527%, red 95.0527%, red 100%, white 100%);"><div class="shaka-ad-markers"></div><input class="shaka-range-element shaka-seek-bar shaka-no-propagation shaka-show-controls-on-mouse-over" type="range" step="any" min="1772288710.6399999" max="1772288765.6399999" aria-label="Seek"><div id="shaka-player-ui-thumbnail-container"><img id="shaka-player-ui-thumbnail-image" draggable="false"><div id="shaka-player-ui-thumbnail-time"></div></div></div></div><div class="shaka-no-propagation shaka-show-controls-on-mouse-over shaka-settings-menu shaka-hidden shaka-audio-languages"><button type="button" class="shaka-back-to-overflow-button" aria-label="Back"><i class="material-icons-round">close</i><span>Language</span></button><button type="button" aria-selected="true"><span class="shaka-chosen-item">हिन्दी</span><i class="material-icons-round shaka-chosen-item" aria-hidden="true">done</i></button></div><div class="shaka-no-propagation shaka-show-controls-on-mouse-over shaka-settings-menu shaka-hidden shaka-text-languages"><button type="button" class="shaka-back-to-overflow-button" aria-label="Back"><i class="material-icons-round">close</i><span>Captions</span></button><button type="button" class="shaka-turn-captions-off-button" aria-selected="true"><span class="shaka-auto-span shaka-chosen-item">Off</span><i class="material-icons-round shaka-chosen-item" aria-hidden="true">done</i></button></div><div class="shaka-no-propagation shaka-show-controls-on-mouse-over shaka-settings-menu shaka-hidden shaka-resolutions"><button type="button" class="shaka-back-to-overflow-button" aria-label="Resolution"><i class="material-icons-round">close</i><span>Resolution</span></button><button type="button" class="explicit-resolution"><span>720p</span></button><button type="button" class="shaka-enable-abr-button" aria-selected="true"><span class="shaka-auto-span shaka-chosen-item">Auto</span><i class="material-icons-round shaka-chosen-item" aria-hidden="true">done</i></button></div></div><div class="shaka-client-side-ad-container shaka-hidden"></div><div class="shaka-spinner-container shaka-hidden"><div class="shaka-spinner"><svg class="shaka-spinner-svg" viewBox="0 0 30 30"><circle class="shaka-spinner-path" cx="15" cy="15" r="14.5" fill="none" stroke-width="1" stroke-miterlimit="10"></circle></svg></div></div></div>
 
   <script>
     const CONFIG = {
       streamUrl: "https://jiotvbpkmob.cdn.jio.com/bpk-tv/Star_Sports_HD1_Hindi_BTS/output/index.mpd",
       keyId: "400131994b445d8c8817202248760fda",
       key: "2d56cb6f07a75b9aff165d534ae2bfc4",
+
       manualCookie: "__hdnea__=st=1772241887~exp=1772328287~acl=/*~hmac=c2276b495783dbb09e00bbbf9f38c98f7d06d932a86c8364b74b848141627e13",
     };
-
+    
     document.addEventListener('DOMContentLoaded', async () => {
 
       shaka.polyfill.installAll();
@@ -101,38 +82,14 @@
       const ui = new shaka.ui.Overlay(player, container, videoEl);
 
       ui.configure({
-        controlPanelElements: [
-          'play_pause',
-          'time_and_duration',
-          'spacer',
-          'language',
-          'captions',
-          'picture_in_picture',
-          'quality',
-          'fullscreen'
-        ],
-        seekBarColors: {
-          base: 'white',
-          buffered: 'red',
-          played: 'green'
-        }
+        controlPanelElements: ['play_pause','time_and_duration','spacer','language','captions','picture_in_picture','quality','fullscreen'],
+        seekBarColors: { base: 'white', buffered: 'red', played: 'green' }
       });
 
       player.configure({
-        drm: {
-          clearKeys: {
-            [CONFIG.keyId]: CONFIG.key
-          }
-        },
-        manifest: {
-          defaultPresentationDelay: 5
-        },
-        streaming: {
-          safeSeekOffset: 5,
-          bufferingGoal: 10,
-          rebufferingGoal: 2,
-          lowLatencyMode: true
-        }
+        drm: { clearKeys: { [CONFIG.keyId]: CONFIG.key } },
+        manifest: { defaultPresentationDelay: 5 },
+        streaming: { safeSeekOffset: 5, bufferingGoal: 10, rebufferingGoal: 2, lowLatencyMode: true }
       });
 
       player.getNetworkingEngine().registerRequestFilter((type, request) => {
@@ -140,14 +97,14 @@
         request.headers['Referer'] = 'https://www.jiotv.com/';
         request.headers['User-Agent'] = 'plaYtv/7.1.5 (Linux;Android 13) ExoPlayerLib/2.11.6';
 
-        if (CONFIG.manualCookie) {
+        if (CONFIG.manualCookie && CONFIG.manualCookie !== "PUT_YOUR_COOKIE_HERE") {
+
           request.headers['Cookie'] = CONFIG.manualCookie;
 
-          if (
-            (type === shaka.net.NetworkingEngine.RequestType.MANIFEST ||
-             type === shaka.net.NetworkingEngine.RequestType.SEGMENT) &&
-            !request.uris[0].includes('__hdnea__')
-          ) {
+          if ((type === shaka.net.NetworkingEngine.RequestType.MANIFEST ||
+               type === shaka.net.NetworkingEngine.RequestType.SEGMENT) &&
+               !request.uris[0].includes('__hdnea__')) {
+
             const sep = request.uris[0].includes('?') ? '&' : '?';
             request.uris[0] += sep + CONFIG.manualCookie;
           }
@@ -156,12 +113,9 @@
 
       try {
         await player.load(CONFIG.streamUrl);
-        await videoEl.play();
+        videoEl.play();
       } catch (e) {
         console.error("Stream Load Error:", e);
       }
     });
   </script>
-
-</body>
-</html>
