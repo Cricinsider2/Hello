@@ -1,130 +1,167 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta name="referrer" content="no-referrer">
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Matches Links</title>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="referrer" content="no-referrer">
+  <title>Star Sports 1 Hindi // Sayan 2026</title>
 
-    <script src="https://content.jwplatform.com/libraries/SAHhwvZq.js"></script>
+  <!-- Shaka Player -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/shaka-player/4.7.11/shaka-player.ui.min.js"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/shaka-player/4.7.11/controls.min.css">
 
-    <style>
-        /* Essential Reset */
-        html, body {
-            margin: 0;
-            padding: 0;
-            width: 100%;
-            height: 100%;
-            background: #000;
-            overflow: hidden;
-        }
+  <!-- Google Analytics -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-FMP9REY96D"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'G-FMP9REY96D');
+  </script>
 
-        /* Main Container */
-        #player-container {
-            position: relative;
-            width: 100%;
-            height: 100%;
-            background: #000;
-        }
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
 
-        /* Player Element */
-        #player {
-            width: 100% !important;
-            height: 100% !important;
-        }
+    html, body {
+      width: 100%;
+      height: 100%;
+      background: #000;
+      overflow: hidden;
+      font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+    }
 
-        /* Loading Text */
-        #loading {
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            color: white;
-            font-size: 18px;
-            z-index: 10;
-            text-align: center;
-        }
-    </style>
+    .shaka-video-container {
+      position: fixed;
+      inset: 0;
+      background: #000;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    video {
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
+      background: #000;
+    }
+
+    .custom-watermark {
+      position: absolute;
+      z-index: 40;
+      pointer-events: none;
+      top: 65%;
+      left: 6%;
+      transform: translateY(-50%);
+      font-size: 11px;
+      font-weight: 600;
+      color: rgba(255, 255, 255, 0.12);
+    }
+
+    @media (max-width: 700px) {
+      .custom-watermark {
+        font-size: 9px;
+        top: 60%;
+        left: 16%;
+      }
+    }
+  </style>
 </head>
 
 <body>
 
-    <div id="player-container">
-        <div id="player"></div>
-        <div id="loading">Loading HDNEA cookie...</div>
-    </div>
+  <div class="shaka-video-container" id="player-container">
+    <video id="video" autoplay playsinline preload="metadata"></video>
+    <div class="custom-watermark"></div>
+  </div>
 
-    <script>
-        jwplayer.key = 'XSuP4qMl+9tK17QNb+4+th2Pm9AWgMO/cYH8CI0HGGr7bdjo';
+  <script>
+    const CONFIG = {
+      streamUrl: "https://jiotvbpkmob.cdn.jio.com/bpk-tv/Star_Sports_HD1_Hindi_BTS/output/index.mpd",
+      keyId: "400131994b445d8c8817202248760fda",
+      key: "2d56cb6f07a75b9aff165d534ae2bfc4",
+      manualCookie: "__hdnea__=st=1772241887~exp=1772328287~acl=/*~hmac=c2276b495783dbb09e00bbbf9f38c98f7d06d932a86c8364b74b848141627e13",
+    };
 
-        const MPD_URL = "https://jiotvbpkmob.cdn.jio.com/bpk-tv/Star_Sports_1_Hindi_BTS/output/index.mpd";
-        const KEY_ID = "8ea9b607549252068e260a5f4d7dd321";
-        const KEY = "350c0aaffedf51cc1502e9543c7c885e";
-        const COOKIE_URL = "https://matcheslinkz.pages.dev/cookie.json";
+    document.addEventListener('DOMContentLoaded', async () => {
 
-        async function fetchAndPlay() {
-            try {
-                document.getElementById('loading').innerText = 'Fetching HDNEA cookie...';
+      shaka.polyfill.installAll();
+      if (!shaka.Player.isBrowserSupported()) return;
 
-                const response = await fetch(COOKIE_URL);
-                const hdnea = await response.text();
+      const videoEl = document.getElementById('video');
+      const container = document.getElementById('player-container');
 
-                document.getElementById('loading').innerText = 'HDNEA loaded, starting player...';
+      const player = new shaka.Player();
+      await player.attach(videoEl);
 
-                if (hdnea) {
-                    const originalOpen = XMLHttpRequest.prototype.open;
+      const ui = new shaka.ui.Overlay(player, container, videoEl);
 
-                    XMLHttpRequest.prototype.open = function(method, url) {
-                        if (url && (url.includes('.mpd') || url.includes('jio') || url.includes('segment'))) {
-                            const separator = url.includes('?') ? '&' : '?';
-                            if (!url.includes('__hdnea__')) {
-                                url += separator + hdnea;
-                            }
-                        }
-                        return originalOpen.apply(this, arguments);
-                    };
-                }
-
-                const playlistConfig = {
-                    file: MPD_URL,
-                    type: "dash"
-                };
-
-                if (KEY_ID && KEY) {
-                    playlistConfig.drm = {
-                        clearkey: {
-                            keyId: KEY_ID,
-                            key: KEY
-                        }
-                    };
-                }
-
-                jwplayer("player").setup({
-                    playlist: [playlistConfig],
-                    autostart: true,
-                    stretching: "uniform",
-                    width: "100%",
-                    height: "100%",
-                    type: "dash"
-                })
-                .on('ready', function() {
-                    document.getElementById('loading').style.display = 'none';
-                })
-                .on('error', function(e) {
-                    document.getElementById('loading').innerText = "Error: " + (e.message || 'Unknown error');
-                })
-                .on('play', function() {
-                    document.getElementById('loading').style.display = 'none';
-                });
-
-            } catch (error) {
-                document.getElementById('loading').innerText = 'Failed to fetch HDNEA: ' + error.message;
-                console.error(error);
-            }
+      ui.configure({
+        controlPanelElements: [
+          'play_pause',
+          'time_and_duration',
+          'spacer',
+          'language',
+          'captions',
+          'picture_in_picture',
+          'quality',
+          'fullscreen'
+        ],
+        seekBarColors: {
+          base: 'white',
+          buffered: 'red',
+          played: 'green'
         }
+      });
 
-        fetchAndPlay();
-    </script>
+      player.configure({
+        drm: {
+          clearKeys: {
+            [CONFIG.keyId]: CONFIG.key
+          }
+        },
+        manifest: {
+          defaultPresentationDelay: 5
+        },
+        streaming: {
+          safeSeekOffset: 5,
+          bufferingGoal: 10,
+          rebufferingGoal: 2,
+          lowLatencyMode: true
+        }
+      });
+
+      player.getNetworkingEngine().registerRequestFilter((type, request) => {
+
+        request.headers['Referer'] = 'https://www.jiotv.com/';
+        request.headers['User-Agent'] = 'plaYtv/7.1.5 (Linux;Android 13) ExoPlayerLib/2.11.6';
+
+        if (CONFIG.manualCookie) {
+          request.headers['Cookie'] = CONFIG.manualCookie;
+
+          if (
+            (type === shaka.net.NetworkingEngine.RequestType.MANIFEST ||
+             type === shaka.net.NetworkingEngine.RequestType.SEGMENT) &&
+            !request.uris[0].includes('__hdnea__')
+          ) {
+            const sep = request.uris[0].includes('?') ? '&' : '?';
+            request.uris[0] += sep + CONFIG.manualCookie;
+          }
+        }
+      });
+
+      try {
+        await player.load(CONFIG.streamUrl);
+        await videoEl.play();
+      } catch (e) {
+        console.error("Stream Load Error:", e);
+      }
+    });
+  </script>
 
 </body>
 </html>
