@@ -1,24 +1,25 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta name="referrer" content="no-referrer"> 
+    <meta name="referrer" content="no-referrer">
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Matches Links</title>
+
     <script src="https://content.jwplatform.com/libraries/SAHhwvZq.js"></script>
 
-    <style>   
+    <style>
         /* Essential Reset */
-        html, body { 
-            margin: 0; 
-            padding: 0; 
-            width: 100%; 
-            height: 100%; 
-            background: #000; 
-            overflow: hidden; 
-        } 
+        html, body {
+            margin: 0;
+            padding: 0;
+            width: 100%;
+            height: 100%;
+            background: #000;
+            overflow: hidden;
+        }
 
-        /* Main Container - Full screen black background */
+        /* Main Container */
         #player-container {
             position: relative;
             width: 100%;
@@ -26,13 +27,13 @@
             background: #000;
         }
 
-        /* The Player Element - Cover entire container */
+        /* Player Element */
         #player {
             width: 100% !important;
             height: 100% !important;
         }
 
-        /* Overlay: Loading Text */
+        /* Loading Text */
         #loading {
             position: absolute;
             top: 50%;
@@ -43,245 +44,87 @@
             z-index: 10;
             text-align: center;
         }
-
-        /* Transparent Telegram Popup */
-        #telegramPopup {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            display: flex; /* Always show on every visit */
-            justify-content: center;
-            align-items: center;
-            z-index: 1000;
-            animation: fadeIn 0.3s ease;
-        }
-
-        .popup-content {
-            background: rgba(15, 15, 15, 0.7);
-            border-radius: 16px;
-            padding: 30px;
-            width: 90%;
-            max-width: 400px;
-            text-align: center;
-            backdrop-filter: blur(10px);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
-            animation: slideUp 0.4s ease;
-        }
-
-        .popup-content h2 {
-            color: #29b6f6;
-            font-size: 24px;
-            margin-bottom: 15px;
-            text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
-        }
-
-        .popup-content p {
-            color: rgba(255, 255, 255, 0.9);
-            font-size: 16px;
-            line-height: 1.5;
-            margin-bottom: 25px;
-            text-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);
-        }
-
-        .popup-buttons {
-            display: flex;
-            flex-direction: column;
-            gap: 12px;
-        }
-
-        .popup-btn {
-            padding: 14px;
-            border-radius: 10px;
-            font-size: 16px;
-            font-weight: 500;
-            border: none;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-        }
-
-        .join-btn {
-            background: linear-gradient(135deg, rgba(41, 182, 246, 0.9), rgba(2, 136, 209, 0.9));
-            color: white;
-        }
-
-        .join-btn:hover {
-            background: linear-gradient(135deg, rgba(2, 136, 209, 0.9), rgba(1, 87, 155, 0.9));
-            transform: translateY(-2px);
-            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.3);
-        }
-
-        .close-btn {
-            background: rgba(255, 255, 255, 0.15);
-            color: rgba(255, 255, 255, 0.9);
-        }
-
-        .close-btn:hover {
-            background: rgba(255, 255, 255, 0.25);
-        }
-
-        @keyframes fadeIn {
-            from { opacity: 0; }
-            to { opacity: 1; }
-        }
-
-        @keyframes slideUp {
-            from { 
-                transform: translateY(20px);
-                opacity: 0;
-            }
-            to { 
-                transform: translateY(0);
-                opacity: 1;
-            }
-        }
-/* Telegram Banner */
-        .tg-banner {
-            position: absolute;
-            top: 20px;
-            left: 20px;
-            background: linear-gradient(135deg, rgba(0, 136, 204, 0.7), rgba(0, 119, 181, 0.7));
-            backdrop-filter: blur(8px);
-            border-radius: 12px;
-            padding: 10px 16px;
-            display: flex;
-            align-items: center;
-            color: white;
-            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.25);
-            z-index: 100;
-            transition: all 0.3s ease;
-            text-decoration: none;
-            border: 1px solid rgba(255, 255, 255, 0.1);
-        }
-
-        .tg-banner:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 12px 32px rgba(0, 0, 0, 0.35);
-            background: linear-gradient(135deg, rgba(0, 136, 204, 0.9), rgba(0, 119, 181, 0.9));
-        }
-
-        .tg-banner img {
-            width: 28px;
-            height: 28px;
-            margin-right: 10px;
-            border-radius: 50%;
-            border: 2px solid rgba(255, 255, 255, 0.5);
-        }
-
-        .tg-banner span {
-            font-size: 15px;
-            font-weight: 600;
-            text-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);
-        }
     </style>
 </head>
+
 <body>
 
-<div id="player-container">
-    <div id="player"></div>
-    <div id="loading">Loading HDNEA cookie...</div>
-</div>
+    <div id="player-container">
+        <div id="player"></div>
+        <div id="loading">Loading HDNEA cookie...</div>
+    </div>
 
-</div>
+    <script>
+        jwplayer.key = 'XSuP4qMl+9tK17QNb+4+th2Pm9AWgMO/cYH8CI0HGGr7bdjo';
 
-<script>
-    jwplayer.key = 'XSuP4qMl+9tK17QNb+4+th2Pm9AWgMO/cYH8CI0HGGr7bdjo';
+        const MPD_URL = "https://jiotvbpkmob.cdn.jio.com/bpk-tv/Star_Sports_1_Hindi_BTS/output/index.mpd";
+        const KEY_ID = "8ea9b607549252068e260a5f4d7dd321";
+        const KEY = "350c0aaffedf51cc1502e9543c7c885e";
+        const COOKIE_URL = "https://matcheslinkz.pages.dev/cookie.json";
 
-    // ===== MANUAL CONFIGURATION - EDIT THESE VALUES =====
-    const MPD_URL = "https://jiotvbpkmob.cdn.jio.com/bpk-tv/Star_Sports_1_Hindi_BTS/output/index.mpd";
-    const KEY_ID = "8ea9b607549252068e260a5f4d7dd321";
-    const KEY = "350c0aaffedf51cc1502e9543c7c885e"; 
-    const COOKIE_URL = "https://matcheslinkz.pages.dev/cookie.json";
-    // ====================================================
+        async function fetchAndPlay() {
+            try {
+                document.getElementById('loading').innerText = 'Fetching HDNEA cookie...';
 
-    // Close popup function with fade out animation
-    function closePopup() {
-        const popup = document.getElementById('telegramPopup');
-        popup.style.animation = 'fadeOut 0.3s ease forwards';
-        setTimeout(() => {
-            popup.style.display = 'none';
-        }, 300);
-    }
+                const response = await fetch(COOKIE_URL);
+                const hdnea = await response.text();
 
-    // Add fadeOut animation
-    const style = document.createElement('style');
-    style.textContent = `
-        @keyframes fadeOut {
-            from { opacity: 1; }
-            to { opacity: 0; }
-        }
-    `;
-    document.head.appendChild(style);
+                document.getElementById('loading').innerText = 'HDNEA loaded, starting player...';
 
-    // Popup is set to display:flex in CSS, so it shows on every visit automatically
+                if (hdnea) {
+                    const originalOpen = XMLHttpRequest.prototype.open;
 
-    // Fetch HDNEA cookie from JSON URL
-    async function fetchAndPlay() {
-        try {
-            document.getElementById('loading').innerText = 'Fetching HDNEA cookie...';
-            
-            // Fetch the cookie from JSON URL
-            const response = await fetch(COOKIE_URL);
-            const hdnea = await response.text(); // The JSON contains just the cookie string
-            
-            document.getElementById('loading').innerText = 'HDNEA loaded, starting player...';
-            
-            // Setup XHR interceptor for HDNEA
-            if (hdnea) {
-                const originalOpen = XMLHttpRequest.prototype.open;
-                XMLHttpRequest.prototype.open = function(method, url) {
-                    if (url && (url.includes('.mpd') || url.includes('jio') || url.includes('segment'))) {
-                        const separator = url.includes('?') ? '&' : '?';
-                        if (!url.includes('__hdnea__')) {
-                            url += separator + hdnea;
+                    XMLHttpRequest.prototype.open = function(method, url) {
+                        if (url && (url.includes('.mpd') || url.includes('jio') || url.includes('segment'))) {
+                            const separator = url.includes('?') ? '&' : '?';
+                            if (!url.includes('__hdnea__')) {
+                                url += separator + hdnea;
+                            }
                         }
-                    }
-                    return originalOpen.apply(this, arguments);
+                        return originalOpen.apply(this, arguments);
+                    };
+                }
+
+                const playlistConfig = {
+                    file: MPD_URL,
+                    type: "dash"
                 };
+
+                if (KEY_ID && KEY) {
+                    playlistConfig.drm = {
+                        clearkey: {
+                            keyId: KEY_ID,
+                            key: KEY
+                        }
+                    };
+                }
+
+                jwplayer("player").setup({
+                    playlist: [playlistConfig],
+                    autostart: true,
+                    stretching: "uniform",
+                    width: "100%",
+                    height: "100%",
+                    type: "dash"
+                })
+                .on('ready', function() {
+                    document.getElementById('loading').style.display = 'none';
+                })
+                .on('error', function(e) {
+                    document.getElementById('loading').innerText = "Error: " + (e.message || 'Unknown error');
+                })
+                .on('play', function() {
+                    document.getElementById('loading').style.display = 'none';
+                });
+
+            } catch (error) {
+                document.getElementById('loading').innerText = 'Failed to fetch HDNEA: ' + error.message;
+                console.error(error);
             }
-
-            // Prepare playlist configuration
-            const playlistConfig = {
-                file: MPD_URL,
-                type: "dash"
-            };
-
-            // Add DRM if keys are provided
-            if (KEY_ID && KEY) {
-                playlistConfig.drm = {
-                    clearkey: {
-                        keyId: KEY_ID,
-                        key: KEY
-                    }
-                };
-            }
-// Setup player with exact configuration
-            jwplayer("player").setup({
-                playlist: [playlistConfig],
-                autostart: true,
-                stretching: "uniform",
-                width: "100%",
-                height: "100%",
-                type: "dash"
-            }).on('ready', function() {
-                document.getElementById('loading').style.display = 'none';
-            }).on('error', function(e) {
-                document.getElementById('loading').innerText = "Error: " + (e.message || 'Unknown error');
-            }).on('play', function() {
-                document.getElementById('loading').style.display = 'none';
-            });
-
-        } catch (error) {
-            document.getElementById('loading').innerText = 'Failed to fetch HDNEA: ' + error.message;
-            console.error('Error fetching HDNEA:', error);
         }
-    }
 
-    // Start the process
-    fetchAndPlay();
-</script>
+        fetchAndPlay();
+    </script>
+
 </body>
 </html>
