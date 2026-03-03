@@ -1,275 +1,323 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta name="referrer" content="no-referrer"> 
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>@Cricinsider365</title>
-    <script src="https://content.jwplatform.com/libraries/SAHhwvZq.js"></script>
+<!DOCTYPE html><html><head>
 
-    <style>   
-        /* Essential Reset */
-        html, body { 
-            margin: 0; 
-            padding: 0; 
-            width: 100%; 
-            height: 100%; 
-            background: #000; 
-            overflow: hidden; 
-        } 
 
-        /* Main Container - Full screen black background */
-        #player-container {
-            position: relative;
-            width: 100%;
-            height: 100%;
-            background: #000;
-        }
+  <meta charset="UTF-8">
+  <title>Matches Links · FootyFeed</title>
+  <meta name="referrer" content="no-referrer">
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+  
+  <style type="text/css">* {user-select: auto !important; -webkit-user-select: auto !important;}</style><input type="hidden" id="inject_idm_text_selection">
+  
+  
+  
+  <style type="text/css">
+    body {
+      margin: 0;
+      padding: 0;
+      background-color: #000000;
+      color: #fff;
+      font-family: Arial, sans-serif;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      width: 100vw;
+      overflow: hidden;
+    }
 
-        /* The Player Element - Cover entire container */
-        #player {
-            width: 100% !important;
-            height: 100% !important;
-        }
+    .video-container {
+      position: relative;
+      width: 100%;
+      height: 100%;
+      background-color: #000;
+    }
 
-        /* Transparent Telegram Popup */
-        #telegramPopup {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            display: flex; /* Always show on every visit */
-            justify-content: center;
-            align-items: center;
-            z-index: 1000;
-            animation: fadeIn 0.3s ease;
-        }
+    video {
+      width: 100%;
+      height: 100%;
+      background-color: #000;
+    }
 
-        .popup-content {
-            background: rgba(15, 15, 15, 0.7);
-            border-radius: 16px;
-            padding: 30px;
-            width: 90%;
-            max-width: 400px;
-            text-align: center;
-            backdrop-filter: blur(10px);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
-            animation: slideUp 0.4s ease;
-        }
+    /* Show default video controls */
+    video::-webkit-media-controls {
+      display: flex !important;
+    }
 
-        .popup-content h2 {
-            color: #29b6f6;
-            font-size: 24px;
-            margin-bottom: 15px;
-            text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
-        }
+    video::-webkit-media-controls-panel {
+      display: flex !important;
+    }
 
-        .popup-content p {
-            color: rgba(255, 255, 255, 0.9);
-            font-size: 16px;
-            line-height: 1.5;
-            margin-bottom: 25px;
-            text-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);
-        }
+    #myLogo {
+      width: 60px;
+      height: 40px;
+      position: absolute;
+      right: 5px;
+      top: 10px;
+      z-index: 1000;
+      pointer-events: none;
+    }
 
-        .popup-buttons {
-            display: flex;
-            flex-direction: column;
-            gap: 12px;
-        }
+    /* Quality selector panel */
+    .quality-panel {
+      position: absolute;
+      top: 10px;
+      right: 70px;
+      z-index: 1000;
+      display: flex;
+      gap: 5px;
+      flex-wrap: wrap;
+      background: rgba(0, 0, 0, 0.7);
+      padding: 8px 12px;
+      border-radius: 20px;
+      border: 1px solid rgba(255,255,255,0.2);
+    }
 
-        .popup-btn {
-            padding: 14px;
-            border-radius: 10px;
-            font-size: 16px;
-            font-weight: 500;
-            border: none;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-        }
+    .quality-btn {
+      background: rgba(255,255,255,0.1);
+      color: white;
+      border: none;
+      padding: 6px 12px;
+      border-radius: 15px;
+      cursor: pointer;
+      font-size: 12px;
+      font-weight: 500;
+      transition: all 0.2s ease;
+      min-width: 50px;
+      text-align: center;
+    }
 
-        .join-btn {
-            background: linear-gradient(135deg, rgba(41, 182, 246, 0.9), rgba(2, 136, 209, 0.9));
-            color: white;
-        }
+    .quality-btn:hover {
+      background: rgba(255,255,255,0.3);
+    }
 
-        .join-btn:hover {
-            background: linear-gradient(135deg, rgba(2, 136, 209, 0.9), rgba(1, 87, 155, 0.9));
-            transform: translateY(-2px);
-            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.3);
-        }
+    .quality-btn.active {
+      background: #ff0000;
+      color: white;
+    }
 
-        .close-btn {
-            background: rgba(255, 255, 255, 0.15);
-            color: rgba(255, 255, 255, 0.9);
-        }
+    /* Match info panel */
+    .match-info {
+      position: absolute;
+      bottom: 60px;
+      left: 10px;
+      z-index: 1000;
+      background: rgba(0,0,0,0.7);
+      padding: 10px 15px;
+      border-radius: 5px;
+      font-size: 14px;
+      border-left: 3px solid #ff0000;
+      max-width: 400px;
+    }
 
-        .close-btn:hover {
-            background: rgba(255, 255, 255, 0.25);
-        }
+    .match-title {
+      font-weight: bold;
+      margin-bottom: 3px;
+      font-size: 16px;
+    }
 
-        @keyframes fadeIn {
-            from { opacity: 0; }
-            to { opacity: 1; }
-        }
+    .match-tournament {
+      font-size: 12px;
+      opacity: 0.8;
+    }
 
-        @keyframes slideUp {
-            from { 
-                transform: translateY(20px);
-                opacity: 0;
-            }
-            to { 
-                transform: translateY(0);
-                opacity: 1;
-            }
-        }
+    /* Loading indicator */
+    .custom-loading {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      color: white;
+      font-size: 16px;
+      background: rgba(0,0,0,0.7);
+      padding: 15px 25px;
+      border-radius: 30px;
+      z-index: 2000;
+      display: none;
+    }
 
-        /* Telegram Banner */
-        .tg-banner {
-            position: absolute;
-            top: 20px;
-            left: 20px;
-            background: linear-gradient(135deg, rgba(0, 136, 204, 0.7), rgba(0, 119, 181, 0.7));
-            backdrop-filter: blur(8px);
-            border-radius: 12px;
-            padding: 10px 16px;
-            display: flex;
-            align-items: center;
-            color: white;
-            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.25);
-            z-index: 100;
-            transition: all 0.3s ease;
-            text-decoration: none;
-            border: 1px solid rgba(255, 255, 255, 0.1);
-        }
+    .custom-loading.visible {
+      display: block;
+    }
 
-        .tg-banner:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 12px 32px rgba(0, 0, 0, 0.35);
-            background: linear-gradient(135deg, rgba(0, 136, 204, 0.9), rgba(0, 119, 181, 0.9));
-        }
+    /* Error message */
+    .error-message {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      color: #ff4444;
+      font-size: 16px;
+      background: rgba(0,0,0,0.8);
+      padding: 20px 30px;
+      border-radius: 10px;
+      z-index: 2000;
+      text-align: center;
+      border: 1px solid #ff4444;
+      max-width: 80%;
+    }
 
-        .tg-banner img {
-            width: 28px;
-            height: 28px;
-            margin-right: 10px;
-            border-radius: 50%;
-            border: 2px solid rgba(255, 255, 255, 0.5);
-        }
+    @media (max-width: 768px) {
+      .quality-panel {
+        right: 10px;
+        left: 10px;
+        top: 10px;
+        justify-content: center;
+      }
+      
+      .match-info {
+        bottom: 60px;
+        max-width: calc(100% - 20px);
+      }
+    }
 
-        .tg-banner span {
-            font-size: 15px;
-            font-weight: 600;
-            text-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);
-        }
-    </style>
+    /* --- Telegram Popup (modal) & confirmation dialog --- */
+    .modal {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      backdrop-filter: blur(6px);
+      background: rgb(0 0 0 / 0.4);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      z-index: 10000;
+      animation: fadeIn 0.5s ease;
+    }
+    .modal-content {
+      background: rgb(255 255 255 / 0.05);
+      border: 1px solid rgb(255 255 255 / 0.1);
+      border-radius: 20px;
+      padding: 30px 25px;
+      width: 90%;
+      max-width: 400px;
+      text-align: center;
+      color: #f3f4f6;
+      box-shadow: 0 8px 32px rgb(0 0 0 / 0.4);
+      backdrop-filter: blur(12px);
+      transform: scale(0.95);
+      animation: scaleIn 0.4s ease forwards;
+    }
+    .modal-content h2 {
+      font-size: 24px;
+      font-weight: 700;
+      color: #facc15;
+      margin-bottom: 16px;
+    }
+    .modal-content p {
+      font-size: 16px;
+      color: #d1d5db;
+      margin-bottom: 24px;
+      line-height: 1.5;
+    }
+    .modal-content strong {
+      color: #fff;
+    }
+    .modal-content button {
+      width: 100%;
+      padding: 12px;
+      font-size: 16px;
+      border: none;
+      border-radius: 12px;
+      margin-bottom: 12px;
+      cursor: pointer;
+      transition: 0.3s;
+    }
+    #joinButton {
+      background: linear-gradient(to right, #3b82f6, #06b6d4);
+      color: #fff;
+      font-weight: 500;
+    }
+    #joinButton:hover {
+      background: linear-gradient(to right, #2563eb, #0891b2);
+      transform: scale(1.02);
+    }
+    #closeButton {
+      background: rgb(255 255 255 / 0.1);
+      color: #f3f4f6;
+    }
+    #closeButton:hover {
+      background: rgb(255 255 255 / 0.15);
+      transform: scale(1.02);
+    }
+    /* Confirmation dialog (simple inline replacement) */
+    .confirm-dialog {
+      background: rgb(20 20 30 / 0.9);
+      border: 1px solid #facc15;
+      border-radius: 16px;
+      padding: 20px;
+      margin-top: 20px;
+      text-align: center;
+    }
+    .confirm-dialog p {
+      color: #fff;
+      font-size: 16px;
+      margin-bottom: 20px;
+    }
+    .confirm-dialog button {
+      background: #3b82f6;
+      color: white;
+      border: none;
+      padding: 10px 20px;
+      border-radius: 30px;
+      font-size: 15px;
+      margin: 0 8px;
+      cursor: pointer;
+      min-width: 100px;
+    }
+    .confirm-dialog button:hover {
+      background: #2563eb;
+    }
+    .confirm-dialog button:last-child {
+      background: rgb(255 255 255 / 0.2);
+    }
+    .confirm-dialog button:last-child:hover {
+      background: rgb(255 255 255 / 0.3);
+    }
+
+    @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+    @keyframes scaleIn { to { transform: scale(1); opacity: 1; } }
+  </style>
 </head>
 <body>
-
-<div id="player-container">
-    </a>
+  <div class="video-container">
+    <video id="video" controls="" autoplay="" playsinline="" src="https://in-mc-flive.fancode.com/mumbai/140143_english_hls_468828740259927_1ta-di_h264/1080p.m3u8?hdntl=Expires=1772642647~_GO=Generated~acl=/mumbai/140143_english_hls_468828740259927_1ta-di_h264/*~Signature=AR5gA-HWGSVRoRDNgaavAkg9fS0M5Wj27Qw3PRtwo57IsDb6JL555ophNyLbBpnuWwzxIAyo3GONquA4lll5KDtrwOIL"></video>
     
-    <div id="player"></div>
-</div>
-
-<!-- Transparent Telegram Popup -->
-            <button class="popup-btn close-btn" onclick="closePopup()">Continue Watching</button>
-        </div>
+    
+    <div id="qualityPanel" class="quality-panel" style="display: flex;"><button class="quality-btn active">1080p</button><button class="quality-btn">720p</button><button class="quality-btn">540p</button><button class="quality-btn">480p</button><button class="quality-btn">360p</button><button class="quality-btn">240p</button></div>
+    
+    
+    <div id="matchInfo" class="match-info" style="display: block;">
+      <div id="matchTitle" class="match-title">West Indies Women Vs Sri Lanka Women</div>
+      <div id="matchTournament" class="match-tournament">Sri Lanka Women tour of West Indies, 2026</div>
+      <div id="matchStatus" class="match-tournament" style="color: #ffaa00;">Status: LIVE</div>
     </div>
-</div>
 
-<script>
-    jwplayer.key = 'XSuP4qMl+9tK17QNb+4+th2Pm9AWgMO/cYH8CI0HGGr7bdjo';
+    
+    <div id="customLoading" class="custom-loading">Loading stream...</div>
+  </div>
 
-    // ===== MANUAL CONFIGURATION - EDIT THESE VALUES =====
-    const MPD_URL = "https://jiotvbpkmob.cdn.jio.com/bpk-tv/Star_Sports_HD1_Hindi_BTS/output/index.mpd";
-    const KEY_ID = "400131994b445d8c8817202248760fda";
-    const KEY = "2d56cb6f07a75b9aff165d534ae2bfc4"; 
-    const COOKIE_URL = "https://matcheslinkz.pages.dev/cookie.json";
-    // ====================================================
+  
+  <div id="telegramPopup" class="modal" style="display: none;">
+    <div class="modal-content" id="popupContent">
+      
+      <div id="mainPopupView" style="display: block;">
+        <h2>⚽ Join Our Telegram!</h2>
+        <p>Get instant updates on all live matches and exclusive content by joining our Telegram channel <strong>@FootyFeed</strong></p>
+        <button id="joinButton">Join Now</button>
+        <button id="closeButton">Continue Watching</button>
+      </div>
+      
+      <div id="confirmView" class="confirm-dialog" style="display: none;">
+        <p>🔔 Are you sure you want to leave and join Telegram?</p>
+        <button id="confirmYes">Yes, Join</button>
+        <button id="confirmNo">Stay Here</button>
+      </div>
+    </div>
+  </div>
 
-    // Close popup function with fade out animation
-    function closePopup() {
-        const popup = document.getElementById('telegramPopup');
-        popup.style.animation = 'fadeOut 0.3s ease forwards';
-        setTimeout(() => {
-            popup.style.display = 'none';
-        }, 300);
-    }
+  
 
-    // Add fadeOut animation
-    const style = document.createElement('style');
-    style.textContent = `
-        @keyframes fadeOut {
-            from { opacity: 1; }
-            to { opacity: 0; }
-        }
-    `;
-    document.head.appendChild(style);
 
-    // Fetch HDNEA cookie from JSON URL
-    async function fetchAndPlay() {
-        try {            
-            // Fetch the cookie from JSON URL
-            const response = await fetch(COOKIE_URL);
-            const hdnea = await response.text(); // The JSON contains just the cookie string
-            
-            // Setup XHR interceptor for HDNEA
-            if (hdnea) {
-                const originalOpen = XMLHttpRequest.prototype.open;
-                XMLHttpRequest.prototype.open = function(method, url) {
-                    if (url && (url.includes('.mpd') || url.includes('jio') || url.includes('segment'))) {
-                        const separator = url.includes('?') ? '&' : '?';
-                        if (!url.includes('__hdnea__')) {
-                            url += separator + hdnea;
-                        }
-                    }
-                    return originalOpen.apply(this, arguments);
-                };
-            }
-
-            // Prepare playlist configuration
-            const playlistConfig = {
-                file: MPD_URL,
-                type: "dash"
-            };
-
-            // Add DRM if keys are provided
-            if (KEY_ID && KEY) {
-                playlistConfig.drm = {
-                    clearkey: {
-                        keyId: KEY_ID,
-                        key: KEY
-                    }
-                };
-            }
-
-            // Setup player with exact configuration
-            jwplayer("player").setup({
-                playlist: [playlistConfig],
-                autostart: true,
-                stretching: "uniform",
-                width: "100%",
-                height: "100%",
-                type: "dash"
-            });
-
-        } catch (error) {
-            console.error('Error:', error);
-        }
-    }
-
-    // Start the process
-    fetchAndPlay();
-</script>
-<script>
-// alert('Join Our Telegram For More Live Links')
-         if (confirm("Join Our Telegram Channel @Cricinsider365") == true) {
-         window.open("https://t.me/+IhSW51QysxU3NzY1", '_blank');
-     }
-</script>
-</body>
-</html>
+</body></html>
