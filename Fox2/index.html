@@ -1,323 +1,261 @@
-<!DOCTYPE html><html><head>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>TEAMROHITOFFICIAL45</title>
 
+<link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
 
-  <meta charset="UTF-8">
-  <title>Matches Links · FootyFeed</title>
-  <meta name="referrer" content="no-referrer">
-  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-  
-  <style type="text/css">* {user-select: auto !important; -webkit-user-select: auto !important;}</style><input type="hidden" id="inject_idm_text_selection">
-  
-  
-  
-  <style type="text/css">
-    body {
-      margin: 0;
-      padding: 0;
-      background-color: #000000;
-      color: #fff;
-      font-family: Arial, sans-serif;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      height: 100vh;
-      width: 100vw;
-      overflow: hidden;
-    }
+<style>
 
-    .video-container {
-      position: relative;
-      width: 100%;
-      height: 100%;
-      background-color: #000;
-    }
+body{
+background:#0a0f1c;
+font-family:system-ui;
+color:white;
+padding-bottom:50px;
+}
 
-    video {
-      width: 100%;
-      height: 100%;
-      background-color: #000;
-    }
+.match-tile{
+background:#131d2f;
+border-radius:28px;
+border:1px solid #253247;
+overflow:hidden;
+transition:.3s;
+display:flex;
+flex-direction:column;
+}
 
-    /* Show default video controls */
-    video::-webkit-media-controls {
-      display: flex !important;
-    }
+.match-tile:hover{
+transform:translateY(-6px);
+border-color:#3b82f6;
+box-shadow:0 10px 25px -5px rgba(59,130,246,.2);
+}
 
-    video::-webkit-media-controls-panel {
-      display: flex !important;
-    }
+.img-wrapper{
+height:200px;
+overflow:hidden;
+position:relative;
+background:#1e293b;
+}
 
-    #myLogo {
-      width: 60px;
-      height: 40px;
-      position: absolute;
-      right: 5px;
-      top: 10px;
-      z-index: 1000;
-      pointer-events: none;
-    }
+.match-img{
+width:100%;
+height:100%;
+object-fit:cover;
+}
 
-    /* Quality selector panel */
-    .quality-panel {
-      position: absolute;
-      top: 10px;
-      right: 70px;
-      z-index: 1000;
-      display: flex;
-      gap: 5px;
-      flex-wrap: wrap;
-      background: rgba(0, 0, 0, 0.7);
-      padding: 8px 12px;
-      border-radius: 20px;
-      border: 1px solid rgba(255,255,255,0.2);
-    }
+.live-badge{
+position:absolute;
+top:12px;
+left:12px;
+background:#dc2626;
+font-size:11px;
+font-weight:800;
+padding:4px 12px;
+border-radius:30px;
+}
 
-    .quality-btn {
-      background: rgba(255,255,255,0.1);
-      color: white;
-      border: none;
-      padding: 6px 12px;
-      border-radius: 15px;
-      cursor: pointer;
-      font-size: 12px;
-      font-weight: 500;
-      transition: all 0.2s ease;
-      min-width: 50px;
-      text-align: center;
-    }
+.btn-watch{
+background:#2563eb;
+padding:14px;
+border-radius:16px;
+text-align:center;
+font-weight:800;
+margin-top:auto;
+cursor:pointer;
+}
 
-    .quality-btn:hover {
-      background: rgba(255,255,255,0.3);
-    }
+.btn-watch.not-live{
+background:#1e293b;
+color:#64748b;
+cursor:not-allowed;
+}
 
-    .quality-btn.active {
-      background: #ff0000;
-      color: white;
-    }
+.modal-overlay{
+display:none;
+position:fixed;
+inset:0;
+background:rgba(0,0,0,.9);
+z-index:1000;
+align-items:center;
+justify-content:center;
+}
 
-    /* Match info panel */
-    .match-info {
-      position: absolute;
-      bottom: 60px;
-      left: 10px;
-      z-index: 1000;
-      background: rgba(0,0,0,0.7);
-      padding: 10px 15px;
-      border-radius: 5px;
-      font-size: 14px;
-      border-left: 3px solid #ff0000;
-      max-width: 400px;
-    }
+.modal-content{
+background:#131d2f;
+width:90%;
+max-width:350px;
+padding:30px;
+border-radius:30px;
+border:1px solid #253247;
+text-align:center;
+}
 
-    .match-title {
-      font-weight: bold;
-      margin-bottom: 3px;
-      font-size: 16px;
-    }
+.quality-btn{
+background:#1e293b;
+border:1px solid #253247;
+width:100%;
+padding:15px;
+margin-bottom:10px;
+border-radius:15px;
+font-weight:bold;
+display:flex;
+justify-content:space-between;
+align-items:center;
+cursor:pointer;
+}
 
-    .match-tournament {
-      font-size: 12px;
-      opacity: 0.8;
-    }
+.close-btn{
+margin-top:15px;
+color:#ef4444;
+font-weight:bold;
+cursor:pointer;
+}
 
-    /* Loading indicator */
-    .custom-loading {
-      position: absolute;
-      top: 50%;
-      left: 50%;
-      transform: translate(-50%, -50%);
-      color: white;
-      font-size: 16px;
-      background: rgba(0,0,0,0.7);
-      padding: 15px 25px;
-      border-radius: 30px;
-      z-index: 2000;
-      display: none;
-    }
-
-    .custom-loading.visible {
-      display: block;
-    }
-
-    /* Error message */
-    .error-message {
-      position: absolute;
-      top: 50%;
-      left: 50%;
-      transform: translate(-50%, -50%);
-      color: #ff4444;
-      font-size: 16px;
-      background: rgba(0,0,0,0.8);
-      padding: 20px 30px;
-      border-radius: 10px;
-      z-index: 2000;
-      text-align: center;
-      border: 1px solid #ff4444;
-      max-width: 80%;
-    }
-
-    @media (max-width: 768px) {
-      .quality-panel {
-        right: 10px;
-        left: 10px;
-        top: 10px;
-        justify-content: center;
-      }
-      
-      .match-info {
-        bottom: 60px;
-        max-width: calc(100% - 20px);
-      }
-    }
-
-    /* --- Telegram Popup (modal) & confirmation dialog --- */
-    .modal {
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100vw;
-      height: 100vh;
-      backdrop-filter: blur(6px);
-      background: rgb(0 0 0 / 0.4);
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      z-index: 10000;
-      animation: fadeIn 0.5s ease;
-    }
-    .modal-content {
-      background: rgb(255 255 255 / 0.05);
-      border: 1px solid rgb(255 255 255 / 0.1);
-      border-radius: 20px;
-      padding: 30px 25px;
-      width: 90%;
-      max-width: 400px;
-      text-align: center;
-      color: #f3f4f6;
-      box-shadow: 0 8px 32px rgb(0 0 0 / 0.4);
-      backdrop-filter: blur(12px);
-      transform: scale(0.95);
-      animation: scaleIn 0.4s ease forwards;
-    }
-    .modal-content h2 {
-      font-size: 24px;
-      font-weight: 700;
-      color: #facc15;
-      margin-bottom: 16px;
-    }
-    .modal-content p {
-      font-size: 16px;
-      color: #d1d5db;
-      margin-bottom: 24px;
-      line-height: 1.5;
-    }
-    .modal-content strong {
-      color: #fff;
-    }
-    .modal-content button {
-      width: 100%;
-      padding: 12px;
-      font-size: 16px;
-      border: none;
-      border-radius: 12px;
-      margin-bottom: 12px;
-      cursor: pointer;
-      transition: 0.3s;
-    }
-    #joinButton {
-      background: linear-gradient(to right, #3b82f6, #06b6d4);
-      color: #fff;
-      font-weight: 500;
-    }
-    #joinButton:hover {
-      background: linear-gradient(to right, #2563eb, #0891b2);
-      transform: scale(1.02);
-    }
-    #closeButton {
-      background: rgb(255 255 255 / 0.1);
-      color: #f3f4f6;
-    }
-    #closeButton:hover {
-      background: rgb(255 255 255 / 0.15);
-      transform: scale(1.02);
-    }
-    /* Confirmation dialog (simple inline replacement) */
-    .confirm-dialog {
-      background: rgb(20 20 30 / 0.9);
-      border: 1px solid #facc15;
-      border-radius: 16px;
-      padding: 20px;
-      margin-top: 20px;
-      text-align: center;
-    }
-    .confirm-dialog p {
-      color: #fff;
-      font-size: 16px;
-      margin-bottom: 20px;
-    }
-    .confirm-dialog button {
-      background: #3b82f6;
-      color: white;
-      border: none;
-      padding: 10px 20px;
-      border-radius: 30px;
-      font-size: 15px;
-      margin: 0 8px;
-      cursor: pointer;
-      min-width: 100px;
-    }
-    .confirm-dialog button:hover {
-      background: #2563eb;
-    }
-    .confirm-dialog button:last-child {
-      background: rgb(255 255 255 / 0.2);
-    }
-    .confirm-dialog button:last-child:hover {
-      background: rgb(255 255 255 / 0.3);
-    }
-
-    @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
-    @keyframes scaleIn { to { transform: scale(1); opacity: 1; } }
-  </style>
+</style>
 </head>
-<body>
-  <div class="video-container">
-    <video id="video" controls="" autoplay="" playsinline="" src="https://in-mc-flive.fancode.com/mumbai/140143_english_hls_468828740259927_1ta-di_h264/1080p.m3u8?hdntl=Expires=1772642647~_GO=Generated~acl=/mumbai/140143_english_hls_468828740259927_1ta-di_h264/*~Signature=AR5gA-HWGSVRoRDNgaavAkg9fS0M5Wj27Qw3PRtwo57IsDb6JL555ophNyLbBpnuWwzxIAyo3GONquA4lll5KDtrwOIL"></video>
-    
-    
-    <div id="qualityPanel" class="quality-panel" style="display: flex;"><button class="quality-btn active">1080p</button><button class="quality-btn">720p</button><button class="quality-btn">540p</button><button class="quality-btn">480p</button><button class="quality-btn">360p</button><button class="quality-btn">240p</button></div>
-    
-    
-    <div id="matchInfo" class="match-info" style="display: block;">
-      <div id="matchTitle" class="match-title">West Indies Women Vs Sri Lanka Women</div>
-      <div id="matchTournament" class="match-tournament">Sri Lanka Women tour of West Indies, 2026</div>
-      <div id="matchStatus" class="match-tournament" style="color: #ffaa00;">Status: LIVE</div>
-    </div>
 
-    
-    <div id="customLoading" class="custom-loading">Loading stream...</div>
-  </div>
+<body class="p-5 max-w-7xl mx-auto">
 
-  
-  <div id="telegramPopup" class="modal" style="display: none;">
-    <div class="modal-content" id="popupContent">
-      
-      <div id="mainPopupView" style="display: block;">
-        <h2>⚽ Join Our Telegram!</h2>
-        <p>Get instant updates on all live matches and exclusive content by joining our Telegram channel <strong>@FootyFeed</strong></p>
-        <button id="joinButton">Join Now</button>
-        <button id="closeButton">Continue Watching</button>
-      </div>
-      
-      <div id="confirmView" class="confirm-dialog" style="display: none;">
-        <p>🔔 Are you sure you want to leave and join Telegram?</p>
-        <button id="confirmYes">Yes, Join</button>
-        <button id="confirmNo">Stay Here</button>
-      </div>
-    </div>
-  </div>
+<!-- Header -->
+<div class="text-center mb-10 mt-5">
+<div class="inline-flex items-center gap-3 bg-[#131d2f] py-4 px-8 rounded-full border border-blue-900/50">
+<i class="fas fa-bolt text-yellow-400"></i>
+<span class="text-2xl font-black">FEMCODE WEB</span>
+</div>
+<p class="text-gray-500 text-xs mt-3">WEB BY @Teamrohitofficial45</p>
+</div>
 
-  
+<!-- Matches -->
+<div id="matches-container" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8"></div>
 
+<!-- Quality Modal -->
+<div id="quality-modal" class="modal-overlay">
+<div class="modal-content">
+<h3 class="text-xl font-bold mb-5">Select Quality</h3>
+<div id="quality-list"></div>
+<div class="close-btn" onclick="closeModal()">CLOSE</div>
+</div>
+</div>
 
-</body></html>
+<script>
+
+const DATA_URL="https://raw.githubusercontent.com/Jitendra-unatti/fancode/refs/heads/main/data/fancode.json";
+const PLAYER_URL="https://teamroshaka2.pages.dev/?url=";
+
+const container=document.getElementById("matches-container");
+let allMatches=[];
+
+function initApp(){
+
+fetch(DATA_URL)
+.then(res=>res.json())
+.then(data=>{
+
+allMatches=data.matches||[];
+renderMatches(allMatches);
+
+})
+.catch(()=>{
+container.innerHTML="<p class='text-center col-span-full'>Failed to load matches</p>";
+});
+
+}
+
+function renderMatches(matches){
+
+container.innerHTML="";
+
+matches.forEach((m,index)=>{
+
+const isLive=(m.status||"").toUpperCase()==="LIVE";
+let img=m.image || "https://www.fancode.com/skillup-uploads/cms-media/Cricket_Fallback_Old_match-card.jpg";
+
+const card=document.createElement("div");
+card.className="match-tile";
+
+card.innerHTML=`
+
+<div class="img-wrapper">
+<img src="${img}" class="match-img">
+${isLive?'<span class="live-badge">LIVE</span>':''}
+</div>
+
+<div class="p-6 flex flex-col flex-grow">
+
+<h3 class="font-bold text-lg">${m.title}</h3>
+
+<p class="text-gray-400 text-xs mt-2 uppercase tracking-widest font-bold">${m.tournament}</p>
+
+<p class="text-gray-500 text-xs mt-1 mb-5">${m.startTime}</p>
+
+<div onclick="${isLive?`openQuality(${index})`:''}" 
+class="btn-watch ${!isLive?'not-live':''}">
+
+${isLive?'<i class="fas fa-play-circle mr-2"></i> WATCH LIVE':'NOT LIVE'}
+
+</div>
+
+</div>
+
+`;
+
+container.appendChild(card);
+
+});
+
+}
+
+function openQuality(index){
+
+const match=allMatches[index];
+const streamData=match.auto_streams?.[0]?.auto||"";
+
+const list=document.getElementById("quality-list");
+list.innerHTML="";
+
+if(!streamData){
+alert("Stream not found");
+return;
+}
+
+const lines=streamData.split("\n");
+
+lines.forEach((line,i)=>{
+
+if(line.includes("RESOLUTION=")){
+
+const resolution=line.split("RESOLUTION=")[1].split(",")[0].split("x")[1]+"p";
+const streamUrl=lines[i+1].trim();
+
+const btn=document.createElement("div");
+btn.className="quality-btn";
+
+btn.innerHTML=`<span>${resolution}</span><i class="fas fa-chevron-right"></i>`;
+
+btn.onclick=()=>{
+window.location.href=PLAYER_URL+encodeURIComponent(streamUrl);
+};
+
+list.appendChild(btn);
+
+}
+
+});
+
+document.getElementById("quality-modal").style.display="flex";
+
+}
+
+function closeModal(){
+document.getElementById("quality-modal").style.display="none";
+}
+
+initApp();
+
+</script>
+
+</body>
+</html>
