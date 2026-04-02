@@ -91,7 +91,7 @@
         player.configure({
             drm: {
                 clearKeys: {
-                    '749618dc54f5bc958a67e38339147bf4': "e746efd1bcc637ae2008043357c7ff6e"
+                    '986e2a9cba0cdcdc0fce71908249ae63': "f5035dff716cd2a0e9392bb10c126a98"
                 }
             }
         });
@@ -115,7 +115,7 @@ window.player = player;
         controls.addEventListener("error", onUIErrorEvent);
 
         try {
-            await player.load("https://a96aivottlinear-a.akamaihd.net/OTTB/iad-nitro/enc/zw4c5ukci9/out/v1/00ca9d82ccf441cbbfcb84a235eca9e1/cenc.mpd");
+            await player.load("https://otte.cache.aiv-cdn.net/bom-nitro/live/clients/dash/enc/woq7brvajz/out/v1/86f8068f569543858d2093c80d35bfa8/cenc.mpd");
             console.log("The video has now been loaded!");
         } catch (error) {
             onPlayerError(error);
