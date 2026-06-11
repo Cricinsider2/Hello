@@ -135,13 +135,13 @@
       player.configure({
         drm: {
           clearKeys: {
-            '10e2114398744f3880cc96653568da55': "d6d40441f9fbebea03ec64c4aea7211f"
+            'f88c0e6ef2de4f92b7ce07e50cb2d937': "7aff86770a0f0ac16b91a372e148a8bd"
           }
         }
       });
 
       try {
-        await player.load("https://ngtv-live-cbj.gcdn.co/Content/DASH/Live/channel(fifa1)/master.mpd");
+        await player.load("https://ngtv-live-cbj.gcdn.co/Content/DASH/Live/channel(fifa3)/master.mpd");
         console.log("✅ The video has now been loaded!");
 
         video.addEventListener('playing', () => {
