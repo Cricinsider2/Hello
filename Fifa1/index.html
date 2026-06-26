@@ -91,7 +91,7 @@
         player.configure({
             drm: {
                 clearKeys: {
-                    'f6564ec2aee819046328a0e153be574d': "ff46a8a1031eb27ef22576a077c98ab7"
+                    '2c338a117d434ce4bbe3569231af90f1': "a9633d901ee8a3f4f58ac314b5c5f4fb"
                 }
             }
         });
@@ -115,7 +115,7 @@ window.player = player;
         controls.addEventListener("error", onUIErrorEvent);
 
         try {
-            await player.load("https://otte-tim.live.pv-cdn.net/pdx-nitro/live/clients/enc/1ke0mu5qrm/out/v1/9e895e2c1c894a75ac6d21a4deddd5d3/cenc.mpd");
+            await player.load("https://qp-pldt-live-bpk-ucd-prod.akamaized.net/bpk-tv/fifa_ppv1/default/index.mpd");
             console.log("The video has now been loaded!");
         } catch (error) {
             onPlayerError(error);
