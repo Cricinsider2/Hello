@@ -91,7 +91,7 @@
         player.configure({
             drm: {
                 clearKeys: {
-                    '1223d5105392cabf1bb9c2c1fdf6539a': "340b409f4b8f78a343e0363a7938df38"
+                    'aa78205160ef4b5c972d5e815a8fe6e4': "338b545591e45469e71dae3a8fb8dbb0"
                 }
             }
         });
@@ -115,7 +115,7 @@ window.player = player;
         controls.addEventListener("error", onUIErrorEvent);
 
         try {
-            await player.load("https://otte.live.fly.ww.aiv-cdn.net/iad-nitro/live/clients/dash/enc/iayg0kyrof/out/v1/91dc04907f56415b897faccfa9d252da/cenc.mpd");
+            await player.load("https://teleamazonasb.cdn.mdstrm.com/live-stream-mp/dfzu2jckcs3he/a5e7a2777ea24b8ca49b326b536f87b2/6a0cd90eb3852427fcded197/manifest.mpd");
             console.log("The video has now been loaded!");
         } catch (error) {
             onPlayerError(error);
