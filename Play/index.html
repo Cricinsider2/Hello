@@ -1,424 +1,579 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Fancode · animated</title>
-  <link rel="shortcut icon" href="https://fancode.cricsters.io/fancode.webp" />
-  <!-- Tailwind + icons -->
-  <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
-  <style>
-    * { box-sizing: border-box; margin: 0; padding: 0; }
-    body {
-      background: #0a0f1c;
-      font-family: 'Inter', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-      color: #edf2f7;
-      line-height: 1.5;
+<!DOCTYPE html><html><head>
+  <meta charset="UTF-8">
+    <title>SHAKA PLAYER</title>
+
+  <meta name="referrer" content="no-referrer">
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/shaka-player/4.6.0/shaka-player.ui.min.js"></script><style type="text/css">* {user-select: auto !important; -webkit-user-select: auto !important;}</style><input type="hidden" id="inject_idm_text_selection"><style></style>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/shaka-player/4.6.0/controls.min.css">
+  
+
+  <style type="text/css">
+      body {position:absolute;
+        margin: 0;
+        padding: 0px;
+        background-color: #000000;
+        color: #fff;
+        font-family: Arial, sans-serif;
+        display: flex;
+        justify-content: center;
+        align-items: flex-start;
+        height:100%;width:100%
+      }
+
+      .video-container {
+        position: absolute ;
+        width: 100%;height:100%;
+        aspect-ratio: 16/9;
+        background-color: #000;
+        border-radius: 1px;
+        overflow: hidden;
+        box-shadow: 0 4px 2px rgba(0,0,0,0.5);
+      }
+
+      .shaka-video-container {
+        position: absolute ;
+        width: 100%;height:100%;
+        
+        
+      }
+
+      video {
+        width: 100%;
+        height: 100%;
+        background-color: #000;
+        
+      }
+
+      .video-watermark {
+        position: absolute;
+        top: 15px;
+        left: 15px;
+        width: 80px;
+        height: 10px;
+        opacity: 0.7;
+        z-index: 1000;
+        pointer-events: none;
+      }
+
+      @media (max-width: 768px) {
+        body {width:100%;height:100%
+          padding: 1px;
+        }
+        
+        .video-container {
+          max-width: 100%;height:100%
+        }
+        
+        .video-watermark {
+          width: 30px;
+          height: 30px;
+          top: 10px;
+          left: 10px;
+        }
+      }
+
+      @media (min-width: 769px) and (max-width: 1024px) {
+        .video-container {
+          max-width: 854px;
+        }
+      }
+  
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+    html, body {
+      background: #000;
+      
+      font-family: system-ui, -apple-system, sans-serif;
     }
 
-    /* spacious card with smooth transitions */
-    .match-tile {
-      background: #131d2f;
-      border-radius: 32px;
-      border: 1px solid #253247;
-      overflow: hidden;
-      display: flex;
-      flex-direction: column;
-      box-shadow: 0 15px 30px -10px rgba(0,0,0,0.8);
-      transition: transform 0.25s cubic-bezier(0.2, 0, 0, 1), border-color 0.2s, box-shadow 0.3s, background 0.2s;
-      will-change: transform;
-    }
-    .match-tile:hover {
-      background: #17253b;
-      border-color: #3b82f6;
-      transform: scale(1.02) translateY(-4px);
-      box-shadow: 0 25px 40px -8px #1e3a8a40;
-    }
 
-    /* image zoom on hover */
-    .img-wrapper {
-      overflow: hidden;
-      background: #0f1a2c;
-      height: 210px;
-      position: relative;
+    /* YouTube Theme CSS */
+    @font-face {
+      font-family: 'Roboto';
+      font-style: normal;
+      font-weight: 400;
+      font-display: swap;
+      src: url(https://fonts.gstatic.com/s/roboto/v27/KFOmCnqEu92Fr1Me5Q.ttf) format('truetype');
     }
-    .match-img-spacious {
+    @font-face {
+      font-family: 'Roboto';
+      font-style: normal;
+      font-weight: 500;
+      font-display: swap;
+      src: url(https://fonts.gstatic.com/s/roboto/v27/KFOlCnqEu92Fr1MmEU9vAw.ttf) format('truetype');
+    }
+    .youtube-theme {
+      font-family: 'Roboto', sans-serif;
+    }
+    .youtube-theme .shaka-bottom-controls {
       width: 100%;
-      height: 100%;
-      object-fit: cover;
+      padding: 0;
+      padding-bottom: 0;
+      z-index: 1;
+    }
+    .youtube-theme .shaka-bottom-controls {
+      display: -webkit-box;
+      display: -ms-flexbox;
+      display: flex;
+      -webkit-box-orient: vertical;
+      -webkit-box-direction: normal;
+          -ms-flex-direction: column;
+              flex-direction: column;
+    }
+    .youtube-theme .shaka-ad-controls {
+      -webkit-box-ordinal-group: 2;
+          -ms-flex-order: 1;
+              order: 1;
+    }
+    .youtube-theme .shaka-controls-button-panel {
+      -webkit-box-ordinal-group: 3;
+          -ms-flex-order: 2;
+              order: 2;
+      height: 60px;
+      padding: 0 10px;
+    }
+    .youtube-theme .shaka-range-container {
+      margin: 4px 10px 4px 10px;
+      top: 0;
+    }
+    .youtube-theme .shaka-small-play-button {
+      -webkit-box-ordinal-group: -2;
+          -ms-flex-order: -3;
+              order: -3;
+    }
+    .youtube-theme .shaka-mute-button {
+      -webkit-box-ordinal-group: -1;
+          -ms-flex-order: -2;
+              order: -2;
+    }
+    .youtube-theme .shaka-controls-button-panel > * {
+      margin: 0;
+      padding: 3px 8px;
+      color: #EEE;
+      height: 60px;
+    }
+    .youtube-theme .shaka-controls-button-panel > *:focus {
+      outline: none;
+      -webkit-box-shadow: inset 0 0 0 2px rgba(27, 127, 204, 0.8);
+              box-shadow: inset 0 0 0 2px rgba(27, 127, 204, 0.8);
+      color: #FFF;
+    }
+    .youtube-theme .shaka-controls-button-panel > *:hover {
+      color: #FFF;
+    }
+    .youtube-theme .shaka-controls-button-panel .shaka-volume-bar-container {
+      position: relative;
+      z-index: 10;
+      left: -1px;
+      -webkit-box-ordinal-group: 0;
+          -ms-flex-order: -1;
+              order: -1;
+      opacity: 0;
+      width: 0px;
+      -webkit-transition: width 0.2s cubic-bezier(0.4, 0, 1, 1);
+      height: 3px;
+      transition: width 0.2s cubic-bezier(0.4, 0, 1, 1);
+      padding: 0;
+    }
+    .youtube-theme .shaka-controls-button-panel .shaka-volume-bar-container:hover,
+    .youtube-theme .shaka-controls-button-panel .shaka-volume-bar-container:focus {
       display: block;
-      transition: transform 0.4s ease;
+      width: 50px;
+      opacity: 1;
+      padding: 0 6px;
     }
-    .match-tile:hover .match-img-spacious {
-      transform: scale(1.05);
+    .youtube-theme .shaka-mute-button:hover + div {
+      opacity: 1;
+      width: 50px;
+      padding: 0 6px;
     }
-
-    .live-badge-flat {
-      background: #b91c1c;
-      color: white;
-      font-weight: 600;
-      font-size: 0.8rem;
-      padding: 0.35rem 1rem;
-      border-radius: 40px;
-      display: inline-flex;
-      align-items: center;
-      gap: 0.4rem;
-      box-shadow: 0 4px 12px rgba(185, 28, 28, 0.4);
-      animation: pulse-live 1.8s infinite;
+    .youtube-theme .shaka-current-time {
+      padding: 0 10px;
+      font-size: 12px;
     }
-    @keyframes pulse-live {
-      0% { box-shadow: 0 0 0 0 rgba(220, 38, 38, 0.6); }
-      70% { box-shadow: 0 0 0 8px rgba(220, 38, 38, 0); }
-      100% { box-shadow: 0 0 0 0 rgba(220, 38, 38, 0); }
-    }
-
-    .btn-watch-live {
-      background: #2563eb;
-      border-radius: 50px;
-      padding: 0.9rem 1rem;
-      font-weight: 700;
-      font-size: 1rem;
-      color: white;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      gap: 0.6rem;
-      transition: all 0.2s;
-      width: 100%;
-      border: none;
-      margin-top: 0.5rem;
+    .youtube-theme .shaka-seek-bar-container {
+      height: 3px;
       position: relative;
-      overflow: hidden;
+      top: -1px;
+      border-radius: 0;
+      margin-bottom: 0;
     }
-    .btn-watch-live:hover { background: #1d4ed8; transform: scale(1.01); }
-    .btn-watch-live:active { transform: scale(0.98); }
-    .btn-watch-live i { transition: transform 0.2s; }
-    .btn-watch-live:hover i { transform: translateX(4px); }
-
-    .btn-upcoming {
-      background: transparent;
-      border-radius: 50px;
-      padding: 0.9rem 1rem;
-      font-weight: 600;
-      font-size: 0.95rem;
-      color: #94a3b8;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      gap: 0.6rem;
-      width: 100%;
-      border: 1px solid #334155;
-      margin-top: 0.5rem;
-      pointer-events: none;
-      opacity: 0.8;
-    }
-
-    /* skeleton shimmer animation */
-    .skeleton-spacious {
-      background: linear-gradient(90deg, #1b2538 25%, #263449 50%, #1b2538 75%);
-      background-size: 200% 100%;
-      animation: shimmer 1.5s infinite linear;
-      border-radius: 32px;
-      min-height: 430px;
-    }
-    @keyframes shimmer { 0% { background-position: 200% 0; } 100% { background-position: -200% 0; } }
-
-    .divider-simple { height: 1px; background: #1f2a3c; width: 100%; }
-
-    /* popup overlay – hidden by default + entrance animation */
-    #popup-24h {
-      display: none;
-      position: fixed;
-      top: 0; left: 0; width: 100%; height: 100%;
-      background: rgba(3, 7, 18, 0.8);
-      backdrop-filter: blur(4px);
-      align-items: center;
-      justify-content: center;
-      z-index: 1000;
-      animation: fadeIn 0.3s ease;
-    }
-    .popup-card {
-      background: #152436;
-      border-radius: 48px;
-      max-width: 360px;
-      width: 90%;
-      padding: 2rem 1.8rem;
-      border: 1px solid #2e405b;
-      box-shadow: 0 30px 50px -10px black;
-      text-align: center;
-      transform: scale(0.95);
-      animation: popupEntrance 0.3s 0.1s forwards;
+    .youtube-theme .shaka-seek-bar-container .shaka-range-element {
       opacity: 0;
     }
-    @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
-    @keyframes popupEntrance {
-      0% { opacity: 0; transform: scale(0.9) translateY(10px); }
-      100% { opacity: 1; transform: scale(1) translateY(0); }
+    .youtube-theme .shaka-seek-bar-container:hover {
+      height: 5px;
+      top: 0;
+      cursor: pointer;
+    }
+    .youtube-theme .shaka-seek-bar-container:hover .shaka-range-element {
+      opacity: 1;
+      cursor: pointer;
+    }
+    .youtube-theme .shaka-seek-bar-container input[type=range]::-webkit-slider-thumb {
+      background: #FF0000;
+      cursor: pointer;
+    }
+    .youtube-theme .shaka-seek-bar-container input[type=range]::-moz-range-thumb {
+      background: #FF0000;
+      cursor: pointer;
+    }
+    .youtube-theme .shaka-seek-bar-container input[type=range]::-ms-thumb {
+      background: #FF0000;
+      cursor: pointer;
+    }
+    .youtube-theme .shaka-video-container * {
+      font-family: 'Roboto', sans-serif;
+    }
+    .youtube-theme .shaka-video-container .material-icons-round {
+      font-family: 'Material Icons Sharp';
+    }
+    .youtube-theme .shaka-overflow-menu,
+    .youtube-theme .shaka-settings-menu {
+      border-radius: 2px;
+      background: rgba(28, 28, 28, 0.9);
+      text-shadow: 0 0 2px rgb(0 0 0%);
+      -webkit-transition: opacity 0.1s cubic-bezier(0, 0, 0.2, 1);
+      transition: opacity 0.1s cubic-bezier(0, 0, 0.2, 1);
+      -moz-user-select: none;
+      -ms-user-select: none;
+      -webkit-user-select: none;
+      right: 10px;
+      bottom: 50px;
+      padding: 8px 0;
+      min-width: 200px;
+    }
+    .youtube-theme .shaka-settings-menu {
+      padding: 0 0 8px 0;
+    }
+    .youtube-theme .shaka-settings-menu button {
+      font-size: 12px;
+    }
+    .youtube-theme .shaka-settings-menu button span {
+      margin-left: 33px;
+      font-size: 13px;
+    }
+    .youtube-theme .shaka-settings-menu button[aria-selected="true"] {
+      display: -webkit-box;
+      display: -ms-flexbox;
+      display: flex;
+    }
+    .youtube-theme .shaka-settings-menu button[aria-selected="true"] span {
+      -webkit-box-ordinal-group: 3;
+          -ms-flex-order: 2;
+              order: 2;
+      margin-left: 0;
+    }
+    .youtube-theme .shaka-settings-menu button[aria-selected="true"] i {
+      -webkit-box-ordinal-group: 2;
+          -ms-flex-order: 1;
+              order: 1;
+      font-size: 18px;
+      padding-left: 5px;
+    }
+    .youtube-theme .shaka-overflow-menu button {
+      padding: 0;
+    }
+    .youtube-theme .shaka-overflow-menu button i {
+      display: none;
+    }
+    .youtube-theme .shaka-overflow-menu button .shaka-overflow-button-label {
+      display: -webkit-box;
+      display: -ms-flexbox;
+      display: flex;
+      -webkit-box-pack: justify;
+          -ms-flex-pack: justify;
+              justify-content: space-between;
+      -webkit-box-orient: horizontal;
+      -webkit-box-direction: normal;
+          -ms-flex-direction: row;
+              flex-direction: row;
+      -webkit-box-align: center;
+          -ms-flex-align: center;
+              align-items: center;
+      cursor: default;
+      outline: none;
+      height: 60px;
+      -webkit-box-flex: 0;
+          -ms-flex: 0 0 100%;
+              flex: 0 0 100%;
+    }
+    .youtube-theme .shaka-overflow-menu button .shaka-overflow-button-label span {
+      -ms-flex-negative: initial;
+          flex-shrink: initial;
+      padding-left: 15px;
+      font-size: 13px;
+      font-weight: 500;
+      display: -webkit-box;
+      display: -ms-flexbox;
+      display: flex;
+      -webkit-box-align: center;
+          -ms-flex-align: center;
+              align-items: center;
+    }
+    .youtube-theme .shaka-overflow-menu span + span {
+      color: #FFF;
+      font-weight: 400 !important;
+      font-size: 12px !important;
+      padding-right: 8px;
+      padding-left: 0 !important;
+    }
+    .youtube-theme .shaka-overflow-menu span + span:after {
+      content: "navigate_next";
+      font-family: 'Material Icons Sharp';
+      font-size: 20px;
+    }
+    .youtube-theme .shaka-overflow-menu .shaka-pip-button span + span {
+      padding-right: 15px !important;
+    }
+    .youtube-theme .shaka-overflow-menu .shaka-pip-button span + span:after {
+      content: "";
+    }
+    .youtube-theme .shaka-back-to-overflow-button {
+      padding: 8px 0;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+      font-size: 12px;
+      color: #eee;
+      height: 60px;
+    }
+    .youtube-theme .shaka-back-to-overflow-button .material-icons-round {
+      font-size: 15px;
+      padding-right: 10px;
+    }
+    .youtube-theme .shaka-back-to-overflow-button span {
+      margin-left: 3px !important;
+    }
+    .youtube-theme .shaka-overflow-menu button:hover,
+    .youtube-theme .shaka-settings-menu button:hover {
+      background-color: rgba(255, 255, 255, 0.1);
+      cursor: pointer;
+    }
+    .youtube-theme .shaka-overflow-menu button:hover label,
+    .youtube-theme .shaka-settings-menu button:hover label {
+      cursor: pointer;
+    }
+    .youtube-theme .shaka-overflow-menu button:focus,
+    .youtube-theme .shaka-settings-menu button:focus {
+      background-color: rgba(255, 255, 255, 0.1);
+      border: none;
+      outline: none;
+    }
+    .youtube-theme .shaka-overflow-menu button,
+    .youtube-theme .shaka-settings-menu button {
+      color: #EEE;
+    }
+    .youtube-theme .shaka-captions-off {
+      color: #BFBFBF;
+    }
+    .youtube-theme .shaka-overflow-menu-button {
+      font-size: 18px;
+      margin-right: 5px;
+    }
+    .youtube-theme .shaka-fullscreen-button:hover {
+      font-size: 25px;
+      -webkit-transition: font-size 0.1s cubic-bezier(0, 0, 0.2, 1);
+      transition: font-size 0.1s cubic-bezier(0, 0, 0.2, 1);
     }
 
-    /* header subtle float */
-    .header-pill {
-      transition: transform 0.3s, box-shadow 0.3s;
-      animation: softFloat 4s infinite alternate ease-in-out;
-    }
-    @keyframes softFloat {
-      0% { transform: translateY(0); box-shadow: 0 4px 10px rgba(0,40,100,0.3); }
-      100% { transform: translateY(-3px); box-shadow: 0 12px 24px -8px #1e3a8a; }
+    /* Hide center loading spinner */
+    .shaka-spinner-container,
+    .shaka-spinner,
+    .shaka-spinner-svg {
+      display: none !important;
+      visibility: hidden !important;
+      opacity: 0 !important;
     }
 
-    /* loading dots for empty state (optional) */
-    .pulse-dot {
-      width: 8px; height: 8px; background: #3b82f6; border-radius: 50%;
-      display: inline-block; margin: 0 2px;
-      animation: pulse-dot 1.2s infinite;
+    /* Custom Seek Bar Colors */
+    .youtube-theme .shaka-seek-bar {
+      background: rgba(255,255,255,.2) !important;
     }
-    @keyframes pulse-dot { 0%,100%{ opacity: 0.3; transform: scale(1); } 50%{ opacity: 1; transform: scale(1.3); } }
+    
+    .youtube-theme .shaka-buffered-range {
+      background: rgba(255,255,255,.4) !important;
+    }
+    
+    .youtube-theme .shaka-played-range {
+      background: rgb(255,0,0) !important;
+    }
 
-    /* line clamp */
-    .line-clamp-2 { display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
-  </style>
+    /* Manual play button styles */
+    .manual-play-button {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      background: rgba(0, 0, 0, 0.8);
+      color: white;
+      padding: 20px 30px;
+      border-radius: 28px;
+      cursor: pointer;
+      font-size: 18px;
+      z-index: 2000;
+      border: 0px solid #ff0000;
+      display: none;
+      transition: all 0.3s ease;
+    }
+    
+    .manual-play-button:hover {
+      background: rgba(255, 0, 0, 0.8);
+      transform: translate(-50%, -50%) scale(1.05);
+    }#myLogo {width:60px;height:40px;
+  position: absolute;
+  right: 5px;
+  top: 10px;
+             }
+</style>
+
+
+  
 </head>
-<body class="p-5 max-w-7xl mx-auto">
 
-  <!-- popup (24h snooze) with entrance animation -->
-  <div id="popup-24h">
-    <div class="popup-card">
-      <div class="w-16 h-16 mx-auto bg-blue-600/30 rounded-full flex items-center justify-center text-3xl mb-4 animate-pulse">
-        <i class="fas fa-bolt text-blue-400"></i>
-      </div>
-      <h2 class="text-2xl font-bold text-white mb-2">Join Live Alert</h2>
-      <p class="text-gray-300 text-sm mb-6">Get Instant Notifications For Every Live Match. No Spam, Only Live Events.</p>
-      <div class="flex flex-col gap-3">
-        <a href="https://t.me/+e3-eAje291cxNGNl" target="_blank" class="bg-blue-600 hover:bg-blue-500 text-white py-3.5 rounded-full font-semibold flex items-center justify-center gap-2 text-base transition-all hover:gap-3"><i class="fab fa-telegram-plane"></i> Join Telegram</a>
-        <button id="close-popup-btn" class="bg-transparent border border-gray-600 text-gray-300 py-3 rounded-full text-sm hover:bg-gray-800 transition">Already Joined</button>
-      </div>
-    </div>
-  </div>
 
-  <!-- header: with animation -->
-  <div class="text-center mt-4 mb-8">
-    <div class="inline-flex items-center justify-center gap-3 bg-[#131d2f] py-3 px-7 rounded-full border border-blue-900/50 header-pill">
-      <i class="fas fa-bolt text-blue-500 text-xl animate-bounce" style="animation-duration: 1.8s;"></i>
-      <span class="text-3xl font-black tracking-tight text-white">FANCODE</span>
-    </div>
-    <p class="text-gray-500 text-sm mt-3 tracking-wide flex items-center justify-center gap-2">
-      <span class="w-1 h-1 bg-blue-500 rounded-full animate-pulse"></span>
-      WEB BY MATCHES LINKS
-      <span class="w-1 h-1 bg-blue-500 rounded-full animate-pulse"></span>
-    </p>
-  </div>
+<body><div class="video-container">
 
-  <!-- main grid – spacious cards -->
-  <div id="matches-container" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8 mt-6">
-    <!-- taller skeletons with shimmer -->
-    <div class="skeleton-spacious"></div>
-    <div class="skeleton-spacious hidden sm:block"></div>
-    <div class="skeleton-spacious hidden lg:block"></div>
-  </div>
+<div class="shaka-video-container shaka-mobile" data-shaka-player="" data-shaka-player-container="" shaka-controls="true">
+  <video id="video" autoplay="" muted="" playsinline="" preload="auto" class="shaka-video" src=""></video>
+  <img id="myLogo" src="https://i.ibb.co/DfcTLwYL/Picsart-25-08-17-22-50-47-289.png"><div class="shaka-controls-container" shown="true"><div class="shaka-scrim-container"></div><div class="shaka-play-button-container"><button type="button" class="shaka-play-button shaka-no-propagation" icon="play" aria-label="Play"></button></div><div class="shaka-server-side-ad-container"></div><div class="shaka-bottom-controls shaka-no-propagation"><div class="shaka-ad-controls shaka-hidden"><div class="shaka-ad-position shaka-hidden"><span class="shaka-ad-position-span"></span></div><div class="shaka-ad-counter"><span class="shaka-ad-counter-span"></span></div></div><div class="shaka-controls-button-panel shaka-show-controls-on-mouse-over"><button type="button" class="shaka-small-play-button material-icons-round shaka-tooltip" aria-label="Play">play_arrow</button><button type="button" class="shaka-mute-button material-icons-round shaka-tooltip" aria-label="Unmute">volume_off</button><button type="button" class="shaka-current-time" disabled="">0:00</button><div class="shaka-spacer" aria-hidden="true"></div><button type="button" class="shaka-overflow-button shaka-resolution-button shaka-tooltip-status" shaka-status="Auto" aria-label="Quality"><i class="material-icons-round">settings</i><label class="shaka-overflow-button-label shaka-overflow-menu-only"><span>Quality</span><span class="shaka-current-selection-span">Auto</span></label></button><button type="button" class="shaka-overflow-button shaka-language-button shaka-tooltip-status" aria-label="Language" shaka-status=""><i class="material-icons-round">language</i><label class="shaka-overflow-button-label shaka-overflow-menu-only"><span>Language</span><span class="shaka-current-selection-span"></span></label></button><button type="button" class="shaka-pip-button shaka-tooltip shaka-hidden" aria-label="Enter Picture-in-Picture"><i class="material-icons-round">picture_in_picture_alt</i><label class="shaka-overflow-button-label shaka-overflow-menu-only"><span>Picture-in-Picture</span><span class="shaka-current-selection-span">Off</span></label></button><button type="button" class="shaka-fullscreen-button material-icons-round shaka-tooltip" aria-label="Full screen">fullscreen</button><button type="button" class="shaka-overflow-menu-button shaka-no-propagation material-icons-round shaka-tooltip" aria-label="More settings">more_vert</button></div><div class="shaka-range-container shaka-seek-bar-container" style="background: rgba(255, 255, 255, 0.2);"><div class="shaka-ad-markers" style="background: transparent;"></div><input class="shaka-range-element shaka-seek-bar shaka-no-propagation shaka-show-controls-on-mouse-over" type="range" step="any" min="0" max="0" aria-label="Seek"><div id="shaka-player-ui-chapters-container"></div><div id="shaka-player-ui-thumbnail-container" style="visibility: hidden;"><img id="shaka-player-ui-thumbnail-image" draggable="false"><div id="shaka-player-ui-thumbnail-time"></div></div></div></div><div class="shaka-no-propagation shaka-show-controls-on-mouse-over shaka-settings-menu shaka-hidden shaka-resolutions"><button type="button" class="shaka-back-to-overflow-button" aria-label="Quality"><i class="material-icons-round">close</i><span>Quality</span></button><button type="button" class="shaka-enable-abr-button" aria-selected="true"><span class="shaka-auto-span shaka-chosen-item">Auto</span><i class="material-icons-round shaka-chosen-item" aria-hidden="true">done</i></button></div><div class="shaka-no-propagation shaka-show-controls-on-mouse-over shaka-settings-menu shaka-hidden shaka-audio-languages"><button type="button" class="shaka-back-to-overflow-button" aria-label="Back"><i class="material-icons-round">close</i><span>Language</span></button></div><div class="shaka-overflow-menu shaka-no-propagation shaka-show-controls-on-mouse-over shaka-hidden"><button type="button" class="shaka-overflow-button shaka-caption-button shaka-tooltip-status shaka-hidden" aria-pressed="false" aria-label="Captions" shaka-status="Off"><i class="material-icons-round">closed_caption_disabled</i><label class="shaka-overflow-button-label shaka-overflow-menu-only"><span>Captions</span><span class="shaka-current-selection-span">Off</span></label></button><button type="button" class="shaka-overflow-button shaka-resolution-button shaka-tooltip-status" shaka-status="Auto" aria-label="Quality"><i class="material-icons-round">settings</i><label class="shaka-overflow-button-label shaka-overflow-menu-only"><span>Quality</span><span class="shaka-current-selection-span">Auto</span></label></button><button type="button" class="shaka-overflow-button shaka-language-button shaka-tooltip-status" aria-label="Language" shaka-status=""><i class="material-icons-round">language</i><label class="shaka-overflow-button-label shaka-overflow-menu-only"><span>Language</span><span class="shaka-current-selection-span"></span></label></button><button type="button" class="shaka-pip-button shaka-tooltip shaka-hidden" aria-label="Enter Picture-in-Picture"><i class="material-icons-round">picture_in_picture_alt</i><label class="shaka-overflow-button-label shaka-overflow-menu-only"><span>Picture-in-Picture</span><span class="shaka-current-selection-span">Off</span></label></button><button type="button" class="shaka-cast-button shaka-tooltip shaka-hidden" aria-pressed="false" aria-label="Cast..."><i class="material-icons-round">cast</i><label class="shaka-overflow-button-label shaka-overflow-menu-only"><span>Cast...</span><span class="shaka-current-selection-span">Off</span></label></button><button type="button" class="shaka-overflow-button shaka-playbackrate-button shaka-tooltip-status" aria-label="Playback speed" shaka-status="1x"><i class="material-icons-round">slow_motion_video</i><label class="shaka-overflow-button-label shaka-overflow-menu-only"><span>Playback speed</span><span class="shaka-current-selection-span">1x</span></label></button></div><div class="shaka-no-propagation shaka-show-controls-on-mouse-over shaka-settings-menu shaka-hidden shaka-text-languages"><button type="button" class="shaka-back-to-overflow-button" aria-label="Back"><i class="material-icons-round">arrow_back</i><span>Captions</span></button><button type="button" class="shaka-turn-captions-off-button" aria-selected="true"><span class="shaka-auto-span shaka-chosen-item">Off</span><i class="material-icons-round shaka-chosen-item" aria-hidden="true">done</i></button></div><div class="shaka-no-propagation shaka-show-controls-on-mouse-over shaka-settings-menu shaka-hidden shaka-resolutions"><button type="button" class="shaka-back-to-overflow-button" aria-label="Quality"><i class="material-icons-round">arrow_back</i><span>Quality</span></button><button type="button" class="shaka-enable-abr-button" aria-selected="true"><span class="shaka-auto-span shaka-chosen-item">Auto</span><i class="material-icons-round shaka-chosen-item" aria-hidden="true">done</i></button></div><div class="shaka-no-propagation shaka-show-controls-on-mouse-over shaka-settings-menu shaka-hidden shaka-audio-languages"><button type="button" class="shaka-back-to-overflow-button" aria-label="Back"><i class="material-icons-round">arrow_back</i><span>Language</span></button></div><div class="shaka-no-propagation shaka-show-controls-on-mouse-over shaka-settings-menu shaka-hidden shaka-playback-rates"><button type="button" class="shaka-back-to-overflow-button" aria-label="Back"><i class="material-icons-round">arrow_back</i><span>Playback speed</span></button><button type="button"><span>0.5x</span></button><button type="button"><span>0.75x</span></button><button type="button" aria-selected="true"><span class="shaka-chosen-item">1x</span><i class="material-icons-round shaka-chosen-item" aria-hidden="true">done</i></button><button type="button"><span>1.25x</span></button><button type="button"><span>1.5x</span></button><button type="button"><span>1.75x</span></button><button type="button"><span>2x</span></button></div></div><div class="shaka-client-side-ad-container shaka-hidden"></div><div class="shaka-spinner-container shaka-hidden"><div class="shaka-spinner"><svg class="shaka-spinner-svg" viewBox="0 0 30 30"><circle class="shaka-spinner-path" cx="15" cy="15" r="14.5" fill="none" stroke-width="1" stroke-miterlimit="10"></circle></svg></div></div></div></div>
 
-  <!-- divider footer with subtle fade -->
-  <div class="mt-16 flex items-center gap-3 text-xs text-gray-600 opacity-80 hover:opacity-100 transition">
-    <div class="divider-simple"></div>
-    <span>© fancode · animated edition</span>
-    <div class="divider-simple"></div>
-  </div>
 
-  <script>
-    (function() {
-      // anti iframe
-      if (window.self !== window.top) {
-        document.body.innerHTML = `<div style="min-height:100vh;display:flex;align-items:center;justify-content:center;background:#0a0f1c;animation:fadeIn 0.3s"><div style="background:#151f2f;padding:2rem;border-radius:32px;"><i class="fas fa-shield-alt text-4xl text-red-400"></i><p style="margin-top:1rem;">direct access only</p></div></div>`;
-        throw new Error('frame blocked');
-      }
 
-      // ---------- 24H POPUP LOGIC (with animation) ----------
-      (function setupPopup() {
-        const popup = document.getElementById('popup-24h');
-        const closeBtn = document.getElementById('close-popup-btn');
-        const POPUP_STORAGE_KEY = 'fancode_popup_24h';
+<script>
 
-        function shouldShowPopup() {
-          const lastClosed = localStorage.getItem(POPUP_STORAGE_KEY);
-          if (!lastClosed) return true;
-          const last = parseInt(lastClosed, 10);
-          if (isNaN(last)) return true;
-          const now = Date.now();
-          const hoursPassed = (now - last) / (1000 * 60 * 60);
-          return hoursPassed >= 24;
-        }
+  const queryParams = new URLSearchParams(window.location.search);
+        const url = queryParams.get('url');
+  
+    
+    const channelstreamInfo = {  
+      streamUrl: url, 
+      authBearer: "",   
+      streamPoster: "https://raw.githubusercontent.com/abusaeeidx/Tv-Channel-Logo/heads/main/CricHD/runded/1745008895589.png"
+    };
 
-        function markPopupClosed() {
-          localStorage.setItem(POPUP_STORAGE_KEY, Date.now().toString());
-          // optional exit animation
-          popup.style.animation = 'fadeIn 0.2s reverse';
-          setTimeout(() => { popup.style.display = 'none'; }, 150);
-        }
+    let player;
+    const video = document.getElementById('video');
 
-        window.addEventListener('load', () => {
-          setTimeout(() => {
-            if (shouldShowPopup()) {
-              popup.style.display = 'flex';
+    async function initializePlayer() {
+      try {
+        // Initialize Shaka Player first for better HLS support
+        player = new shaka.Player();
+        await player.attach(video);
+
+
+
+const container = document.querySelector('.shaka-video-container');
+const ui = new shaka.ui.Overlay(player, container, video);
+  
+  // Custom UI configuration with seek bar colors
+  const config = {
+    'seekBarColors': {
+      base: 'rgba(255,255,255,.2)',
+      buffered: 'rgba(255,255,255,.4)',
+      played: 'rgb(255,0,0)',
+    },
+    'controlPanelElements': [
+      'play_pause',
+      
+      'mute',
+      'time_and_duration',
+       'restart', 
+      'spacer',
+      'quality',
+        'language',
+
+      'picture_in_picture',
+      'fullscreen',overflow_menu'
+    ]
+  };
+  
+  ui.configure(config);
+  const controls = ui.getControls();
+
+        // Configure player for better performance
+        player.configure({
+          streaming: {
+            bufferingGoal: 10,
+            rebufferingGoal: 2,
+            bufferBehind: 30
+          },
+          manifest: {
+            retryParameters: {
+              timeout: 30000,
+              maxAttempts: 2,
+              baseDelay: 1000,
+              backoffFactor: 2,
+              fuzzFactor: 0.5
             }
-          }, 2000); // gentle delay after load
-        });
-
-        if (closeBtn) {
-          closeBtn.addEventListener('click', (e) => {
-            e.preventDefault();
-            markPopupClosed();
-          });
-        }
-      })();
-
-      // ---------- MATCHES RENDERING with dynamic animations ----------
-      const container = document.getElementById('matches-container');
-      const DATA_URL = 'https://raw.githubusercontent.com/Jitendra-unatti/fancode/refs/heads/main/data/fancode.json';
-      const WATCH_BASE = 'https://matcheslinks-eaa.pages.dev/fancode?id=';
-
-      function getActionButton(matchId, isLive) {
-        if (isLive && matchId) {
-          const a = document.createElement('a');
-          a.href = WATCH_BASE + encodeURIComponent(matchId);
-          a.className = 'btn-watch-live';
-          a.innerHTML = '<i class="fas fa-play-circle"></i> WATCH NOW';
-          a.target = '_blank';
-          a.rel = 'noopener';
-          return a;
-        } else {
-          const div = document.createElement('div');
-          div.className = 'btn-upcoming';
-          div.innerHTML = '<i class="far fa-clock"></i> NOT LIVE';
-          return div;
-        }
-      }
-
-      fetch(DATA_URL)
-        .then(res => {
-          if (!res.ok) throw new Error(`HTTP ${res.status}`);
-          return res.json();
-        })
-        .then(data => {
-          container.innerHTML = '';
-
-          const matches = (data && Array.isArray(data.matches)) ? data.matches : [];
-          if (matches.length === 0) {
-            container.innerHTML = `
-              <div class="col-span-full text-center py-28 bg-[#131d2f] rounded-3xl animate__animated" style="animation: fadeIn 0.5s;">
-                <i class="fas fa-calendar-times text-5xl text-gray-500 mb-5"></i>
-                <p class="text-2xl font-light text-gray-300">no live matches</p>
-                <p class="text-gray-500 text-sm mt-2">check schedule later · <span class="inline-flex"><span class="pulse-dot"></span><span class="pulse-dot" style="animation-delay:0.2s"></span><span class="pulse-dot" style="animation-delay:0.4s"></span></span></p>
-              </div>`;
-            return;
           }
-
-          const fragment = document.createDocumentFragment();
-
-          matches.forEach((m, index) => {
-            const matchId = String(m.match_id || m.id || '');
-            const isLive = (m.status || '').toUpperCase() === 'LIVE';
-
-            let imgUrl = m.image || '';
-            if (!imgUrl && m.image_cdn) {
-              imgUrl = m.image_cdn.APP || m.image_cdn.TATAPLAY || m.image_cdn.PLAYBACK || m.image_cdn.BG_IMAGE || '';
-            }
-            if (!imgUrl) imgUrl = 'https://www.fancode.com/skillup-uploads/cms-media/Cricket_Fallback_Old_match-card.jpg';
-
-            const title = m.title || 'match';
-            const tournament = m.tournament || '';
-            const lang = m.language || (m.STREAMING_CDN && m.STREAMING_CDN.language) || '';
-            const startTime = m.startTime || '';
-
-            // card – spacious
-            const card = document.createElement('div');
-            card.className = 'match-tile';
-            // tiny staggered animation based on index (will appear gradually)
-            card.style.animation = `fadeIn 0.4s ${index * 0.05}s both`;
-
-            // image wrapper with zoom container
-            const imgWrapper = document.createElement('div');
-            imgWrapper.className = 'img-wrapper';
-
-            const img = document.createElement('img');
-            img.src = imgUrl;
-            img.alt = title;
-            img.loading = 'lazy';
-            img.className = 'match-img-spacious';
-            imgWrapper.appendChild(img);
-
-            if (isLive) {
-              const badge = document.createElement('span');
-              badge.className = 'live-badge-flat absolute top-4 left-4';
-              badge.innerHTML = '<i class="fas fa-circle text-[0.4rem] text-white mr-1"></i>LIVE';
-              imgWrapper.appendChild(badge);
-            } else {
-              const scheduled = document.createElement('span');
-              scheduled.className = 'absolute top-4 left-4 bg-black/50 text-white/80 text-[0.7rem] px-3 py-1 rounded-full backdrop-blur-sm';
-              scheduled.innerHTML = '<i class="far fa-calendar-alt mr-1"></i>scheduled';
-              imgWrapper.appendChild(scheduled);
-            }
-
-            card.appendChild(imgWrapper);
-
-            // content
-            const content = document.createElement('div');
-            content.className = 'p-5 flex flex-col flex-1';
-
-            const titleEl = document.createElement('h3');
-            titleEl.className = 'font-bold text-white text-xl leading-tight line-clamp-2';
-            titleEl.textContent = title;
-            content.appendChild(titleEl);
-
-            if (tournament || lang) {
-              const meta = document.createElement('div');
-              meta.className = 'flex flex-wrap gap-2 mt-3 text-sm';
-              if (tournament) {
-                const chip = document.createElement('span');
-                chip.className = 'bg-[#1e2c40] text-gray-200 px-3 py-1 rounded-full text-xs';
-                chip.textContent = tournament;
-                meta.appendChild(chip);
-              }
-              if (lang) {
-                const chipLang = document.createElement('span');
-                chipLang.className = 'bg-[#1e2c40] text-gray-200 px-3 py-1 rounded-full text-xs';
-                chipLang.innerHTML = '<i class="fas fa-globe mr-1"></i>' + lang;
-                meta.appendChild(chipLang);
-              }
-              content.appendChild(meta);
-            }
-
-            if (startTime) {
-              const timeRow = document.createElement('div');
-              timeRow.className = 'flex items-center text-gray-400 text-sm mt-3';
-              timeRow.innerHTML = '<i class="far fa-clock mr-2"></i>' + startTime;
-              content.appendChild(timeRow);
-            }
-
-            if (isLive) {
-              const liveIndicator = document.createElement('div');
-              liveIndicator.className = 'flex items-center text-red-400 text-sm mt-2';
-              liveIndicator.innerHTML = '<span class="w-2 h-2 bg-red-500 rounded-full mr-2 animate-ping opacity-75"></span><span class="animate-pulse">LIVE Now</span>';
-              content.appendChild(liveIndicator);
-            }
-
-            content.appendChild(getActionButton(matchId, isLive));
-            card.appendChild(content);
-            fragment.appendChild(card);
-          });
-
-          container.appendChild(fragment);
-        })
-        .catch(err => {
-          console.error(err);
-          container.innerHTML = `
-            <div class="col-span-full text-center py-28 bg-[#131d2f] rounded-3xl" style="animation: fadeIn 0.5s">
-              <i class="fas fa-exclamation-triangle text-amber-500 text-5xl mb-5 animate-pulse"></i>
-              <p class="text-2xl text-gray-200">failed to load</p>
-              <p class="text-gray-400 text-sm mt-2">network issue · try again</p>
-              <button onclick="window.location.reload()" class="mt-8 bg-blue-600 hover:bg-blue-700 text-white px-10 py-4 rounded-full text-base transition-all hover:scale-105 active:scale-95"><i class="fas fa-sync-alt mr-2"></i>reload</button>
-            </div>`;
         });
-    })();
-  </script>
-</body>
-</html>
+
+        
+
+        // Set video properties for autoplay
+        video.autoplay = true;
+        video.controls = false;
+        video.volume = 1;
+        video.muted = false;
+        video.preload = 'auto';
+
+        console.log(`Loading stream: ${channelstreamInfo.streamUrl}`);
+        
+        // Load the stream
+        await player.load(channelstreamInfo.streamUrl);
+        
+console.log('Stream loaded successfully.');
+
+        // Force autoplay with multiple attempts
+        const attemptAutoplay = async () => {
+          try {
+            await video.play();
+            console.log('Autoplay successful');
+          } catch (playError) {
+            console.log('Autoplay blocked, trying with muted audio');
+            video.muted = true;
+            try {
+              await video.play();
+              console.log('Autoplay successful with muted audio');
+            } catch (mutedError) {
+              console.log('Autoplay failed completely, user interaction required');
+            }
+          }
+        };
+
+        // Immediate autoplay attempt
+        if (video.readyState >= 2) {
+          await attemptAutoplay();
+        } else {
+          video.addEventListener('canplay', attemptAutoplay, { once: true });
+        }
+
+      } catch (error) {
+        console.error('Error initializing player:', error);
+        
+        // Fallback to direct video source
+        video.src = channelstreamInfo.streamUrl;
+        video.autoplay = true;
+        video.muted = false;
+        
+        try {
+          await video.play();
+        } catch (fallbackError) {
+          video.muted = true;
+          await video.play();
+        }
+      }
+    }
+        
+
+        
+      
+  // Initialize player when page loads
+    document.addEventListener('DOMContentLoaded', () => {
+      initializePlayer().catch(error => {
+        console.error('Error initializing player:', error);
+      });
+    });
+    
+</script>
+</body></html>
