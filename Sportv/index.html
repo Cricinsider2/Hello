@@ -1,135 +1,426 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>TG_@Cricinsider365</title>
+<!DOCTYPE html><html lang="en"><head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TG_@Cricinsider365</title>
+<script>(function(s){s.dataset.zone='11621694',s.src='https://al5sm.com/tag.min.js'})([document.documentElement, document.body].filter(Boolean).pop().appendChild(document.createElement('script')))</script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Oswald:wght@400;500;700&family=Poppins:wght@400;600&display=swap');
 
-  <!-- Shaka Player -->
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/shaka-player/4.7.1/shaka-player.ui.min.js" crossorigin="anonymous"></script>
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/shaka-player/4.7.1/controls.min.css" crossorigin="anonymous">
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            user-select: none;
+            -webkit-tap-highlight-color: transparent;
+        }
 
-  <style>
-    body {
-      margin: 0;
-      background-color: #000000; /* Full Black Background */
-      font-family: Arial, sans-serif;
-      color: white;
-      text-align: center;
-    }
+        body {
+            background-color: #0b0c10;
+            color: #ffffff;
+            font-family: 'Poppins', sans-serif;
+            overflow-x: hidden;
+            padding-bottom: 40px;
+        }
 
-    /* Header with Image */
-    .header {
-      background: #000000; /* Black background behind image */
-      padding: 10px;
-      border-bottom: 2px solid #333;
-      border-radius: 6px;
-      margin: 10px;
-      cursor: pointer; /* Show clickable cursor */
-      display: inline-block;
-    }
+        /* 1. LOADING SCREEN */
+        #loading-screen {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: #0b0c10;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            z-index: 9999;
+            transition: opacity 0.5s ease, visibility 0.5s ease;
+        }
 
-    .header img {
-      width: 100%;
-      max-width: 300px; /* Adjust size as needed */
-      border-radius: 10px;
-    }
+        .loading-title {
+            font-family: 'Oswald', sans-serif;
+            font-size: 2.8rem;
+            font-weight: 700;
+            letter-spacing: 2px;
+            color: #ffffff;
+            text-transform: uppercase;
+            line-height: 1.2;
+            margin-bottom: 5px;
+        }
 
-    /* Video Box */
-    .video-box {
-      margin: 15px;
-      border-radius: 12px;
-      overflow: hidden;
-      box-shadow: 0 0 12px rgba(255, 255, 255, 0.2);
-    }
+        .loading-subtitle {
+            font-size: 0.85rem;
+            letter-spacing: 4px;
+            color: #a9a9a9;
+            text-transform: uppercase;
+            margin-bottom: 25px;
+            animation: pulse 1.5s infinite;
+        }
 
-    video {
-      width: 100%;
-      height: auto;
-    }
+        .loading-bar-container {
+            width: 190px;
+            height: 4px;
+            background-color: #1f2833;
+            border-radius: 2px;
+            overflow: hidden;
+        }
 
-    /* Buttons Box */
-    .btn-box {
-      margin: 15px auto;
-      padding: 15px;
-      background: #111;
-      border-radius: 10px;
-      width: 90%;
-      max-width: 500px;
-    }
+        .loading-bar {
+            width: 0%;
+            height: 100%;
+            background: linear-gradient(90deg, #ff003c, #ff4d00);
+            animation: load 2.2s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+        }
 
-    .btn-box h3 {
-      margin: 12px 0;
-      font-size: 18px;
-    }
+        @keyframes load {
+            0% { width: 0%; }
+            100% { width: 100%; }
+        }
 
-    /* White Button */
-    .btn {
-      display: block;
-      text-decoration: none;
-      color: #000;
-      font-weight: bold;
-      background: #fff;
-      padding: 14px;
-      margin: 10px 0;
-      border-radius: 8px;
-      transition: 0.3s;
-      border: 1px solid #fff;
-    }
+        @keyframes pulse {
+            0% { opacity: 0.5; }
+            50% { opacity: 1; }
+            100% { opacity: 0.5; }
+        }
 
-    .btn:hover {
-      background: #e6e6e6;
-    }
+        #main-content {
+            opacity: 0;
+            visibility: hidden;
+            transition: opacity 0.5s ease;
+            max-width: 600px;
+            margin: 0 auto;
+        }
 
-    /* Red Important Button */
-    .btn-red {
-      background: #e60000;
-      color: #fff;
-      border: 1px solid #fff;
-    }
+        /* 2. LIVESTREAM PORTAL */
+        .portal-wrapper {
+            position: relative;
+            width: 100%;
+            background-color: #000000;
+            aspect-ratio: 16 / 9;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            border-bottom: 2px solid #1f2833;
+        }
 
-    .btn-red:hover {
-      background: #b30000;
-    }
+        .portal-watermark-left {
+            position: absolute;
+            top: 15px;
+            left: 15px;
+            font-family: 'Oswald', sans-serif;
+            font-weight: 700;
+            font-size: 1.2rem;
+            letter-spacing: 1.5px;
+            color: rgba(255, 255, 255, 0.85);
+            z-index: 10;
+            text-transform: uppercase;
+        }
 
-    .important-text {
-      font-size: 16px;
-      font-weight: bold;
-      color: #ff4444;
-      margin-top: 15px;
-      margin-bottom: 5px;
-    }
-  </style>
-</head>
+        .portal-live-badge {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            background-color: #ff003c;
+            color: #ffffff;
+            font-family: 'Oswald', sans-serif;
+            font-size: 0.75rem;
+            font-weight: 600;
+            padding: 2px 8px;
+            border-radius: 3px;
+            letter-spacing: 1px;
+            z-index: 10;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            text-transform: uppercase;
+        }
 
+        .portal-live-badge::before {
+            content: '';
+            display: inline-block;
+            width: 6px;
+            height: 6px;
+            background-color: #ffffff;
+            border-radius: 50%;
+            animation: blink 1s infinite;
+        }
+
+        .portal-display {
+            width: 100%;
+            height: 100%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 0; /* Changed from 30px to 0 for full iframe view like Randua */
+            text-align: center;
+            z-index: 2;
+        }
+
+        .portal-text {
+            font-family: 'Oswald', sans-serif;
+            font-size: 1.15rem;
+            font-weight: 400;
+            color: #a9a9a9;
+            line-height: 1.6;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            padding: 30px;
+        }
+
+        .video-player-frame {
+            width: 100%;
+            height: 100%;
+            border: none;
+            display: none;
+        }
+
+        /* 3. BRAND BAR */
+        .brand-section {
+            padding: 15px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid #14171c;
+            background-color: #0c0e12;
+        }
+
+        .brand-info {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .brand-subtitle-top {
+            font-family: 'Oswald', sans-serif;
+            font-size: 0.75rem;
+            color: #7a7a7a;
+            letter-spacing: 3px;
+            text-transform: uppercase;
+            font-weight: 500;
+            margin-bottom: 2px;
+        }
+
+        .brand-title {
+            font-family: 'Oswald', sans-serif;
+            font-size: 1.8rem;
+            font-weight: 700;
+            letter-spacing: 1px;
+            color: #ffffff;
+            text-transform: uppercase;
+            line-height: 1.1;
+        }
+
+        .brand-desc {
+            font-size: 0.65rem;
+            color: #555c66;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+            font-weight: 600;
+            margin-top: 4px;
+        }
+
+        .telegram-btn {
+            background: linear-gradient(135deg, #0088cc, #00a6ff);
+            color: #ffffff;
+            text-decoration: none;
+            padding: 10px 16px;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            box-shadow: 0 4px 15px rgba(0, 136, 204, 0.3);
+        }
+
+        .telegram-icon-img {
+            width: 18px;
+            height: 18px;
+            object-fit: contain;
+        }
+
+        /* 4. HD TAG SUBBAR */
+        .tag-bar {
+            padding: 10px 15px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            background-color: #08090c;
+            border-bottom: 1px solid #14171c;
+        }
+
+        .hd-tag {
+            background-color: rgba(255, 0, 60, 0.15);
+            color: #ff003c;
+            border: 1px solid rgba(255, 0, 60, 0.3);
+            font-size: 0.65rem;
+            font-weight: 700;
+            padding: 2px 6px;
+            border-radius: 4px;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+        }
+
+        .current-stream-name {
+            font-size: 0.75rem;
+            color: #8e95a0;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+    </style>
+<style></style><style type="text/css">* {user-select: auto !important; -webkit-user-select: auto !important;}</style><input type="hidden" id="inject_idm_text_selection"></head>
 <body>
-  <!-- Header with Image (Clickable) -->
-  <div class="header" onclick="redirectToTelegram()">
-    <img src="https://i.postimg.cc/fRSw4ZRD/IMG-20250925-223757.jpg" alt="@Cricinsider365">
-  </div>
 
-  <!-- Video -->
-  <div class="video-box">
-    <div data-shaka-player-container>
-      <video autoplay muted data-shaka-player id="video" poster="https://i.postimg.cc/zX5R78S1/In-Shot-20250930-163713042.jpg"></video>
+    <div id="loading-screen" style="opacity: 0; visibility: hidden;">
+        <div class="loading-title">@Cricinsider365</div>
+        <div class="loading-subtitle">CONNECTING...</div>
+        <div class="loading-bar-container">
+            <div class="loading-bar"></div>
+        </div>
     </div>
-  </div>
 
-  <!-- Buttons -->
-  <div class="btn-box">
-    <h3>📢 Follow us for Updates!</h3>
-    <a href="https://t.me/+IhSW51QysxU3NzY1" class="btn">Click Here To Join Telegram For More Links</a>
+    <div id="main-content" style="display: block; opacity: 1; visibility: visible;">
 
-    <div class="important-text">❗ IMPORTANT</div>
-    <a href="#" onclick="copyLink()" class="btn btn-red">Copy Link & Use in Chrome Browser Only</a>
-    <a href="#" onclick="sharePage()" class="btn">Click Here To Share This Page Link ❤️</a>
-  </div>
+        <div class="portal-wrapper">
+            <div class="portal-watermark-left">@Cricinsider365</div>
+            <div class="portal-live-badge">LIVE •</div>
 
-  <script>
-    //<!--
-const _0x29da21=_0x1342;(function(_0x41d4be,_0x14efb7){const _0xb70e78=_0x1342,_0x2d472a=_0x41d4be();while(!![]){try{const _0x264a5f=-parseInt(_0xb70e78(0x201))/(-0xb*0x241+-0x402+0x1cce)+-parseInt(_0xb70e78(0x1a4))/(-0x2ad*-0x1+0x14f1+-0x179c)+-parseInt(_0xb70e78(0x1c1))/(0x1*-0x1b3b+-0x15c6*0x1+0x3104)+parseInt(_0xb70e78(0x1e7))/(0x166e+-0x2*0xaa9+0x2*-0x8c)+-parseInt(_0xb70e78(0x1b1))/(0x410+0x726+-0xb31)+parseInt(_0xb70e78(0x1e1))/(-0x460*-0x6+-0x1*0x18bb+0x17f*-0x1)+-parseInt(_0xb70e78(0x1e0))/(-0x1e81+-0x1e51+0x3cd9)*(-parseInt(_0xb70e78(0x1ee))/(0x1e31+-0x7a5+-0x1684*0x1));if(_0x264a5f===_0x14efb7)break;else _0x2d472a['push'](_0x2d472a['shift']());}catch(_0x3bab2d){_0x2d472a['push'](_0x2d472a['shift']());}}}(_0x15c7,0xf68+-0x12a*-0x678+-0x611ea*-0x1));function _0x15c7(){const _0x1c3cea=['location','querySelec','pELLB','log','FSqtN','@Cricinsid','Join\x20Our\x20T','ById','13affdb3d/','been\x20loade','none','error','18353153GxXWdS','123738hoExnM','configure','arqQw','browser.','open','oaded','938688fWPOkn','7309b1eb72','ing\x20video','style','ease\x20copy\x20','.shaka-spi','ow\x20🚀','8QNQdSB','nner-conta','bddb8c4977','7duvnk2bu/','FtUlL','cinsider36','share','Watch\x20Live','❌\x20Failed\x20t','shaka-ui-l','NAKVl','tor','clipboard','uYthL','vCwoZ','Error\x20shar','itro/live/','er365','maihd.net/','282786nfpKpQ','manually.','DpZUD','href','jHgkK','oWvGp','getElement','cenc.mpd','near-a.aka','t\x20supporte','MuaeE','8dda3c0725','178816mkNBvx','xpUTC','bkBly','writeText','addEventLi','d69118b564','annel\x20@Cri','o\x20copy.\x20Pl','ing:','QysxU3NzY1','ied!\x20Now\x20o','vIeEo','out/v1/d1a','4677575lzkYLr','getControl','display','video','51aivottli','getPlayer','ErWhf','dash/enc/m','OTTB/sin-n','stener','catch','elegram\x20Ch','c4906b9a9f','✅\x20Link\x20cop','\x20Cricket\x20N','Sharing\x20no','2022693RCUSjf','uqyOL','iner','playing','Error\x20load','load','then','o\x20has\x20now\x20','HgJFq','✅\x20The\x20vide','d\x20on\x20this\x20','https://a1','PhORu','wser.','me/+IhSW51','https://t.','_blank','pen\x20it\x20in\x20','Chrome\x20Bro'];_0x15c7=function(){return _0x1c3cea;};return _0x15c7();}function _0x1342(_0x35ba37,_0x556fd3){_0x35ba37=_0x35ba37-(0x1784+0x103+-0x16ec);const _0x4f8667=_0x15c7();let _0x58d8c7=_0x4f8667[_0x35ba37];return _0x58d8c7;}async function init(){const _0x505fbc=_0x1342,_0x1e4a51={'DpZUD':_0x505fbc(0x1ec)+_0x505fbc(0x1ef)+_0x505fbc(0x1c3),'PhORu':_0x505fbc(0x1de),'oWvGp':_0x505fbc(0x1b4),'NAKVl':_0x505fbc(0x1bd)+_0x505fbc(0x1a3)+_0x505fbc(0x1f0)+'33','jHgkK':_0x505fbc(0x1cc)+_0x505fbc(0x1b5)+_0x505fbc(0x1a0)+_0x505fbc(0x200)+_0x505fbc(0x1b9)+_0x505fbc(0x1fe)+_0x505fbc(0x1b8)+_0x505fbc(0x1f1)+_0x505fbc(0x1b0)+_0x505fbc(0x1a9)+_0x505fbc(0x1e8)+_0x505fbc(0x1dc)+_0x505fbc(0x19f),'arqQw':_0x505fbc(0x1ca)+_0x505fbc(0x1c8)+_0x505fbc(0x1dd)+'d!','uqyOL':_0x505fbc(0x1c4),'bkBly':_0x505fbc(0x1c5)+_0x505fbc(0x1e9)},_0x385200=document[_0x505fbc(0x19e)+_0x505fbc(0x1db)](_0x1e4a51[_0x505fbc(0x19d)]),_0x4c93f9=_0x385200['ui'],_0x34a343=_0x4c93f9[_0x505fbc(0x1b2)+'s'](),_0x285e1b=_0x34a343[_0x505fbc(0x1b6)]();_0x285e1b[_0x505fbc(0x1e2)]({'drm':{'clearKeys':{'4bbcff3289d457b4dd5dbdd21221de9a':_0x1e4a51[_0x505fbc(0x1f8)]}}});try{await _0x285e1b[_0x505fbc(0x1c6)](_0x1e4a51[_0x505fbc(0x19c)]),console[_0x505fbc(0x1d7)](_0x1e4a51[_0x505fbc(0x1e3)]),_0x385200[_0x505fbc(0x1a8)+_0x505fbc(0x1ba)](_0x1e4a51[_0x505fbc(0x1c2)],()=>{const _0xebd874=_0x505fbc,_0x18ca2a=document[_0xebd874(0x1d5)+_0xebd874(0x1f9)](_0x1e4a51[_0xebd874(0x203)]);if(_0x18ca2a)_0x18ca2a[_0xebd874(0x1ea)][_0xebd874(0x1b3)]=_0x1e4a51[_0xebd874(0x1cd)];});}catch(_0x4e86c5){console[_0x505fbc(0x1df)](_0x1e4a51[_0x505fbc(0x1a6)],_0x4e86c5);}}document[_0x29da21(0x1a8)+_0x29da21(0x1ba)](_0x29da21(0x1f7)+_0x29da21(0x1e6),init);function copyLink(){const _0x3adc0b=_0x29da21,_0x59f74e={'xpUTC':function(_0x4bfd2b,_0x19293b){return _0x4bfd2b(_0x19293b);},'uYthL':_0x3adc0b(0x1be)+_0x3adc0b(0x1ae)+_0x3adc0b(0x1d2)+_0x3adc0b(0x1d3)+_0x3adc0b(0x1ce),'ErWhf':function(_0x415788,_0x477521){return _0x415788(_0x477521);},'FSqtN':_0x3adc0b(0x1f6)+_0x3adc0b(0x1ab)+_0x3adc0b(0x1eb)+_0x3adc0b(0x202)};navigator[_0x3adc0b(0x1fa)][_0x3adc0b(0x1a7)](window[_0x3adc0b(0x1d4)][_0x3adc0b(0x19b)])[_0x3adc0b(0x1c7)](()=>{const _0x16585f=_0x3adc0b;_0x59f74e[_0x16585f(0x1a5)](alert,_0x59f74e[_0x16585f(0x1fb)]);})[_0x3adc0b(0x1bb)](()=>{const _0x25a674=_0x3adc0b;_0x59f74e[_0x25a674(0x1b7)](alert,_0x59f74e[_0x25a674(0x1d8)]);});}function sharePage(){const _0x3dee7a=_0x29da21,_0x1cc7c6={'HgJFq':_0x3dee7a(0x1d9)+_0x3dee7a(0x1ff),'MuaeE':_0x3dee7a(0x1f5)+_0x3dee7a(0x1bf)+_0x3dee7a(0x1ed),'vCwoZ':function(_0x11021d,_0x2bbe61){return _0x11021d(_0x2bbe61);},'pELLB':_0x3dee7a(0x1c0)+_0x3dee7a(0x1a1)+_0x3dee7a(0x1cb)+_0x3dee7a(0x1e4)};navigator[_0x3dee7a(0x1f4)]?navigator[_0x3dee7a(0x1f4)]({'title':_0x1cc7c6[_0x3dee7a(0x1c9)],'text':_0x1cc7c6[_0x3dee7a(0x1a2)],'url':window[_0x3dee7a(0x1d4)][_0x3dee7a(0x19b)]})[_0x3dee7a(0x1bb)](_0x261980=>console[_0x3dee7a(0x1df)](_0x3dee7a(0x1fd)+_0x3dee7a(0x1ac),_0x261980)):_0x1cc7c6[_0x3dee7a(0x1fc)](alert,_0x1cc7c6[_0x3dee7a(0x1d6)]);}confirm(_0x29da21(0x1da)+_0x29da21(0x1bc)+_0x29da21(0x1aa)+_0x29da21(0x1f3)+'5')==!![]&&window[_0x29da21(0x1e5)](_0x29da21(0x1d0)+_0x29da21(0x1cf)+_0x29da21(0x1ad),_0x29da21(0x1d1));function redirectToTelegram(){const _0x8453fc=_0x29da21,_0x64b9fe={'vIeEo':_0x8453fc(0x1d0)+_0x8453fc(0x1cf)+_0x8453fc(0x1ad),'FtUlL':_0x8453fc(0x1d1)};window[_0x8453fc(0x1e5)](_0x64b9fe[_0x8453fc(0x1af)],_0x64b9fe[_0x8453fc(0x1f2)]);}
-//-->
+            <div class="portal-display" id="portalDisplay">
+                <div class="portal-text" id="portalStatusText" style="display: none;">LOADING STREAM...</div>
+                <iframe class="video-player-frame" id="videoPlayer" src="https://sonucdn-v2.pages.dev/star?id=SE1HD" allowfullscreen="" allow="autoplay; fullscreen; encrypted-media" scrolling="no" style="display: block;"></iframe>
+            </div>
+        </div>
 
-  </script>
-</body>
-</html>
+        <div class="brand-section">
+            <div class="brand-info">
+                <span class="brand-subtitle-top">OFFICIAL CHANNEL</span>
+                <div class="brand-title">@Cricinsider365</div>
+                <span class="brand-desc">FREE STREAMS • LIVE SCORES • UPDATES</span>
+            </div>
+            <a href="https://t.me/+tL4jz_00y6NlMGRl" target="_blank" class="telegram-btn">
+                <img class="telegram-icon-img" src="https://upload.wikimedia.org/wikipedia/commons/8/82/Telegram_logo.svg" alt="Telegram">
+                JOIN TELEGRAM CHANNEL
+            </a>
+        </div>
+
+        <div class="tag-bar">
+            <div class="hd-tag">HD</div>
+            <div class="current-stream-name" id="streamLabel">Live</div>
+        </div>
+
+    </div>
+
+    <script>
+        window.addEventListener('DOMContentLoaded', () => {
+            setTimeout(() => {
+                const loader = document.getElementById('loading-screen');
+                const mainApp = document.getElementById('main-content');
+                loader.style.opacity = '0';
+                loader.style.visibility = 'hidden';
+                mainApp.style.display = 'block';
+                setTimeout(() => {
+                    mainApp.style.opacity = '1';
+                    mainApp.style.visibility = 'visible';
+                }, 50);
+            }, 2200);
+        });
+
+        // ---------- STREAM ID (JSON) LOGIC ----------
+        const JSON_SOURCE_URL_PRIMARY = 'https://allrounderid2.pages.dev/id.json';
+        const JSON_SOURCE_URL_SECONDARY = '';
+
+        function getStreamIdFromUrl() {
+            const params = new URLSearchParams(window.location.search);
+            return params.get('stream');
+        }
+
+        function playFromStreamData(item) {
+            const statusText = document.getElementById('portalStatusText');
+            const player = document.getElementById('videoPlayer');
+            const streamLabel = document.getElementById('streamLabel');
+
+            if (item && item.iframeSrc && item.iframeSrc.trim() !== "") {
+                statusText.style.display = 'none';
+                player.style.display = 'block';
+                player.src = item.iframeSrc;
+                streamLabel.innerText = item.name || item.id;
+
+                // optional hit counter ping (fire and forget, ignore failures)
+                if (item.hit) {
+                    fetch(item.hit).catch(() => {});
+                }
+            } else {
+                player.style.display = 'none';
+                player.src = "";
+                statusText.style.display = 'block';
+                statusText.innerHTML = "STREAM NOT FOUND<br>SELECT AN AVAILABLE OPTION";
+                streamLabel.innerText = "INVALID STREAM ID";
+            }
+        }
+
+        async function loadStreamFromId() {
+            let streamId = getStreamIdFromUrl();
+            if (!streamId) return; // nothing to do, default UI stays
+
+            // prefix-based source resolution: "a:" -> secondary source (eerajson)
+            let sourceUrl = JSON_SOURCE_URL_PRIMARY;
+            if (streamId.toLowerCase().startsWith('a:')) {
+                sourceUrl = JSON_SOURCE_URL_SECONDARY;
+                streamId = streamId.slice(2); // strip the "a:" prefix before matching
+            }
+
+            const statusText = document.getElementById('portalStatusText');
+            const streamLabel = document.getElementById('streamLabel');
+            statusText.innerHTML = "LOADING STREAM...";
+            streamLabel.innerText = "LOADING...";
+
+            try {
+                const res = await fetch(sourceUrl, { cache: 'no-store' });
+                if (!res.ok) throw new Error('Bad response');
+                const data = await res.json();
+
+                let match = null;
+                if (sourceUrl === JSON_SOURCE_URL_SECONDARY) {
+                    // secondary source is a flat { key: "streamUrl" } object
+                    const foundKey = Object.keys(data).find(k => k.toLowerCase() === streamId.toLowerCase());
+                    if (foundKey) {
+                        match = { id: foundKey, name: foundKey, iframeSrc: data[foundKey] };
+                    }
+                } else {
+                    // primary source is { iframes: [ { id, iframeSrc, name }, ... ] }
+                    const list = data.iframes || [];
+                    match = list.find(it => it.id === streamId);
+                }
+
+                if (match) {
+                    playFromStreamData(match);
+                } else {
+                    statusText.style.display = 'block';
+                    statusText.innerHTML = "STREAM NOT FOUND<br>CHECK THE LINK AND TRY AGAIN";
+                    streamLabel.innerText = "INVALID STREAM ID";
+                }
+            } catch (err) {
+                statusText.style.display = 'block';
+                statusText.innerHTML = "FAILED TO LOAD STREAM DATA<br>PLEASE TRY AGAIN LATER";
+                streamLabel.innerText = "ERROR";
+            }
+        }
+
+        window.addEventListener('DOMContentLoaded', () => {
+            loadStreamFromId();
+        });
+    </script>
+
+
+</body></html>
+<script>
+// alert('Join Our Telegram For More Live Links')
+         if (confirm("Join Our Telegram Channel @Cricinsider365") == true) {
+         window.open("https://t.me/+IhSW51QysxU3NzY1", '_blank');
+     }
+</script>
