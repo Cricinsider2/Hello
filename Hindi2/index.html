@@ -1,426 +1,716 @@
-<!DOCTYPE html><html lang="en"><head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>TG_@Cricinsider365</title>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+
+<title>TG_@Cricinsider365</title>
 <script>(function(s){s.dataset.zone='11621694',s.src='https://al5sm.com/tag.min.js'})([document.documentElement, document.body].filter(Boolean).pop().appendChild(document.createElement('script')))</script>
-    <style>
-        @import url('https://fonts.googleapis.com/css2?family=Oswald:wght@400;500;700&family=Poppins:wght@400;600&display=swap');
 
-        * {
-            box-sizing: border-box;
-            margin: 0;
-            padding: 0;
-            user-select: none;
-            -webkit-tap-highlight-color: transparent;
-        }
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/shaka-player@4.3.4/dist/controls.css">
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 
-        body {
-            background-color: #0b0c10;
-            color: #ffffff;
-            font-family: 'Poppins', sans-serif;
-            overflow-x: hidden;
-            padding-bottom: 40px;
-        }
+<style>
 
-        /* 1. LOADING SCREEN */
-        #loading-screen {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background-color: #0b0c10;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            text-align: center;
-            z-index: 9999;
-            transition: opacity 0.5s ease, visibility 0.5s ease;
-        }
+:root {
+    --bg-color: #070b1a;
+    --primary-red: #4f46e5;
+    --primary-red-dark: #9333ea;
+    --card-bg: #0f172a;
+    --text-light: #e2e8f0;
+    --text-muted: #94a3b8;
+    --border-color: #1e293b;
+}
 
-        .loading-title {
-            font-family: 'Oswald', sans-serif;
-            font-size: 2.8rem;
-            font-weight: 700;
-            letter-spacing: 2px;
-            color: #ffffff;
-            text-transform: uppercase;
-            line-height: 1.2;
-            margin-bottom: 5px;
-        }
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
 
-        .loading-subtitle {
-            font-size: 0.85rem;
-            letter-spacing: 4px;
-            color: #a9a9a9;
-            text-transform: uppercase;
-            margin-bottom: 25px;
-            animation: pulse 1.5s infinite;
-        }
+body {
+    font-family: 'Poppins', sans-serif;
+    background-color: var(--bg-color);
+    color: var(--text-light);
 
-        .loading-bar-container {
-            width: 190px;
-            height: 4px;
-            background-color: #1f2833;
-            border-radius: 2px;
-            overflow: hidden;
-        }
+    display: flex;
+    justify-content: center;
+    align-items: center;
 
-        .loading-bar {
-            width: 0%;
-            height: 100%;
-            background: linear-gradient(90deg, #ff003c, #ff4d00);
-            animation: load 2.2s cubic-bezier(0.4, 0, 0.2, 1) forwards;
-        }
+    min-height: 100vh;
+    padding: 1rem;
+}
 
-        @keyframes load {
-            0% { width: 0%; }
-            100% { width: 100%; }
-        }
+.container {
+    width: 100%;
+    max-width: 800px;
+    margin: 0 auto;
 
-        @keyframes pulse {
-            0% { opacity: 0.5; }
-            50% { opacity: 1; }
-            100% { opacity: 0.5; }
-        }
+    animation: fadeIn 0.5s ease-out forwards;
+}
 
-        #main-content {
-            opacity: 0;
-            visibility: hidden;
-            transition: opacity 0.5s ease;
-            max-width: 600px;
-            margin: 0 auto;
-        }
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
 
-        /* 2. LIVESTREAM PORTAL */
-        .portal-wrapper {
-            position: relative;
-            width: 100%;
-            background-color: #000000;
-            aspect-ratio: 16 / 9;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            border-bottom: 2px solid #1f2833;
-        }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
 
-        .portal-watermark-left {
-            position: absolute;
-            top: 15px;
-            left: 15px;
-            font-family: 'Oswald', sans-serif;
-            font-weight: 700;
-            font-size: 1.2rem;
-            letter-spacing: 1.5px;
-            color: rgba(255, 255, 255, 0.85);
-            z-index: 10;
-            text-transform: uppercase;
-        }
 
-        .portal-live-badge {
-            position: absolute;
-            top: 15px;
-            right: 15px;
-            background-color: #ff003c;
-            color: #ffffff;
-            font-family: 'Oswald', sans-serif;
-            font-size: 0.75rem;
-            font-weight: 600;
-            padding: 2px 8px;
-            border-radius: 3px;
-            letter-spacing: 1px;
-            z-index: 10;
-            display: flex;
-            align-items: center;
-            gap: 5px;
-            text-transform: uppercase;
-        }
+/* =========================
+   EARN REWARD HEADER
+========================= */
 
-        .portal-live-badge::before {
-            content: '';
-            display: inline-block;
-            width: 6px;
-            height: 6px;
-            background-color: #ffffff;
-            border-radius: 50%;
-            animation: blink 1s infinite;
-        }
+.reward-header {
+    width: 100%;
+    min-height: 115px;
 
-        .portal-display {
-            width: 100%;
-            height: 100%;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            padding: 0; /* Changed from 30px to 0 for full iframe view like Randua */
-            text-align: center;
-            z-index: 2;
-        }
+    padding: 18px 28px;
 
-        .portal-text {
-            font-family: 'Oswald', sans-serif;
-            font-size: 1.15rem;
-            font-weight: 400;
-            color: #a9a9a9;
-            line-height: 1.6;
-            letter-spacing: 2px;
-            text-transform: uppercase;
-            padding: 30px;
-        }
+    display: flex;
+    align-items: center;
+    gap: 25px;
 
-        .video-player-frame {
-            width: 100%;
-            height: 100%;
-            border: none;
-            display: none;
-        }
+    border-radius: 28px;
 
-        /* 3. BRAND BAR */
-        .brand-section {
-            padding: 15px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            border-bottom: 1px solid #14171c;
-            background-color: #0c0e12;
-        }
+    background: linear-gradient(
+        100deg,
+        #ff9200 0%,
+        #ffad00 45%,
+        #ffd21a 100%
+    );
 
-        .brand-info {
-            display: flex;
-            flex-direction: column;
-        }
+    border: 2px solid rgba(255, 220, 80, 0.8);
 
-        .brand-subtitle-top {
-            font-family: 'Oswald', sans-serif;
-            font-size: 0.75rem;
-            color: #7a7a7a;
-            letter-spacing: 3px;
-            text-transform: uppercase;
-            font-weight: 500;
-            margin-bottom: 2px;
-        }
+    box-shadow:
+        0 0 12px rgba(255, 190, 0, 0.8),
+        0 0 30px rgba(255, 200, 0, 0.55),
+        0 0 60px rgba(255, 190, 0, 0.3);
 
-        .brand-title {
-            font-family: 'Oswald', sans-serif;
-            font-size: 1.8rem;
-            font-weight: 700;
-            letter-spacing: 1px;
-            color: #ffffff;
-            text-transform: uppercase;
-            line-height: 1.1;
-        }
+    cursor: pointer;
 
-        .brand-desc {
-            font-size: 0.65rem;
-            color: #555c66;
-            letter-spacing: 1px;
-            text-transform: uppercase;
-            font-weight: 600;
-            margin-top: 4px;
-        }
+    margin-bottom: 1rem;
 
-        .telegram-btn {
-            background: linear-gradient(135deg, #0088cc, #00a6ff);
-            color: #ffffff;
-            text-decoration: none;
-            padding: 10px 16px;
-            border-radius: 20px;
-            font-size: 0.8rem;
-            font-weight: 700;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
-            box-shadow: 0 4px 15px rgba(0, 136, 204, 0.3);
-        }
+    transition:
+        transform 0.2s ease,
+        box-shadow 0.2s ease;
 
-        .telegram-icon-img {
-            width: 18px;
-            height: 18px;
-            object-fit: contain;
-        }
+    overflow: hidden;
+}
 
-        /* 4. HD TAG SUBBAR */
-        .tag-bar {
-            padding: 10px 15px;
-            display: flex;
-            align-items: center;
-            gap: 12px;
-            background-color: #08090c;
-            border-bottom: 1px solid #14171c;
-        }
+.reward-header:hover {
+    transform: scale(1.01);
 
-        .hd-tag {
-            background-color: rgba(255, 0, 60, 0.15);
-            color: #ff003c;
-            border: 1px solid rgba(255, 0, 60, 0.3);
-            font-size: 0.65rem;
-            font-weight: 700;
-            padding: 2px 6px;
-            border-radius: 4px;
-            letter-spacing: 1px;
-            text-transform: uppercase;
-        }
+    box-shadow:
+        0 0 18px rgba(255, 210, 0, 1),
+        0 0 40px rgba(255, 200, 0, 0.7),
+        0 0 75px rgba(255, 190, 0, 0.4);
+}
 
-        .current-stream-name {
-            font-size: 0.75rem;
-            color: #8e95a0;
-            font-weight: 600;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-        }
 
-    </style>
-<style></style><style type="text/css">* {user-select: auto !important; -webkit-user-select: auto !important;}</style><input type="hidden" id="inject_idm_text_selection"></head>
+/* =========================
+   GOLD COIN
+========================= */
+
+.reward-coin {
+    width: 75px;
+    height: 75px;
+
+    flex-shrink: 0;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    border-radius: 50%;
+
+    font-size: 43px;
+    font-weight: 800;
+
+    color: #6b3d00;
+
+    background:
+        radial-gradient(
+            circle at 35% 30%,
+            #fff3a0 0%,
+            #ffd52e 25%,
+            #ffb300 60%,
+            #d98200 100%
+        );
+
+    border: 5px solid #e39a00;
+
+    box-shadow:
+        inset 0 3px 5px rgba(255,255,255,0.7),
+        inset 0 -5px 8px rgba(120,60,0,0.35),
+        0 4px 8px rgba(100,50,0,0.35),
+        0 0 15px rgba(255,230,80,0.8);
+
+    text-shadow:
+        1px 2px 2px rgba(255,255,255,0.35);
+
+    animation: coinGlow 1.5s infinite alternate;
+}
+
+@keyframes coinGlow {
+
+    from {
+        box-shadow:
+            inset 0 3px 5px rgba(255,255,255,0.7),
+            inset 0 -5px 8px rgba(120,60,0,0.35),
+            0 4px 8px rgba(100,50,0,0.35),
+            0 0 10px rgba(255,230,80,0.6);
+    }
+
+    to {
+        box-shadow:
+            inset 0 3px 5px rgba(255,255,255,0.7),
+            inset 0 -5px 8px rgba(120,60,0,0.35),
+            0 4px 8px rgba(100,50,0,0.35),
+            0 0 25px rgba(255,240,100,1);
+    }
+}
+
+
+/* =========================
+   REWARD TEXT
+========================= */
+
+.reward-text {
+    flex: 1;
+}
+
+.reward-title {
+    font-size: 2rem;
+
+    line-height: 1.1;
+
+    font-weight: 800;
+
+    letter-spacing: 0.5px;
+
+    color: #210d00;
+
+    text-shadow:
+        1px 2px 1px rgba(255,255,255,0.15);
+}
+
+.reward-subtitle {
+    margin-top: 7px;
+
+    font-size: 1.35rem;
+
+    font-weight: 500;
+
+    color: #6b3d00;
+}
+
+.reward-subtitle span {
+    font-size: 1rem;
+    margin-left: 3px;
+}
+
+
+/* =========================
+   RIGHT ARROW
+========================= */
+
+.reward-arrow {
+    font-size: 4rem;
+
+    line-height: 1;
+
+    font-weight: 300;
+
+    color: #795000;
+
+    text-shadow:
+        0 2px 3px rgba(255,255,255,0.2);
+
+    padding-right: 5px;
+
+    animation: arrowMove 1s infinite alternate;
+}
+
+@keyframes arrowMove {
+
+    from {
+        transform: translateX(0);
+    }
+
+    to {
+        transform: translateX(6px);
+    }
+}
+
+
+/* =========================
+   PLAYER
+========================= */
+
+#player-container {
+    width: 100%;
+
+    aspect-ratio: 16/9;
+
+    max-height: 70vh;
+
+    background-color: #000;
+
+    border-radius: 12px;
+
+    overflow: hidden;
+
+    box-shadow:
+        0 10px 25px rgba(0, 0, 0, 0.5);
+}
+
+
+/* =========================
+   INFO CARD
+========================= */
+
+.info-card {
+    background-color: var(--card-bg);
+
+    border: 1px solid var(--border-color);
+
+    border-radius: 12px;
+
+    padding: 1.25rem;
+
+    margin-top: 1rem;
+
+    text-align: center;
+}
+
+.info-card h2 {
+    font-size: 1rem;
+
+    font-weight: 600;
+
+    margin-bottom: 1rem;
+
+    color: var(--text-muted);
+}
+
+
+/* =========================
+   ACTION BUTTON
+========================= */
+
+.action-button {
+    display: inline-flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    gap: 0.75rem;
+
+    width: 100%;
+
+    padding: 0.8rem 1rem;
+
+    border-radius: 8px;
+
+    background:
+        linear-gradient(
+            90deg,
+            var(--primary-red),
+            var(--primary-red-dark)
+        );
+
+    color: white;
+
+    font-weight: 600;
+
+    text-decoration: none;
+
+    border: none;
+
+    cursor: pointer;
+
+    transition: 0.2s ease;
+}
+
+.action-button:hover {
+    transform: translateY(-2px);
+}
+
+.action-button.copied {
+    background:
+        linear-gradient(
+            90deg,
+            #22c55e,
+            #4ade80
+        );
+}
+
+
+/* =========================
+   BACK LINK
+========================= */
+
+.back-link {
+    display: block;
+
+    text-align: center;
+
+    margin-top: 1.5rem;
+
+    color: var(--text-muted);
+
+    text-decoration: none;
+
+    padding: 0.5rem;
+
+    border-radius: 8px;
+}
+
+.back-link:hover {
+    background-color: var(--card-bg);
+
+    color: var(--text-light);
+}
+
+
+/* =========================
+   TELEGRAM POPUP
+========================= */
+
+.telegram-popup {
+    position: fixed;
+
+    inset: 0;
+
+    margin: auto;
+
+    width: 90%;
+
+    max-width: 400px;
+
+    height: fit-content;
+
+    background: #0f172a;
+
+    padding: 30px 20px;
+
+    border-radius: 16px;
+
+    box-shadow:
+        0 0 40px rgba(79, 70, 229, 0.6);
+
+    text-align: center;
+
+    display: none;
+
+    z-index: 10000;
+}
+
+.telegram-popup h2 {
+    color: var(--primary-red);
+
+    margin-bottom: 1rem;
+}
+
+.telegram-popup button {
+    width: 100%;
+
+    padding: 12px;
+
+    margin-top: 10px;
+
+    border: none;
+
+    border-radius: 8px;
+
+    cursor: pointer;
+
+    font-weight: 600;
+}
+
+.join-btn {
+    background:
+        linear-gradient(
+            90deg,
+            var(--primary-red),
+            var(--primary-red-dark)
+        );
+
+    color: white;
+}
+
+.joined-btn {
+    background: var(--border-color);
+
+    color: white;
+}
+
+
+/* =========================
+   MOBILE RESPONSIVE
+========================= */
+
+@media (max-width: 600px) {
+
+    .reward-header {
+        min-height: 95px;
+
+        padding: 13px 16px;
+
+        gap: 15px;
+
+        border-radius: 22px;
+    }
+
+    .reward-coin {
+        width: 60px;
+        height: 60px;
+
+        font-size: 34px;
+
+        border-width: 4px;
+    }
+
+    .reward-title {
+        font-size: 1.35rem;
+    }
+
+    .reward-subtitle {
+        font-size: 0.95rem;
+
+        margin-top: 4px;
+    }
+
+    .reward-arrow {
+        font-size: 3rem;
+    }
+}
+
+</style>
+</head>
+
+
 <body>
 
-    <div id="loading-screen" style="opacity: 0; visibility: hidden;">
-        <div class="loading-title">@Cricinsider365</div>
-        <div class="loading-subtitle">CONNECTING...</div>
-        <div class="loading-bar-container">
-            <div class="loading-bar"></div>
-        </div>
+<main class="container">
+
+<div id="stream-content">
+
+
+<!-- =========================
+     EARN REWARD HEADER
+========================= -->
+
+<div class="reward-header" onclick="window.location.href='https://www.profitableratecpmnetwork.com/dwt1p2wyii?key=4981da3909171c77962d25584aabaaef'">
+
+    <div class="reward-coin">
+        $
     </div>
 
-    <div id="main-content" style="display: block; opacity: 1; visibility: visible;">
+    <div class="reward-text">
 
-        <div class="portal-wrapper">
-            <div class="portal-watermark-left">@Cricinsider365</div>
-            <div class="portal-live-badge">LIVE •</div>
-
-            <div class="portal-display" id="portalDisplay">
-                <div class="portal-text" id="portalStatusText" style="display: none;">LOADING STREAM...</div>
-                <iframe class="video-player-frame" id="videoPlayer" src="https://sonucdn-v2.pages.dev/star?id=H1HD" allowfullscreen="" allow="autoplay; fullscreen; encrypted-media" scrolling="no" style="display: block;"></iframe>
-            </div>
+        <div class="reward-title">
+            EARN REWARD
         </div>
 
-        <div class="brand-section">
-            <div class="brand-info">
-                <span class="brand-subtitle-top">OFFICIAL CHANNEL</span>
-                <div class="brand-title">@Cricinsider365</div>
-                <span class="brand-desc">FREE STREAMS • LIVE SCORES • UPDATES</span>
-            </div>
-            <a href="https://t.me/+tL4jz_00y6NlMGRl" target="_blank" class="telegram-btn">
-                <img class="telegram-icon-img" src="https://upload.wikimedia.org/wikipedia/commons/8/82/Telegram_logo.svg" alt="Telegram">
-                JOIN TELEGRAM CHANNEL
-            </a>
-        </div>
-
-        <div class="tag-bar">
-            <div class="hd-tag">HD</div>
-            <div class="current-stream-name" id="streamLabel">Live</div>
+        <div class="reward-subtitle">
+            Tap to Claim <span>►</span>
         </div>
 
     </div>
 
-    <script>
-        window.addEventListener('DOMContentLoaded', () => {
-            setTimeout(() => {
-                const loader = document.getElementById('loading-screen');
-                const mainApp = document.getElementById('main-content');
-                loader.style.opacity = '0';
-                loader.style.visibility = 'hidden';
-                mainApp.style.display = 'block';
-                setTimeout(() => {
-                    mainApp.style.opacity = '1';
-                    mainApp.style.visibility = 'visible';
-                }, 50);
-            }, 2200);
-        });
+    <div class="reward-arrow">
+        →
+    </div>
 
-        // ---------- STREAM ID (JSON) LOGIC ----------
-        const JSON_SOURCE_URL_PRIMARY = 'https://allrounderid2.pages.dev/id.json';
-        const JSON_SOURCE_URL_SECONDARY = '';
-
-        function getStreamIdFromUrl() {
-            const params = new URLSearchParams(window.location.search);
-            return params.get('stream');
-        }
-
-        function playFromStreamData(item) {
-            const statusText = document.getElementById('portalStatusText');
-            const player = document.getElementById('videoPlayer');
-            const streamLabel = document.getElementById('streamLabel');
-
-            if (item && item.iframeSrc && item.iframeSrc.trim() !== "") {
-                statusText.style.display = 'none';
-                player.style.display = 'block';
-                player.src = item.iframeSrc;
-                streamLabel.innerText = item.name || item.id;
-
-                // optional hit counter ping (fire and forget, ignore failures)
-                if (item.hit) {
-                    fetch(item.hit).catch(() => {});
-                }
-            } else {
-                player.style.display = 'none';
-                player.src = "";
-                statusText.style.display = 'block';
-                statusText.innerHTML = "STREAM NOT FOUND<br>SELECT AN AVAILABLE OPTION";
-                streamLabel.innerText = "INVALID STREAM ID";
-            }
-        }
-
-        async function loadStreamFromId() {
-            let streamId = getStreamIdFromUrl();
-            if (!streamId) return; // nothing to do, default UI stays
-
-            // prefix-based source resolution: "a:" -> secondary source (eerajson)
-            let sourceUrl = JSON_SOURCE_URL_PRIMARY;
-            if (streamId.toLowerCase().startsWith('a:')) {
-                sourceUrl = JSON_SOURCE_URL_SECONDARY;
-                streamId = streamId.slice(2); // strip the "a:" prefix before matching
-            }
-
-            const statusText = document.getElementById('portalStatusText');
-            const streamLabel = document.getElementById('streamLabel');
-            statusText.innerHTML = "LOADING STREAM...";
-            streamLabel.innerText = "LOADING...";
-
-            try {
-                const res = await fetch(sourceUrl, { cache: 'no-store' });
-                if (!res.ok) throw new Error('Bad response');
-                const data = await res.json();
-
-                let match = null;
-                if (sourceUrl === JSON_SOURCE_URL_SECONDARY) {
-                    // secondary source is a flat { key: "streamUrl" } object
-                    const foundKey = Object.keys(data).find(k => k.toLowerCase() === streamId.toLowerCase());
-                    if (foundKey) {
-                        match = { id: foundKey, name: foundKey, iframeSrc: data[foundKey] };
-                    }
-                } else {
-                    // primary source is { iframes: [ { id, iframeSrc, name }, ... ] }
-                    const list = data.iframes || [];
-                    match = list.find(it => it.id === streamId);
-                }
-
-                if (match) {
-                    playFromStreamData(match);
-                } else {
-                    statusText.style.display = 'block';
-                    statusText.innerHTML = "STREAM NOT FOUND<br>CHECK THE LINK AND TRY AGAIN";
-                    streamLabel.innerText = "INVALID STREAM ID";
-                }
-            } catch (err) {
-                statusText.style.display = 'block';
-                statusText.innerHTML = "FAILED TO LOAD STREAM DATA<br>PLEASE TRY AGAIN LATER";
-                streamLabel.innerText = "ERROR";
-            }
-        }
-
-        window.addEventListener('DOMContentLoaded', () => {
-            loadStreamFromId();
-        });
-    </script>
+</div>
 
 
-</body></html>
+<!-- =========================
+     VIDEO PLAYER
+========================= -->
+
+<div id="player-container">
+
+    <iframe
+        src="https://sonucdn-v2.pages.dev/star?id=H1HD"
+        style="width:100%; height:100%; border:0;"
+        allow="encrypted-media; autoplay"
+        allowfullscreen>
+    </iframe>
+
+</div>
+
+
+<!-- =========================
+     TELEGRAM
+========================= -->
+
+<div class="info-card">
+
+    <h2>
+        <i class="fa-solid fa-bell"></i>
+        Follow us for Updates!
+    </h2>
+
+    <a
+        href="https://t.me/+IhSW51QysxU3NzY1"
+        target="_blank"
+        class="action-button">
+
+        <i class="fa-brands fa-telegram"></i>
+
+        Click Here To Join Telegram
+
+    </a>
+
+</div>
+
+
+<!-- =========================
+     SHARE
+========================= -->
+
+<div class="info-card">
+
+    <h2>
+        <i class="fa-solid fa-link"></i>
+        Copy Link & Share
+    </h2>
+
+    <button
+        class="action-button"
+        id="shareButton">
+
+        <i class="fa-solid fa-share-nodes"></i>
+
+        Click Here To Share This Page Link
+
+    </button>
+
+</div>
+
+
+<a href="#" class="back-link">
+
+    <i class="fa-solid fa-arrow-left"></i>
+
+    Back to All Streams
+
+</a>
+
+
+</div>
+
+</main>
+
+
+<!-- =========================
+     TELEGRAM POPUP
+========================= -->
+
+<div class="telegram-popup" id="telegramPopup">
+
+    <h2>
+        <i class="fa-brands fa-telegram"></i>
+        Support Us!
+    </h2>
+
+    <p>
+        Join our Telegram channel
+        <strong>@Cricinsider365</strong>
+    </p>
+
+    <a
+        href="https://t.me/+IhSW51QysxU3NzY1"
+        target="_blank">
+
+        <button class="join-btn">
+            Join Now
+        </button>
+
+    </a>
+
+    <button
+        class="joined-btn"
+        onclick="document.getElementById('telegramPopup').style.display='none';">
+
+        Already Joined
+
+    </button>
+
+</div>
+
+
 <script>
-// alert('Join Our Telegram For More Live Links')
-         if (confirm("Join Our Telegram Channel @Cricinsider365") == true) {
-         window.open("https://t.me/+IhSW51QysxU3NzY1", '_blank');
-     }
+
+
+/* =========================
+   SHARE BUTTON
+========================= */
+
+document
+.getElementById('shareButton')
+.addEventListener('click', async () => {
+
+    const btn =
+        document.getElementById('shareButton');
+
+    const original =
+        btn.innerHTML;
+
+    try {
+
+        await navigator.clipboard.writeText(
+            window.location.href
+        );
+
+        btn.innerHTML =
+            '<i class="fa-solid fa-check"></i> Link Copied!';
+
+        btn.classList.add('copied');
+
+        setTimeout(() => {
+
+            btn.innerHTML = original;
+
+            btn.classList.remove('copied');
+
+        }, 2000);
+
+    } catch (error) {
+
+        alert(
+            'Unable to copy link. Please copy it manually.'
+        );
+
+    }
+
+});
+
+
+/* =========================
+   TELEGRAM POPUP
+========================= */
+
+setTimeout(() => {
+
+    document
+    .getElementById('telegramPopup')
+    .style.display = 'block';
+
+}, 1500);
+
+
 </script>
+
+</body>
+</html>
