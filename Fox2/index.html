@@ -1,12 +1,16 @@
 <!DOCTYPE html>
-<html lang="en" data-theme="dark">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"
+    >
 
     <title>Cric Hype | Live Sports</title>
 
-    <meta name="referrer" content="no-referrer">
+    <meta name="theme-color" content="#07090f">
 
     <!-- Font Awesome -->
     <link
@@ -19,14 +23,6 @@
         href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap"
         rel="stylesheet"
     >
-
-    <!-- Shaka Player -->
-    <link
-        rel="stylesheet"
-        href="https://cdn.jsdelivr.net/npm/shaka-player@4.16.2/dist/controls.css"
-    >
-
-    <script src="https://cdn.jsdelivr.net/npm/shaka-player@4.16.2/dist/shaka-player.ui.min.js"></script>
 
     <style>
         * {
@@ -48,6 +44,7 @@
             overflow-x: hidden;
         }
 
+        /* Background */
         .ambient-bg {
             position: fixed;
             inset: 0;
@@ -58,58 +55,73 @@
 
         .orb {
             position: absolute;
-            width: 280px;
-            height: 280px;
+            width: 300px;
+            height: 300px;
             border-radius: 50%;
-            filter: blur(100px);
-            opacity: .18;
+            filter: blur(110px);
+            opacity: .16;
         }
 
         .orb-1 {
-            top: -100px;
-            left: -80px;
+            top: -120px;
+            left: -100px;
             background: #2878ff;
         }
 
         .orb-2 {
-            right: -100px;
-            bottom: -100px;
+            right: -120px;
+            bottom: -120px;
             background: #8b35ff;
         }
 
+        /* Header */
         header {
             position: relative;
-            z-index: 2;
-            padding: 18px 16px;
+            z-index: 5;
+
+            padding: 16px;
+
+            background: rgba(7, 9, 15, .78);
             border-bottom: 1px solid rgba(255,255,255,.08);
-            background: rgba(7,9,15,.72);
+
             backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
         }
 
         .header-inner {
-            max-width: 1000px;
+            width: min(1000px, 100%);
             margin: auto;
+
             display: flex;
             align-items: center;
             justify-content: space-between;
-            gap: 15px;
+            gap: 12px;
         }
 
         .brand {
             display: flex;
             align-items: center;
             gap: 10px;
+
             color: #fff;
             text-decoration: none;
         }
 
         .brand-icon {
-            width: 38px;
-            height: 38px;
-            border-radius: 12px;
+            width: 40px;
+            height: 40px;
+
             display: grid;
             place-items: center;
-            background: linear-gradient(135deg, #246bfe, #8b3dff);
+
+            border-radius: 12px;
+
+            background: linear-gradient(
+                135deg,
+                #246bfe,
+                #8b3dff
+            );
+
             box-shadow: 0 8px 30px rgba(50,100,255,.25);
         }
 
@@ -122,11 +134,16 @@
             display: flex;
             align-items: center;
             gap: 7px;
+
             padding: 7px 11px;
+
             border-radius: 20px;
-            background: rgba(255,55,55,.1);
+
+            background: rgba(255,55,55,.10);
             border: 1px solid rgba(255,80,80,.18);
-            color: #ff6b6b;
+
+            color: #ff7070;
+
             font-size: 12px;
             font-weight: 700;
         }
@@ -134,9 +151,13 @@
         .live-dot {
             width: 7px;
             height: 7px;
+
             border-radius: 50%;
+
             background: #ff3b3b;
+
             box-shadow: 0 0 10px #ff3b3b;
+
             animation: pulse 1.4s infinite;
         }
 
@@ -147,86 +168,195 @@
             }
         }
 
+        /* Main */
         .main-container {
             position: relative;
             z-index: 1;
-            width: min(1000px, calc(100% - 24px));
-            margin: 22px auto 40px;
+
+            width: min(1000px, calc(100% - 20px));
+
+            margin: 20px auto 40px;
         }
 
+        /* Player */
         .player-card {
             position: relative;
+
             width: 100%;
             aspect-ratio: 16 / 9;
+
             overflow: hidden;
+
             border-radius: 18px;
+
             background: #000;
-            border: 1px solid rgba(255,255,255,.09);
-            box-shadow: 0 20px 70px rgba(0,0,0,.4);
+
+            border: 1px solid rgba(255,255,255,.10);
+
+            box-shadow:
+                0 20px 70px rgba(0,0,0,.45);
         }
 
-        #playerContainer {
-            width: 100%;
-            height: 100%;
-        }
-
-        #video {
-            width: 100%;
-            height: 100%;
-            display: block;
-            object-fit: contain;
-            background: #000;
-        }
-
-        .error-overlay {
+        #streamFrame {
             position: absolute;
+
             inset: 0;
-            z-index: 10;
-            display: none;
-            flex-direction: column;
+
+            width: 100%;
+            height: 100%;
+
+            display: block;
+
+            border: 0;
+
+            background: #000;
+        }
+
+        /* Loading */
+        .loading {
+            position: absolute;
+
+            inset: 0;
+
+            z-index: 2;
+
+            display: flex;
+
             align-items: center;
             justify-content: center;
+
+            background: #000;
+
+            pointer-events: none;
+
+            transition: opacity .3s ease;
+        }
+
+        .loading.hide {
+            opacity: 0;
+            visibility: hidden;
+        }
+
+        .loader {
+            width: 36px;
+            height: 36px;
+
+            border: 3px solid rgba(255,255,255,.2);
+            border-top-color: #fff;
+
+            border-radius: 50%;
+
+            animation: spin .8s linear infinite;
+        }
+
+        @keyframes spin {
+            to {
+                transform: rotate(360deg);
+            }
+        }
+
+        /* Error */
+        .error-overlay {
+            position: absolute;
+
+            inset: 0;
+
+            z-index: 10;
+
+            display: none;
+
+            flex-direction: column;
+
+            align-items: center;
+            justify-content: center;
+
             text-align: center;
+
             padding: 20px;
-            background: rgba(0,0,0,.82);
+
+            background: rgba(0,0,0,.88);
         }
 
         .error-overlay.show {
             display: flex;
         }
 
+        .error-icon {
+            width: 55px;
+            height: 55px;
+
+            display: grid;
+            place-items: center;
+
+            margin-bottom: 12px;
+
+            border-radius: 50%;
+
+            background: rgba(255,255,255,.08);
+
+            font-size: 22px;
+        }
+
+        .error-overlay h3 {
+            margin: 0 0 7px;
+
+            font-size: 16px;
+        }
+
         .error-overlay p {
             margin: 0 0 15px;
-            color: #ddd;
-            font-size: 14px;
+
+            color: #9da3b3;
+
+            font-size: 13px;
         }
 
         .retry-btn {
+            min-height: 43px;
+
+            padding: 0 18px;
+
             border: 0;
             border-radius: 10px;
-            padding: 11px 18px;
+
             background: #fff;
             color: #111;
+
+            font-size: 14px;
             font-weight: 700;
+
             cursor: pointer;
         }
 
+        .retry-btn:active {
+            transform: scale(.96);
+        }
+
+        /* Cards */
         .glass-card {
-            margin-top: 16px;
+            margin-top: 15px;
+
             padding: 18px;
-            border-radius: 18px;
+
+            border-radius: 17px;
+
             background: rgba(255,255,255,.045);
+
             border: 1px solid rgba(255,255,255,.08);
+
             backdrop-filter: blur(18px);
+            -webkit-backdrop-filter: blur(18px);
         }
 
         .card-title {
             display: flex;
             align-items: center;
             gap: 9px;
+
+            margin-bottom: 8px;
+
             font-size: 16px;
             font-weight: 800;
-            margin-bottom: 8px;
         }
 
         .card-title i {
@@ -235,99 +365,145 @@
 
         .glass-card p {
             margin: 0 0 15px;
+
             color: #9da3b3;
-            line-height: 1.55;
+
+            font-size: 13px;
+            line-height: 1.6;
         }
 
-        .promo-buttons {
+        /* Buttons */
+        .buttons {
             display: grid;
+
             grid-template-columns: 1fr 1fr;
+
             gap: 10px;
         }
 
-        .btn-social {
-            min-height: 44px;
+        .btn {
+            min-height: 45px;
+
             display: flex;
+
             align-items: center;
             justify-content: center;
+
             gap: 8px;
+
             border-radius: 11px;
+
             border: 1px solid rgba(255,255,255,.08);
+
             text-decoration: none;
+
             font-size: 14px;
             font-weight: 700;
-            cursor: pointer;
-            transition: transform .15s ease, opacity .15s ease;
+
+            transition:
+                transform .15s ease,
+                opacity .15s ease;
         }
 
-        .btn-social:active {
+        .btn:active {
             transform: scale(.97);
         }
 
-        .btn-tg {
-            background: rgba(40,160,255,.12);
+        .telegram {
             color: #38a9ff;
+            background: rgba(40,160,255,.10);
         }
 
-        .btn-ig {
-            background: rgba(255,70,130,.10);
+        .instagram {
             color: #ff6b9c;
+            background: rgba(255,70,130,.10);
         }
 
-        .btn-share {
+        .share {
             width: 100%;
+
+            margin-top: 10px;
+
             background: rgba(255,255,255,.07);
+
             color: #fff;
+
+            cursor: pointer;
         }
 
+        /* Toast */
         .toast {
             position: fixed;
+
             left: 50%;
             bottom: 22px;
+
             z-index: 50;
-            transform: translateX(-50%) translateY(20px);
+
+            transform:
+                translateX(-50%)
+                translateY(20px);
+
             opacity: 0;
+
             pointer-events: none;
+
             padding: 11px 16px;
+
             border-radius: 12px;
-            background: rgba(20,22,30,.94);
-            border: 1px solid rgba(255,255,255,.1);
+
+            background: rgba(20,22,30,.96);
+
+            border: 1px solid rgba(255,255,255,.10);
+
             color: #fff;
+
             font-size: 13px;
+
             transition: .25s ease;
+
             white-space: nowrap;
         }
 
         .toast.show {
             opacity: 1;
-            transform: translateX(-50%) translateY(0);
+
+            transform:
+                translateX(-50%)
+                translateY(0);
         }
 
+        /* Mobile */
         @media (max-width: 600px) {
+
             header {
-                padding: 14px 12px;
+                padding: 13px 12px;
             }
 
             .brand-name {
                 font-size: 17px;
             }
 
+            .brand-icon {
+                width: 37px;
+                height: 37px;
+            }
+
             .main-container {
-                width: calc(100% - 16px);
-                margin-top: 14px;
+                width: calc(100% - 12px);
+                margin-top: 12px;
             }
 
             .player-card {
-                border-radius: 13px;
-                aspect-ratio: 16 / 9;
+                border-radius: 12px;
             }
 
             .glass-card {
                 padding: 15px;
-                border-radius: 15px;
+                border-radius: 14px;
             }
 
-            .promo-buttons {
+            .buttons {
                 grid-template-columns: 1fr;
             }
         }
@@ -336,270 +512,313 @@
 
 <body>
 
-<div class="ambient-bg">
-    <div class="orb orb-1"></div>
-    <div class="orb orb-2"></div>
-</div>
+    <!-- Background -->
+    <div class="ambient-bg">
+        <div class="orb orb-1"></div>
+        <div class="orb orb-2"></div>
+    </div>
 
-<header>
-    <div class="header-inner">
 
-        <a href="#" class="brand">
-            <div class="brand-icon">
-                <i class="fas fa-play"></i>
+    <!-- Header -->
+    <header>
+        <div class="header-inner">
+
+            <a href="#" class="brand">
+
+                <div class="brand-icon">
+                    <i class="fas fa-play"></i>
+                </div>
+
+                <span class="brand-name">
+                    Cric Hype
+                </span>
+
+            </a>
+
+            <div class="live-pill">
+                <span class="live-dot"></span>
+                LIVE
             </div>
 
-            <span class="brand-name">
-                Cric Hype
-            </span>
-        </a>
+        </div>
+    </header>
 
-        <div class="live-pill">
-            <span class="live-dot"></span>
-            Live Stream
+
+    <!-- Main -->
+    <main class="main-container">
+
+        <!-- Player -->
+        <div class="player-card">
+
+            <iframe
+                id="streamFrame"
+                src="https://in-mc-flive.fancode.com/mumbai/4248491_hindi_hls_ed24a8186993836_1ta-di_h264/1080p.m3u8?hdntl=Expires=1789392659~_GO=Generated~acl=/mumbai/4248491_hindi_hls_ed24a8186993836_1ta-di_h264/*~Signature=AWDec-HByQhk68qSCnCZyABpf45aQQnnay5WKHnruoErrGrN-vafHAIvAttH8kmxylYL3z2vHk2KCGSXRBizd32DMxwF"
+                title="Cric Hype Live Player"
+                allow="autoplay; fullscreen; picture-in-picture; encrypted-media"
+                allowfullscreen
+                frameborder="0"
+                scrolling="no"
+                referrerpolicy="no-referrer-when-downgrade">
+            </iframe>
+
+
+            <!-- Loading -->
+            <div
+                id="loading"
+                class="loading"
+            >
+                <div class="loader"></div>
+            </div>
+
+
+            <!-- Error -->
+            <div
+                id="errorOverlay"
+                class="error-overlay"
+            >
+
+                <div class="error-icon">
+                    <i class="fas fa-exclamation"></i>
+                </div>
+
+                <h3>
+                    Player Unavailable
+                </h3>
+
+                <p>
+                    The embedded player could not be loaded.
+                </p>
+
+                <button
+                    class="retry-btn"
+                    onclick="reloadFrame()"
+                >
+                    <i class="fas fa-rotate-right"></i>
+                    Try Again
+                </button>
+
+            </div>
+
         </div>
 
-    </div>
-</header>
 
-<main class="main-container">
+        <!-- Community -->
+        <div class="glass-card">
 
-    <div class="player-card">
+            <div class="card-title">
+                <i class="fas fa-bullhorn"></i>
+                Join Community
+            </div>
 
-        <div
-            id="playerContainer"
-            data-shaka-player-container
-            shaka-controls="true"
-        >
-            <video
-                id="video"
-                data-shaka-player
-                playsinline
-                autoplay
-                poster="https://chtv18.pages.dev/P.jpg"
-            ></video>
+            <p>
+                Join our channels for updates, schedules
+                and live sports information.
+            </p>
+
+
+            <div class="buttons">
+
+                <a
+                    class="btn telegram"
+                    href="https://telegram.me/CricHype"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                >
+                    <i class="fab fa-telegram-plane"></i>
+                    Telegram
+                </a>
+
+
+                <a
+                    class="btn instagram"
+                    href="https://instagram.com/realCricHype"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                >
+                    <i class="fab fa-instagram"></i>
+                    Instagram
+                </a>
+
+            </div>
+
         </div>
 
-        <div id="errorOverlay" class="error-overlay">
 
-            <p id="errorMsg">
-                Stream is currently offline
+        <!-- Share -->
+        <div class="glass-card">
+
+            <div class="card-title">
+                <i class="fas fa-share-nodes"></i>
+                Share
+            </div>
+
+            <p>
+                Share this page with your friends.
             </p>
 
             <button
-                class="retry-btn"
-                onclick="location.reload()"
+                class="btn share"
+                onclick="sharePage()"
             >
-                Try Again
+                <i class="fas fa-share-alt"></i>
+                Share Link
             </button>
 
         </div>
 
+    </main>
+
+
+    <!-- Toast -->
+    <div
+        id="toast"
+        class="toast"
+    >
+        Link copied!
     </div>
 
 
-    <div class="glass-card">
+    <script>
 
-        <div class="card-title">
-            <i class="fas fa-bullhorn"></i>
-            Join Community
-        </div>
+        const frame =
+            document.getElementById("streamFrame");
 
-        <p>
-            Join our official channels for updates and schedules.
-        </p>
+        const loading =
+            document.getElementById("loading");
 
-        <div class="promo-buttons">
-
-            <a
-                href="https://telegram.me/CricHype"
-                target="_blank"
-                rel="noopener noreferrer"
-                class="btn-social btn-tg"
-            >
-                <i class="fab fa-telegram-plane"></i>
-                Telegram
-            </a>
-
-            <a
-                href="https://instagram.com/realCricHype"
-                target="_blank"
-                rel="noopener noreferrer"
-                class="btn-social btn-ig"
-            >
-                <i class="fab fa-instagram"></i>
-                Instagram
-            </a>
-
-        </div>
-
-    </div>
+        const errorOverlay =
+            document.getElementById("errorOverlay");
 
 
-    <div class="glass-card">
+        /*
+         * Hide loading screen after iframe
+         * has finished loading.
+         */
+        frame.addEventListener("load", function () {
 
-        <div class="card-title">
-            <i class="fas fa-info-circle"></i>
-            Support Us
-        </div>
+            loading.classList.add("hide");
 
-        <p>
-            For the best experience, use Google Chrome.
-            If the stream lags, try refreshing the page.
-        </p>
+            errorOverlay.classList.remove("show");
 
-        <button
-            class="btn-social btn-share"
-            onclick="shareLink()"
-        >
-            <i class="fas fa-share-alt"></i>
-            Share Link with Friends
-        </button>
-
-    </div>
-
-</main>
-
-
-<div id="toast" class="toast">
-    Loading player...
-</div>
-
-
-<script>
-    /*
-     * IMPORTANT:
-     * Replace this with your own licensed/authorized
-     * HLS (.m3u8) or DASH (.mpd) stream.
-     */
-    const STREAM_URL = "YOUR_LICENSED_STREAM_URL";
-
-
-    const video = document.getElementById("video");
-    const playerContainer = document.getElementById("playerContainer");
-    const errorOverlay = document.getElementById("errorOverlay");
-    const errorMsg = document.getElementById("errorMsg");
-    const toast = document.getElementById("toast");
-
-
-    function showToast(message) {
-        toast.textContent = message;
-        toast.classList.add("show");
-
-        clearTimeout(window.toastTimer);
-
-        window.toastTimer = setTimeout(() => {
-            toast.classList.remove("show");
-        }, 2500);
-    }
-
-
-    function showError(message) {
-        errorMsg.textContent = message;
-        errorOverlay.classList.add("show");
-        showToast(message);
-    }
-
-
-    function hideError() {
-        errorOverlay.classList.remove("show");
-    }
-
-
-    async function initPlayer() {
-
-        if (!shaka.Player.isBrowserSupported()) {
-            showError("Your browser does not support this video player.");
-            return;
-        }
-
-        if (
-            !STREAM_URL ||
-            STREAM_URL === "https://in-mc-flive.fancode.com/mumbai/4248491_hindi_hls_ed24a8186993836_1ta-di_h264/1080p.m3u8?hdntl=Expires=1789392659~_GO=Generated~acl=/mumbai/4248491_hindi_hls_ed24a8186993836_1ta-di_h264/*~Signature=AWDec-HByQhk68qSCnCZyABpf45aQQnnay5WKHnruoErrGrN-vafHAIvAttH8kmxylYL3z2vHk2KCGSXRBizd32DMxwF"
-        ) {
-            showError("Add your licensed stream URL first.");
-            return;
-        }
-
-        showToast("Loading player...");
-
-        const player = new shaka.Player(video);
-
-        window.shakaPlayer = player;
-
-        player.addEventListener("error", (event) => {
-            console.error("Shaka error:", event.detail);
-            showError("Stream is currently unavailable.");
         });
 
-        video.addEventListener("playing", () => {
-            hideError();
-            showToast("Live stream started");
-        });
 
-        try {
+        /*
+         * Reload iframe
+         */
+        function reloadFrame() {
 
-            await player.load(STREAM_URL);
+            errorOverlay.classList.remove("show");
 
-            hideError();
+            loading.classList.remove("hide");
 
-            /*
-             * Try autoplay.
-             * If browser blocks autoplay, the Shaka play button
-             * remains available.
-             */
+            const currentURL = frame.src;
+
+            frame.src = "about:blank";
+
+            setTimeout(function () {
+
+                frame.src = currentURL;
+
+            }, 150);
+
+        }
+
+
+        /*
+         * Share page
+         */
+        async function sharePage() {
+
+            const shareData = {
+
+                title: "Cric Hype",
+
+                text: "Watch Live Sports on Cric Hype",
+
+                url: window.location.href
+
+            };
+
+
             try {
-                await video.play();
-            } catch (err) {
-                console.log("Autoplay blocked:", err);
-            }
 
-        } catch (error) {
+                if (navigator.share) {
 
-            console.error("Player load failed:", error);
+                    await navigator.share(
+                        shareData
+                    );
 
-            showError("Unable to load the stream.");
+                } else {
 
-        }
-    }
+                    await navigator.clipboard.writeText(
+                        window.location.href
+                    );
 
+                    showToast("Link copied!");
 
-    async function shareLink() {
+                }
 
-        const shareData = {
-            title: "Cric Hype",
-            text: "Watch Live Sports on Cric Hype",
-            url: window.location.href
-        };
+            } catch (error) {
 
-        try {
-
-            if (navigator.share) {
-
-                await navigator.share(shareData);
-
-            } else {
-
-                await navigator.clipboard.writeText(
-                    window.location.href
+                console.log(
+                    "Share cancelled:",
+                    error
                 );
 
-                showToast("Link copied!");
-
             }
 
-        } catch (error) {
+        }
 
-            console.log("Share cancelled:", error);
+
+        /*
+         * Toast
+         */
+        function showToast(message) {
+
+            const toast =
+                document.getElementById("toast");
+
+            toast.textContent = message;
+
+            toast.classList.add("show");
+
+            clearTimeout(
+                window.toastTimer
+            );
+
+            window.toastTimer =
+                setTimeout(function () {
+
+                    toast.classList.remove(
+                        "show"
+                    );
+
+                }, 2500);
 
         }
-    }
 
 
-    document.addEventListener("DOMContentLoaded", () => {
-        initPlayer();
-    });
-</script>
+        /*
+         * Basic URL check
+         */
+        if (
+            frame.src.includes(
+                "YOUR_AUTHORIZED_IFRAME_URL"
+            )
+        ) {
+
+            setTimeout(function () {
+
+                loading.classList.add("hide");
+
+                errorOverlay.classList.add("show");
+
+            }, 1500);
+
+        }
+
+    </script>
 
 </body>
 </html>
