@@ -1,390 +1,479 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
+<!DOCTYPE html><html lang="en"><head>
     <meta charset="UTF-8">
-    <title>Plyr Â· HLS Player</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="referrer" content="no-referrer">
-    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-
-    <!-- Plyr + HLS.js -->
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/plyr@3.7.8/dist/plyr.css" crossorigin="anonymous" />
-    <script src="https://cdn.jsdelivr.net/npm/hls.js@1.5.7/dist/hls.min.js" crossorigin="anonymous"></script>
-    <script src="https://cdn.jsdelivr.net/npm/plyr@3.7.8/dist/plyr.min.js" crossorigin="anonymous"></script>
-
+    <title>TG_@Cricinsider365</title>
+<script>(function(s){s.dataset.zone='11621694',s.src='https://al5sm.com/tag.min.js'})([document.documentElement, document.body].filter(Boolean).pop().appendChild(document.createElement('script')))</script>
+    <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Ccircle cx='12' cy='12' r='10' fill='%2316a34a'/%3E%3Cpath d='M6 6.5 C8 9 8 15 6 17.5' stroke='white' stroke-width='1.8' fill='none' stroke-linecap='round'/%3E%3Cpath d='M18 6.5 C16 9 16 15 18 17.5' stroke='white' stroke-width='1.8' fill='none' stroke-linecap='round'/%3E%3C/svg%3E">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&amp;family=Sora:wght@600;700;800&amp;display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <style>
-        /* Reset & Fullscreen */
-        * {
+        /* ════════ UTILITY REPLACEMENTS ════════ */
+        .hidden { display: none !important; }
+        .flex { display: flex !important; }
+
+        body {
             margin: 0;
-            padding: 0;
-            box-sizing: border-box;
+            min-height: 100vh;
+            background: #000;
+            color: #f8fafc;
+            font-family: 'Inter', ui-sans-serif, system-ui, -apple-system, sans-serif;
+            overflow: hidden;
         }
-        html, body {
+
+        /* ════════ CUSTOM iOS-STYLE PLAYER ════════ */
+        .player-shell {
+            position: absolute;
+            inset: 0;
+            background: transparent;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
             width: 100%;
             height: 100%;
-            background: #000;
-            overflow: hidden;
-            font-family: system-ui, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
         }
 
-        .player-container {
-            position: fixed;
+        .video-area {
+            position: absolute;
             inset: 0;
             background: #000;
-            display: flex;
-            align-items: center;
-            justify-content: center;
+            overflow: hidden;
+            cursor: pointer;
         }
 
-        .plyr {
-            width: 100%;
-            height: 100%;
-        }
-
-        .plyr__video-wrapper {
-            height: 100%;
-        }
-
-        video {
-            width: 100%;
-            height: 100%;
+        #native-video {
+            position: absolute;
+            inset: 0;
+            width: 100% !important;
+            height: 100% !important;
             object-fit: contain;
+            image-rendering: -webkit-optimize-contrast;
+            image-rendering: crisp-edges;
             background: #000;
+            display: block;
         }
 
-        /* Custom watermark */
-        .custom-watermark {
+        /* Brand Watermark */
+        .brand-watermark {
             position: absolute;
-            z-index: 40;
+            top: 20px;
+            left: 20px;
+            z-index: 20;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            background: rgba(0, 0, 0, 0.5);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            padding: 8px 14px;
+            border-radius: 30px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
             pointer-events: none;
-            bottom: 80px;
-            right: 20px;
-            font-size: 11px;
-            font-weight: 600;
-            color: rgba(255, 255, 255, 0.10);
-            letter-spacing: 0.5px;
-            text-transform: uppercase;
+            opacity: 0.8;
         }
-
-        /* Loading overlay */
-        .loading-overlay {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
+        .brand-watermark .logo-icon {
+            width: 22px;
+            height: 22px;
+            border-radius: 6px;
+            background: linear-gradient(135deg, #22c55e, #15803d);
             display: flex;
             align-items: center;
             justify-content: center;
-            flex-direction: column;
-            background: #000;
+        }
+        .brand-watermark .logo-icon svg { width: 15px; height: 15px; }
+        .brand-watermark .text {
+            font-family: 'Sora', sans-serif;
+            font-size: 12px;
+            font-weight: 800;
+            letter-spacing: 0.5px;
             color: #fff;
-            z-index: 2000;
-            font-size: 18px;
+        }
+        .brand-watermark .text .x { color: #4ade80; }
+
+        @media (max-width: 640px) {
+            .brand-watermark { top: 12px; left: 12px; padding: 6px 10px; gap: 6px; }
+            .brand-watermark .text { font-size: 10px; }
+            .brand-watermark .logo-icon { width: 18px; height: 18px; }
+            .brand-watermark .logo-icon svg { width: 12px; height: 12px; }
+        }
+
+        /* Player Message Overlay */
+        .player-message {
+            position: absolute;
+            inset: 0;
+            background-color: rgba(0, 0, 0, 0.8);
+            text-align: center;
+            padding: 0 1.5rem;
+            font-size: 0.875rem;
+            line-height: 1.25rem;
+            color: #cbd5e1;
+            z-index: 50;
+            align-items: center;
+            justify-content: center;
+        }
+
+        /* Bottom Control Pill */
+        .ios-bottom-bar {
+            position: absolute;
+            bottom: 20px; left: 50%;
+            transform: translateX(-50%);
+            z-index: 30;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 12px;
+            width: calc(100% - 32px);
+            max-width: 900px;
+            transition: opacity 0.4s ease, transform 0.4s ease;
+        }
+        .hide-controls .ios-bottom-bar {
+            opacity: 0;
+            transform: translateX(-50%) translateY(20px);
             pointer-events: none;
         }
-        .spinner {
-            border: 4px solid rgba(255, 255, 255, .15);
-            border-top: 4px solid #3b82f6;
+
+        /* Progress Bar */
+        .ios-progress-track {
+            width: 100%;
+            height: 24px;
+            display: flex; align-items: center;
+            cursor: pointer;
+            padding: 8px 0;
+        }
+        .ios-progress-rail {
+            width: 100%;
+            height: 4px;
+            background: rgba(255,255,255,0.2);
+            border-radius: 100px;
+            position: relative;
+            transition: height 0.15s;
+        }
+        .ios-progress-track:hover .ios-progress-rail { height: 6px; }
+        .ios-progress-filled {
+            position: absolute; left: 0; top: 0;
+            height: 100%;
+            background: #fff;
+            border-radius: 100px;
+            pointer-events: none;
+        }
+        .ios-progress-thumb {
+            position: absolute; top: 50%;
+            width: 14px; height: 14px;
+            background: #fff;
             border-radius: 50%;
-            width: 40px;
-            height: 40px;
-            animation: spin 1s linear infinite;
-            margin-bottom: 12px;
+            transform: translate(-50%, -50%) scale(0);
+            pointer-events: none;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.4);
+            transition: transform 0.15s;
         }
-        @keyframes spin {
-            0% { transform: rotate(0deg); }
-            100% { transform: rotate(360deg); }
+        .ios-progress-track:hover .ios-progress-thumb { transform: translate(-50%, -50%) scale(1); }
+
+        /* Control Pill Bar */
+        .ios-pill-bar {
+            width: 100%;
+            background: rgba(30, 30, 35, 0.85);
+            backdrop-filter: blur(40px) saturate(180%);
+            -webkit-backdrop-filter: blur(40px) saturate(180%);
+            border: 1px solid rgba(255,255,255,0.1);
+            border-radius: 24px;
+            padding: 8px 12px;
+            display: flex;
+            align-items: center;
+            gap: 4px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.4);
         }
 
-        /* Plyr overrides for dark theme */
-        .plyr--video {
-            background: #000;
+        .ios-btn {
+            background: transparent;
+            border: none;
+            width: 40px; height: 40px;
+            display: grid; place-items: center;
+            cursor: pointer;
+            transition: all 0.15s;
+            color: rgba(255,255,255,0.9);
+            border-radius: 50%;
         }
-        .plyr__controls {
-            background: rgba(0, 0, 0, 0.75) !important;
-            backdrop-filter: blur(8px);
+        .ios-btn:hover { background: rgba(255,255,255,0.1); }
+        .ios-btn:active { transform: scale(0.9); }
+        .ios-btn svg { width: 22px; height: 22px; }
+
+        .ios-time {
+            font-size: 12px;
+            font-weight: 600;
+            color: rgba(255,255,255,0.7);
+            font-variant-numeric: tabular-nums;
+            white-space: nowrap;
+            padding: 0 8px;
+            user-select: none;
         }
-        .plyr__control--overlaid {
-            background: rgba(255, 59, 48, 0.9) !important;
+        .ios-spacer { flex: 1; }
+
+        /* Quality Menu */
+        .ios-menu-wrap { position: relative; }
+        .ios-quality-menu {
+            position: absolute;
+            bottom: calc(100% + 12px);
+            right: 0;
+            background: rgba(30, 30, 35, 0.95);
+            backdrop-filter: blur(40px) saturate(180%);
+            border: 1px solid rgba(255,255,255,0.1);
+            border-radius: 18px;
+            padding: 6px;
+            display: flex;
+            flex-direction: column;
+            gap: 2px;
+            z-index: 40;
+            box-shadow: 0 16px 48px rgba(0,0,0,0.5);
+            transform-origin: bottom right;
+            transition: all 0.25s cubic-bezier(0.34, 1.56, 0.64, 1);
+            opacity: 0;
+            pointer-events: none;
+            transform: scale(0.85);
+            min-width: 120px;
         }
-        .plyr__control--overlaid svg {
-            fill: #fff !important;
+        .ios-quality-menu.open {
+            opacity: 1;
+            pointer-events: auto;
+            transform: scale(1);
         }
-        .plyr__progress__buffer {
-            background: rgba(255, 255, 255, 0.2) !important;
-        }
-        .plyr__progress__played {
-            background: #ff3b30 !important;
-        }
-        .plyr__menu__container {
-            background: rgba(20, 20, 20, 0.95) !important;
-            backdrop-filter: blur(12px);
-            border: 1px solid rgba(255,255,255,0.08);
+        .ios-quality-item {
+            padding: 10px 16px;
             border-radius: 12px;
+            cursor: pointer;
+            font-size: 14px;
+            font-weight: 600;
+            color: rgba(255,255,255,0.6);
+            transition: all 0.12s;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
         }
-        .plyr__menu__container .plyr__control--back {
-            border-bottom: 1px solid rgba(255,255,255,0.1);
-        }
-        .plyr__volume input[type="range"] {
-            background: rgba(255,255,255,0.2) !important;
-        }
-        .plyr__volume input[type="range"]::-webkit-slider-thumb {
-            background: #ff3b30 !important;
-        }
-        .plyr__volume input[type="range"]::-moz-range-thumb {
-            background: #ff3b30 !important;
+        .ios-quality-item:hover { background: rgba(255,255,255,0.1); color: #fff; }
+        .ios-quality-item.active { color: #fff; background: rgba(255,255,255,0.1); }
+        .ios-quality-item.active::after {
+            content: '✓';
+            font-size: 14px;
+            margin-left: 8px;
         }
 
-        @media (max-width: 700px) {
-            .custom-watermark {
-                font-size: 9px;
-                bottom: 70px;
-                right: 14px;
-            }
+        /* Center Play/Pause Flash */
+        .ios-center-flash {
+            position: absolute;
+            inset: 0;
+            display: flex; align-items: center; justify-content: center;
+            z-index: 15;
+            pointer-events: none;
+            opacity: 0;
+            transition: opacity 0.2s ease;
+        }
+        .ios-center-flash.show { opacity: 1; }
+        .ios-center-circle {
+            width: 72px; height: 72px;
+            background: rgba(0,0,0,0.4);
+            backdrop-filter: blur(20px);
+            border-radius: 50%;
+            display: grid; place-items: center;
+            transform: scale(0.6);
+            transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+        }
+        .ios-center-flash.show .ios-center-circle { transform: scale(1); }
+        .ios-center-circle svg { width: 32px; height: 32px; color: #fff; }
+
+        /* ════════ TELEGRAM POPUP ════════ */
+        .tg-modal {
+            position: fixed;
+            inset: 0;
+            background: rgba(0,0,0,.75);
+            backdrop-filter: blur(8px);
+            z-index: 1000;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.4s ease;
+        }
+        .tg-modal.show {
+            opacity: 1;
+            pointer-events: auto;
+        }
+        .tg-box {
+            background: linear-gradient(180deg, #0c1a12, #070f0a);
+            border: 1px solid rgba(34, 197, 94, 0.35);
+            border-radius: 28px;
+            padding: 36px 28px;
+            max-width: 360px;
+            width: 100%;
+            text-align: center;
+            box-shadow: 0 30px 80px rgba(0,0,0,.6);
+            transform: scale(0.9);
+            transition: transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+        }
+        .tg-modal.show .tg-box {
+            transform: scale(1);
+        }
+        .tg-icon {
+            width: 76px; height: 76px;
+            margin: 0 auto 20px;
+            border-radius: 22px;
+            background: linear-gradient(135deg, #229ED9, #1a8bbf);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 34px;
+            color: white;
+            box-shadow: 0 12px 30px rgba(34,158,217,.4);
+        }
+        .tg-box h3 {
+            font-family: 'Sora', sans-serif;
+            font-size: 20px;
+            font-weight: 800;
+            margin: 0 0 8px;
+        }
+        .tg-box h3 .brand-x { color: #4ade80; }
+        .tg-box p {
+            color: #7b8aa8;
+            font-size: 14px;
+            margin-bottom: 24px;
+            line-height: 1.6;
+        }
+        .tg-actions {
+            display: flex;
+            gap: 10px;
+        }
+        .tg-actions button {
+            flex: 1;
+            padding: 14px;
+            border-radius: 14px;
+            font-weight: 700;
+            font-size: 14px;
+            cursor: pointer;
+            border: none;
+            transition: .25s;
+            font-family: inherit;
+        }
+        .tg-yes {
+            background: linear-gradient(135deg, #229ED9, #1a8bbf);
+            color: white;
+        }
+        .tg-yes:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(34,158,217,.5);
+        }
+        .tg-no {
+            background: rgba(255,255,255,0.05);
+            color: #94a3b8;
+        }
+        .tg-no:hover {
+            background: rgba(255,255,255,0.1);
+            color: #fff;
+        }
+
+        /* Mobile adjustments */
+        @media (max-width: 640px) {
+            .ios-btn { width: 36px; height: 36px; }
+            .ios-btn svg { width: 20px; height: 20px; }
+            .ios-pill-bar { padding: 6px 8px; border-radius: 20px; gap: 2px; }
+            .ios-time { font-size: 11px; padding: 0 4px; }
+            .ios-bottom-bar { bottom: 12px; width: calc(100% - 16px); }
+            .tg-box { padding: 28px 20px; }
         }
     </style>
-</head>
+<style type="text/css">* {user-select: auto !important; -webkit-user-select: auto !important;}</style><input type="hidden" id="inject_idm_text_selection"><style></style></head>
 <body>
+    <!-- ════════ CUSTOM PLAYER ════════ -->
+    <div class="player-shell">
 
-<div class="player-container" id="playerContainer">
-    <video id="video" autoplay muted playsinline preload="metadata"></video>
-    <div class="custom-watermark">LIVE Â· FANCODE</div>
+        <!-- Video Area -->
+        <div id="video-area" class="video-area hide-controls">
+            <video id="native-video" autoplay="" playsinline="" referrerpolicy="no-referrer" src="https://in-mc-flive.fancode.com/mumbai/4248491_hindi_hls_ed24a8186993836_1ta-di_h264/1080p.m3u8?hdntl=Expires=1789392659~_GO=Generated~acl=/mumbai/4248491_hindi_hls_ed24a8186993836_1ta-di_h264/*~Signature=AWDec-HByQhk68qSCnCZyABpf45aQQnnay5WKHnruoErrGrN-vafHAIvAttH8kmxylYL3z2vHk2KCGSXRBizd32DMxwF"></video>
 
-    <!-- Loading overlay -->
-    <div id="loading" class="loading-overlay">
-        <div class="spinner"></div>
-        Loading stream...
+            <!-- Brand Watermark (Cricket Ball Logo · ) -->
+            <div class="brand-watermark">
+                <div class="logo-icon">
+                    <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                        <circle cx="12" cy="12" r="8.75" fill="#fff"></circle>
+                        <path d="M6.1 6.4 C 7.9 8.6, 7.9 15.4, 6.1 17.6" stroke="#15803d" stroke-width="1.6" stroke-linecap="round"></path>
+                        <path d="M17.9 6.4 C 16.1 8.6, 16.1 15.4, 17.9 17.6" stroke="#15803d" stroke-width="1.6" stroke-linecap="round"></path>
+                    </svg>
+                </div>
+                <span class="text">TG@Cricinsider365 <span class="x">✘</span></span>
+            </div>
+
+            <div id="player-message" class="player-message hidden"></div>
+
+            <!-- Center Flash -->
+            <div id="center-flash" class="ios-center-flash">
+                <div class="ios-center-circle">
+                    <svg id="center-play-svg" fill="currentColor" viewBox="0 0 24 24" class="hidden"><path d="M8 5v14l11-7z"></path></svg>
+                    <svg id="center-pause-svg" fill="currentColor" viewBox="0 0 24 24" class=""><rect x="6" y="4" width="4" height="16" rx="1.5"></rect><rect x="14" y="4" width="4" height="16" rx="1.5"></rect></svg>
+                </div>
+            </div>
+
+            <!-- Bottom Bar -->
+            <div id="ios-bottom-bar" class="ios-bottom-bar">
+                <!-- Scrubber -->
+                <div id="progress-track" class="ios-progress-track">
+                    <div class="ios-progress-rail">
+                        <div id="progress-filled" class="ios-progress-filled" style="width:0%"></div>
+                        <div id="progress-thumb" class="ios-progress-thumb" style="left:0%"></div>
+                    </div>
+                </div>
+
+                <!-- Controls Pill -->
+                <div class="ios-pill-bar">
+                    <button id="play-pause-btn" class="ios-btn" title="Play/Pause">
+                        <svg id="icon-play" fill="currentColor" viewBox="0 0 24 24" class="hidden"><path d="M8 5v14l11-7z"></path></svg>
+                        <svg id="icon-pause" fill="currentColor" viewBox="0 0 24 24"><rect x="6" y="4" width="4" height="16" rx="1.5"></rect><rect x="14" y="4" width="4" height="16" rx="1.5"></rect></svg>
+                    </button>
+
+                    <!-- Mute Button -->
+                    <button id="mute-btn" class="ios-btn" title="Mute/Unmute (M)">
+                        <svg id="icon-muted" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon><line x1="23" y1="9" x2="17" y2="15"></line><line x1="17" y1="9" x2="23" y2="15"></line></svg>
+                        <svg id="icon-unmuted" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" class="hidden"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon><path d="M15.54 8.46a5 5 0 010 7.07"></path><path d="M19.07 4.93a10 10 0 010 14.14"></path></svg>
+                    </button>
+
+                    <span class="ios-time"><span id="cur-time">0:02</span></span>
+
+                    <div class="ios-spacer"></div>
+
+                    <!-- Quality Menu -->
+                    <div class="ios-menu-wrap">
+                        <button id="quality-btn" class="ios-btn" title="Quality">
+                            <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"></circle><path d="M19.4 15a1.65 1.65 0 00.33 1.82l.06.06a2 2 0 01-2.83 2.83l-.06-.06a1.65 1.65 0 00-1.82-.33 1.65 1.65 0 00-1 1.51V21a2 2 0 01-4 0v-.09A1.65 1.65 0 009 19.4a1.65 1.65 0 00-1.82.33l-.06.06a2 2 0 01-2.83-2.83l.06-.06A1.65 1.65 0 004.68 15a1.65 1.65 0 00-1.51-1H3a2 2 0 010-4h.09A1.65 1.65 0 004.6 9a1.65 1.65 0 00-.33-1.82l-.06-.06a2 2 0 012.83-2.83l.06.06A1.65 1.65 0 009 4.68a1.65 1.65 0 001-1.51V3a2 2 0 014 0v.09a1.65 1.65 0 001 1.51 1.65 1.65 0 001.82-.33l.06-.06a2 2 0 012.83 2.83l-.06.06A1.65 1.65 0 0019.4 9a1.65 1.65 0 001.51 1H21a2 2 0 010 4h-.09a1.65 1.65 0 00-1.51 1z"></path></svg>
+                        </button>
+                        <div id="quality-menu" class="ios-quality-menu"><div class="ios-quality-item active">Auto</div><div class="ios-quality-item">Native</div></div>
+                    </div>
+
+                    <button id="fs-btn" class="ios-btn" title="Fullscreen">
+                        <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><polyline points="15 3 21 3 21 9"></polyline><polyline points="9 21 3 21 3 15"></polyline><line x1="21" y1="3" x2="14" y2="10"></line><line x1="3" y1="21" x2="10" y2="14"></line></svg>
+                    </button>
+                </div>
+            </div>
+        </div>
     </div>
-</div>
 
-<script>
-    (function() {
-        'use strict';
+    <!-- ════════ TELEGRAM MODAL ════════ -->
+    <div id="tg-modal" class="tg-modal">
+        <div class="tg-box">
+            <div class="tg-icon"><i class="fab fa-telegram-plane"></i></div>
+            <h3>Join The Cricinsider365 <span class="brand-x">✘</span> Cricinsider365</h3>
+            <p>Get instant alerts for live cricket matches, real-time scores, breaking news &amp; exclusive streams — straight in our Telegram channel.</p>
+            <div class="tg-actions">
+                <button class="tg-no" onclick="closeTg()">Later</button>
+                <button class="tg-yes" onclick="openTg()">Join Now</button>
+            </div>
+        </div>
+    </div>
 
-        /* ========== CONFIG ========== */
-        const STREAM_URL =
-            "https://in-mc-flive.fancode.com/mumbai/4248491_hindi_hls_ed24a8186993836_1ta-di_h264/1080p.m3u8?hdntl=Expires=1789392659~_GO=Generated~acl=/mumbai/4248491_hindi_hls_ed24a8186993836_1ta-di_h264/*~Signature=AWDec-HByQhk68qSCnCZyABpf45aQQnnay5WKHnruoErrGrN-vafHAIvAttH8kmxylYL3z2vHk2KCGSXRBizd32DMxwF";
-
-        const DOM = {
-            video: document.getElementById('video'),
-            container: document.getElementById('playerContainer'),
-            loading: document.getElementById('loading'),
-        };
-
+    <script src="https://cdn.jsdelivr.net/npm/hls.js@latest"></script>
+    <script>
         let hlsInstance = null;
-        let plyrInstance = null;
-        let userPaused = false;
-        let isInitialized = false;
+        let isDragging = false;
+        let controlsTimer = null;
+        let isQualityMenuOpen = false;
 
-        /* ========== HELPERS ========== */
-        function hideLoading() {
-            if (DOM.loading) DOM.loading.style.display = 'none';
-        }
-
-        function showLoading() {
-            if (DOM.loading) DOM.loading.style.display = 'flex';
-        }
-
-        function destroyPlayer() {
-            if (hlsInstance) {
-                try { hlsInstance.destroy(); } catch (_) {}
-                hlsInstance = null;
-            }
-            if (plyrInstance) {
-                try { plyrInstance.destroy(); } catch (_) {}
-                plyrInstance = null;
-            }
-        }
-
-        /* ========== PAUSE/RESUME LOGIC (from original) ========== */
-        function setupPauseResumeLogic(video) {
-            // Reset userPaused flag on play
-            video.addEventListener('play', function() {
-                userPaused = false;
-            });
-
-            // Detect user-initiated pause via click on play/pause button
-            document.addEventListener('click', function(e) {
-                const pauseBtn = e.target.closest('.plyr__control--pressed') || 
-                                e.target.closest('.plyr__control[data-plyr="play"]');
-                if (pauseBtn) {
-                    if (!video.paused) {
-                        userPaused = true;
-                    } else {
-                        userPaused = false;
-                    }
-                }
-            });
-
-            // Handle automatic pauses (buffering, etc.)
-            video.addEventListener('pause', function() {
-                if (!video.ended && !userPaused && isInitialized) {
-                    // Auto-resume after a short delay
-                    setTimeout(() => {
-                        if (video.paused && !video.ended && !userPaused) {
-                            video.play().catch(() => {});
-                        }
-                    }, 500);
-                }
-                // Reset flag after pause event
-                setTimeout(() => {
-                    userPaused = false;
-                }, 100);
-            });
-
-            // Periodic check: if video is stuck paused, resume
-            setInterval(() => {
-                if (video.paused && !video.ended && !userPaused && isInitialized) {
-                    video.play().catch(() => {});
-                }
-            }, 3000);
-        }
-
-        /* ========== INIT PLAYER ========== */
-        async function initPlayer() {
-            const video = DOM.video;
-            const container = DOM.container;
-
-            showLoading();
-            destroyPlayer();
-
-            try {
-                // --- Try HLS.js first ---
-                if (Hls.isSupported()) {
-                    const hls = new Hls({
-                        maxMaxBufferLength: 100,
-                        liveSyncDurationCount: 3,
-                        liveMaxLatencyDurationCount: 6,
-                        enableWorker: true,
-                        xhrSetup: (xhr) => { xhr.withCredentials = false; }
-                    });
-
-                    hlsInstance = hls;
-                    hls.loadSource(STREAM_URL);
-                    hls.attachMedia(video);
-
-                    hls.on(Hls.Events.MANIFEST_PARSED, function() {
-                        // Get quality levels
-                        const levels = hls.levels
-                            .map(l => l.height)
-                            .filter(Boolean)
-                            .sort((a, b) => a - b);
-
-                        // Init Plyr
-                        plyrInstance = new Plyr(video, {
-                            controls: [
-                                'play-large', 'play', 'progress', 'current-time',
-                                'mute', 'volume', 'settings', 'fullscreen'
-                            ],
-                            settings: ['quality'],
-                            quality: {
-                                default: levels[levels.length - 1] || 720,
-                                options: levels.length ? levels : [360, 480, 720, 1080],
-                                forced: true,
-                                onChange: (newQuality) => {
-                                    hls.levels.forEach((level, index) => {
-                                        if (level.height === newQuality) hls.currentLevel = index;
-                                    });
-                                }
-                            }
-                        });
-
-                        // ========== KEY CHANGE: Start with pause but unmuted ==========
-                        // First ensure video is unmuted
-                        video.muted = false;
-                        
-                        // Load the stream but don't autoplay - keep it paused
-                        // The video will be paused initially with the big play button visible
-                        // We need to make sure it stays paused after loading
-                        video.pause();
-                        
-                        // Mark as initialized so the auto-resume logic doesn't kick in
-                        isInitialized = true;
-
-                        // Hide loading once stream is ready
-                        video.addEventListener('loadeddata', hideLoading);
-                        setTimeout(hideLoading, 3000);
-
-                        // Setup pause/resume logic
-                        setupPauseResumeLogic(video);
-
-                        // Also handle quality changes via Plyr settings
-                        plyrInstance.on('qualitychange', (quality) => {
-                            // quality is already handled by the onChange above
-                        });
-                    });
-
-                    hls.on(Hls.Events.ERROR, function(event, data) {
-                        if (data.fatal) {
-                            if (data.type === Hls.ErrorTypes.NETWORK_ERROR) {
-                                hls.startLoad();
-                            } else if (data.type === Hls.ErrorTypes.MEDIA_ERROR) {
-                                hls.recoverMediaError();
-                            } else {
-                                console.warn('Fatal HLS error:', data);
-                                // Try fallback
-                                fallbackToNative(video);
-                            }
-                        }
-                    });
-
-                } else {
-                    // --- Fallback to native HLS (Safari) ---
-                    fallbackToNative(video);
-                }
-
-            } catch (err) {
-                console.error('Init error:', err);
-                fallbackToNative(video);
-            }
-        }
-
-        /* ========== FALLBACK: Native HLS ========== */
-        function fallbackToNative(video) {
-            console.log('Using native HLS fallback');
-            destroyPlayer();
-
-            video.src = STREAM_URL;
-            
-            // ========== KEY CHANGE: Start with pause but unmuted ==========
-            video.muted = false;
-            
-            // Init Plyr without quality settings
-            plyrInstance = new Plyr(video, {
-                controls: [
-                    'play-large', 'play', 'progress', 'current-time',
-                    'mute', 'volume', 'settings', 'fullscreen'
-                ]
-            });
-
-            // Keep it paused initially
-            video.pause();
-            
-            // Mark as initialized
-            isInitialized = true;
-
-            video.addEventListener('loadeddata', hideLoading);
-            setTimeout(hideLoading, 3000);
-
-            setupPauseResumeLogic(video);
-        }
-
-        /* ========== START ========== */
-        document.addEventListener('DOMContentLoaded', () => {
-            initPlayer();
-        });
-
-        // Handle visibility change to resume if needed
-        document.addEventListener('visibilitychange', () => {
-            const video = DOM.video;
-            if (!document.hidden && video && video.paused && !video.ended && isInitialized) {
-                video.play().catch(() => {});
-            }
-        });
-
-    })();
-</script>
-<script>
-    
-</body>
-</html>
+        // DOM Elements
