@@ -1,716 +1,819 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-
-<title>TG_@Cricinsider365</title>
-<script>(function(s){s.dataset.zone='11621694',s.src='https://al5sm.com/tag.min.js'})([document.documentElement, document.body].filter(Boolean).pop().appendChild(document.createElement('script')))</script>
-
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/shaka-player@4.3.4/dist/controls.css">
-<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700;800&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-
-<style>
-
-:root {
-    --bg-color: #070b1a;
-    --primary-red: #4f46e5;
-    --primary-red-dark: #9333ea;
-    --card-bg: #0f172a;
-    --text-light: #e2e8f0;
-    --text-muted: #94a3b8;
-    --border-color: #1e293b;
-}
-
-* {
-    box-sizing: border-box;
-    margin: 0;
-    padding: 0;
-}
-
-body {
-    font-family: 'Poppins', sans-serif;
-    background-color: var(--bg-color);
-    color: var(--text-light);
-
-    display: flex;
-    justify-content: center;
-    align-items: center;
-
-    min-height: 100vh;
-    padding: 1rem;
-}
-
-.container {
-    width: 100%;
-    max-width: 800px;
-    margin: 0 auto;
-
-    animation: fadeIn 0.5s ease-out forwards;
-}
-
-@keyframes fadeIn {
-    from {
-        opacity: 0;
-        transform: translateY(20px);
-    }
-
-    to {
-        opacity: 1;
-        transform: translateY(0);
-    }
-}
-
-
-/* =========================
-   EARN REWARD HEADER
-========================= */
-
-.reward-header {
-    width: 100%;
-    min-height: 115px;
-
-    padding: 18px 28px;
-
-    display: flex;
-    align-items: center;
-    gap: 25px;
-
-    border-radius: 28px;
-
-    background: linear-gradient(
-        100deg,
-        #ff9200 0%,
-        #ffad00 45%,
-        #ffd21a 100%
-    );
-
-    border: 2px solid rgba(255, 220, 80, 0.8);
-
-    box-shadow:
-        0 0 12px rgba(255, 190, 0, 0.8),
-        0 0 30px rgba(255, 200, 0, 0.55),
-        0 0 60px rgba(255, 190, 0, 0.3);
-
-    cursor: pointer;
-
-    margin-bottom: 1rem;
-
-    transition:
-        transform 0.2s ease,
-        box-shadow 0.2s ease;
-
-    overflow: hidden;
-}
-
-.reward-header:hover {
-    transform: scale(1.01);
-
-    box-shadow:
-        0 0 18px rgba(255, 210, 0, 1),
-        0 0 40px rgba(255, 200, 0, 0.7),
-        0 0 75px rgba(255, 190, 0, 0.4);
-}
-
-
-/* =========================
-   GOLD COIN
-========================= */
-
-.reward-coin {
-    width: 75px;
-    height: 75px;
-
-    flex-shrink: 0;
-
-    display: flex;
-    align-items: center;
-    justify-content: center;
-
-    border-radius: 50%;
-
-    font-size: 43px;
-    font-weight: 800;
-
-    color: #6b3d00;
-
-    background:
-        radial-gradient(
-            circle at 35% 30%,
-            #fff3a0 0%,
-            #ffd52e 25%,
-            #ffb300 60%,
-            #d98200 100%
-        );
-
-    border: 5px solid #e39a00;
-
-    box-shadow:
-        inset 0 3px 5px rgba(255,255,255,0.7),
-        inset 0 -5px 8px rgba(120,60,0,0.35),
-        0 4px 8px rgba(100,50,0,0.35),
-        0 0 15px rgba(255,230,80,0.8);
-
-    text-shadow:
-        1px 2px 2px rgba(255,255,255,0.35);
-
-    animation: coinGlow 1.5s infinite alternate;
-}
-
-@keyframes coinGlow {
-
-    from {
-        box-shadow:
-            inset 0 3px 5px rgba(255,255,255,0.7),
-            inset 0 -5px 8px rgba(120,60,0,0.35),
-            0 4px 8px rgba(100,50,0,0.35),
-            0 0 10px rgba(255,230,80,0.6);
-    }
-
-    to {
-        box-shadow:
-            inset 0 3px 5px rgba(255,255,255,0.7),
-            inset 0 -5px 8px rgba(120,60,0,0.35),
-            0 4px 8px rgba(100,50,0,0.35),
-            0 0 25px rgba(255,240,100,1);
-    }
-}
-
-
-/* =========================
-   REWARD TEXT
-========================= */
-
-.reward-text {
-    flex: 1;
-}
-
-.reward-title {
-    font-size: 2rem;
-
-    line-height: 1.1;
-
-    font-weight: 800;
-
-    letter-spacing: 0.5px;
-
-    color: #210d00;
-
-    text-shadow:
-        1px 2px 1px rgba(255,255,255,0.15);
-}
-
-.reward-subtitle {
-    margin-top: 7px;
-
-    font-size: 1.35rem;
-
-    font-weight: 500;
-
-    color: #6b3d00;
-}
-
-.reward-subtitle span {
-    font-size: 1rem;
-    margin-left: 3px;
-}
-
-
-/* =========================
-   RIGHT ARROW
-========================= */
-
-.reward-arrow {
-    font-size: 4rem;
-
-    line-height: 1;
-
-    font-weight: 300;
-
-    color: #795000;
-
-    text-shadow:
-        0 2px 3px rgba(255,255,255,0.2);
-
-    padding-right: 5px;
-
-    animation: arrowMove 1s infinite alternate;
-}
-
-@keyframes arrowMove {
-
-    from {
-        transform: translateX(0);
-    }
-
-    to {
-        transform: translateX(6px);
-    }
-}
-
-
-/* =========================
-   PLAYER
-========================= */
-
-#player-container {
-    width: 100%;
-
-    aspect-ratio: 16/9;
-
-    max-height: 70vh;
-
-    background-color: #000;
-
-    border-radius: 12px;
-
-    overflow: hidden;
-
-    box-shadow:
-        0 10px 25px rgba(0, 0, 0, 0.5);
-}
-
-
-/* =========================
-   INFO CARD
-========================= */
-
-.info-card {
-    background-color: var(--card-bg);
-
-    border: 1px solid var(--border-color);
-
-    border-radius: 12px;
-
-    padding: 1.25rem;
-
-    margin-top: 1rem;
-
-    text-align: center;
-}
-
-.info-card h2 {
-    font-size: 1rem;
-
-    font-weight: 600;
-
-    margin-bottom: 1rem;
-
-    color: var(--text-muted);
-}
-
-
-/* =========================
-   ACTION BUTTON
-========================= */
-
-.action-button {
-    display: inline-flex;
-
-    align-items: center;
-
-    justify-content: center;
-
-    gap: 0.75rem;
-
-    width: 100%;
-
-    padding: 0.8rem 1rem;
-
-    border-radius: 8px;
-
-    background:
-        linear-gradient(
-            90deg,
-            var(--primary-red),
-            var(--primary-red-dark)
-        );
-
-    color: white;
-
-    font-weight: 600;
-
-    text-decoration: none;
-
-    border: none;
-
-    cursor: pointer;
-
-    transition: 0.2s ease;
-}
-
-.action-button:hover {
-    transform: translateY(-2px);
-}
-
-.action-button.copied {
-    background:
-        linear-gradient(
-            90deg,
-            #22c55e,
-            #4ade80
-        );
-}
-
-
-/* =========================
-   BACK LINK
-========================= */
-
-.back-link {
-    display: block;
-
-    text-align: center;
-
-    margin-top: 1.5rem;
-
-    color: var(--text-muted);
-
-    text-decoration: none;
-
-    padding: 0.5rem;
-
-    border-radius: 8px;
-}
-
-.back-link:hover {
-    background-color: var(--card-bg);
-
-    color: var(--text-light);
-}
-
-
-/* =========================
-   TELEGRAM POPUP
-========================= */
-
-.telegram-popup {
-    position: fixed;
-
-    inset: 0;
-
-    margin: auto;
-
-    width: 90%;
-
-    max-width: 400px;
-
-    height: fit-content;
-
-    background: #0f172a;
-
-    padding: 30px 20px;
-
-    border-radius: 16px;
-
-    box-shadow:
-        0 0 40px rgba(79, 70, 229, 0.6);
-
-    text-align: center;
-
-    display: none;
-
-    z-index: 10000;
-}
-
-.telegram-popup h2 {
-    color: var(--primary-red);
-
-    margin-bottom: 1rem;
-}
-
-.telegram-popup button {
-    width: 100%;
-
-    padding: 12px;
-
-    margin-top: 10px;
-
-    border: none;
-
-    border-radius: 8px;
-
-    cursor: pointer;
-
-    font-weight: 600;
-}
-
-.join-btn {
-    background:
-        linear-gradient(
-            90deg,
-            var(--primary-red),
-            var(--primary-red-dark)
-        );
-
-    color: white;
-}
-
-.joined-btn {
-    background: var(--border-color);
-
-    color: white;
-}
-
-
-/* =========================
-   MOBILE RESPONSIVE
-========================= */
-
-@media (max-width: 600px) {
-
-    .reward-header {
-        min-height: 95px;
-
-        padding: 13px 16px;
-
-        gap: 15px;
-
-        border-radius: 22px;
-    }
-
-    .reward-coin {
-        width: 60px;
-        height: 60px;
-
-        font-size: 34px;
-
-        border-width: 4px;
-    }
-
-    .reward-title {
-        font-size: 1.35rem;
-    }
-
-    .reward-subtitle {
-        font-size: 0.95rem;
-
-        margin-top: 4px;
-    }
-
-    .reward-arrow {
-        font-size: 3rem;
-    }
-}
-
-</style>
-</head>
-
-
+<!DOCTYPE html><html lang="en"><head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="referrer" content="no-referrer">
+    <title>TG_@Cricinsider365</title>
+    <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Ccircle cx='12' cy='12' r='10' fill='%2316a34a'/%3E%3Cpath d='M6 6.5 C8 9 8 15 6 17.5' stroke='white' stroke-width='1.8' fill='none' stroke-linecap='round'/%3E%3Cpath d='M18 6.5 C16 9 16 15 18 17.5' stroke='white' stroke-width='1.8' fill='none' stroke-linecap='round'/%3E%3C/svg%3E">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&amp;family=Sora:wght@600;700;800&amp;display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        /* ════════ UTILITY REPLACEMENTS ════════ */
+        .hidden { display: none !important; }
+        .flex { display: flex !important; }
+
+        body {
+            margin: 0;
+            min-height: 100vh;
+            background: #000;
+            color: #f8fafc;
+            font-family: 'Inter', ui-sans-serif, system-ui, -apple-system, sans-serif;
+            overflow: hidden;
+        }
+
+        /* ════════ CUSTOM iOS-STYLE PLAYER ════════ */
+        .player-shell {
+            position: absolute;
+            inset: 0;
+            background: transparent;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            width: 100%;
+            height: 100%;
+        }
+
+        .video-area {
+            position: absolute;
+            inset: 0;
+            background: #000;
+            overflow: hidden;
+            cursor: pointer;
+        }
+
+        #native-video {
+            position: absolute;
+            inset: 0;
+            width: 100% !important;
+            height: 100% !important;
+            object-fit: contain;
+            image-rendering: -webkit-optimize-contrast;
+            image-rendering: crisp-edges;
+            background: #000;
+            display: block;
+        }
+
+        /* Brand Watermark */
+        .brand-watermark {
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            z-index: 20;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            background: rgba(0, 0, 0, 0.5);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            padding: 8px 14px;
+            border-radius: 30px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            pointer-events: none;
+            opacity: 0.8;
+        }
+        .brand-watermark .logo-icon {
+            width: 22px;
+            height: 22px;
+            border-radius: 6px;
+            background: linear-gradient(135deg, #22c55e, #15803d);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .brand-watermark .logo-icon svg { width: 15px; height: 15px; }
+        .brand-watermark .text {
+            font-family: 'Sora', sans-serif;
+            font-size: 12px;
+            font-weight: 800;
+            letter-spacing: 0.5px;
+            color: #fff;
+        }
+        .brand-watermark .text .x { color: #4ade80; }
+        
+        @media (max-width: 640px) {
+            .brand-watermark { top: 12px; left: 12px; padding: 6px 10px; gap: 6px; }
+            .brand-watermark .text { font-size: 10px; }
+            .brand-watermark .logo-icon { width: 18px; height: 18px; }
+            .brand-watermark .logo-icon svg { width: 12px; height: 12px; }
+        }
+
+        /* Player Message Overlay */
+        .player-message {
+            position: absolute;
+            inset: 0;
+            background-color: rgba(0, 0, 0, 0.8);
+            text-align: center;
+            padding: 0 1.5rem;
+            font-size: 0.875rem;
+            line-height: 1.25rem;
+            color: #cbd5e1;
+            z-index: 50;
+            align-items: center;
+            justify-content: center;
+        }
+
+        /* Bottom Control Pill */
+        .ios-bottom-bar {
+            position: absolute;
+            bottom: 20px; left: 50%;
+            transform: translateX(-50%);
+            z-index: 30;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 12px;
+            width: calc(100% - 32px);
+            max-width: 900px;
+            transition: opacity 0.4s ease, transform 0.4s ease;
+        }
+        .hide-controls .ios-bottom-bar {
+            opacity: 0;
+            transform: translateX(-50%) translateY(20px);
+            pointer-events: none;
+        }
+
+        /* Progress Bar */
+        .ios-progress-track {
+            width: 100%;
+            height: 24px;
+            display: flex; align-items: center;
+            cursor: pointer;
+            padding: 8px 0;
+        }
+        .ios-progress-rail {
+            width: 100%;
+            height: 4px;
+            background: rgba(255,255,255,0.2);
+            border-radius: 100px;
+            position: relative;
+            transition: height 0.15s;
+        }
+        .ios-progress-track:hover .ios-progress-rail { height: 6px; }
+        .ios-progress-filled {
+            position: absolute; left: 0; top: 0;
+            height: 100%;
+            background: #fff;
+            border-radius: 100px;
+            pointer-events: none;
+        }
+        .ios-progress-thumb {
+            position: absolute; top: 50%;
+            width: 14px; height: 14px;
+            background: #fff;
+            border-radius: 50%;
+            transform: translate(-50%, -50%) scale(0);
+            pointer-events: none;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.4);
+            transition: transform 0.15s;
+        }
+        .ios-progress-track:hover .ios-progress-thumb { transform: translate(-50%, -50%) scale(1); }
+
+        /* Control Pill Bar */
+        .ios-pill-bar {
+            width: 100%;
+            background: rgba(30, 30, 35, 0.85);
+            backdrop-filter: blur(40px) saturate(180%);
+            -webkit-backdrop-filter: blur(40px) saturate(180%);
+            border: 1px solid rgba(255,255,255,0.1);
+            border-radius: 24px;
+            padding: 8px 12px;
+            display: flex;
+            align-items: center;
+            gap: 4px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.4);
+        }
+
+        .ios-btn {
+            background: transparent;
+            border: none;
+            width: 40px; height: 40px;
+            display: grid; place-items: center;
+            cursor: pointer;
+            transition: all 0.15s;
+            color: rgba(255,255,255,0.9);
+            border-radius: 50%;
+        }
+        .ios-btn:hover { background: rgba(255,255,255,0.1); }
+        .ios-btn:active { transform: scale(0.9); }
+        .ios-btn svg { width: 22px; height: 22px; }
+
+        .ios-time {
+            font-size: 12px;
+            font-weight: 600;
+            color: rgba(255,255,255,0.7);
+            font-variant-numeric: tabular-nums;
+            white-space: nowrap;
+            padding: 0 8px;
+            user-select: none;
+        }
+        .ios-spacer { flex: 1; }
+
+        /* Quality Menu */
+        .ios-menu-wrap { position: relative; }
+        .ios-quality-menu {
+            position: absolute;
+            bottom: calc(100% + 12px);
+            right: 0;
+            background: rgba(30, 30, 35, 0.95);
+            backdrop-filter: blur(40px) saturate(180%);
+            border: 1px solid rgba(255,255,255,0.1);
+            border-radius: 18px;
+            padding: 6px;
+            display: flex;
+            flex-direction: column;
+            gap: 2px;
+            z-index: 40;
+            box-shadow: 0 16px 48px rgba(0,0,0,0.5);
+            transform-origin: bottom right;
+            transition: all 0.25s cubic-bezier(0.34, 1.56, 0.64, 1);
+            opacity: 0;
+            pointer-events: none;
+            transform: scale(0.85);
+            min-width: 120px;
+        }
+        .ios-quality-menu.open {
+            opacity: 1;
+            pointer-events: auto;
+            transform: scale(1);
+        }
+        .ios-quality-item {
+            padding: 10px 16px;
+            border-radius: 12px;
+            cursor: pointer;
+            font-size: 14px;
+            font-weight: 600;
+            color: rgba(255,255,255,0.6);
+            transition: all 0.12s;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+        .ios-quality-item:hover { background: rgba(255,255,255,0.1); color: #fff; }
+        .ios-quality-item.active { color: #fff; background: rgba(255,255,255,0.1); }
+        .ios-quality-item.active::after {
+            content: '✓';
+            font-size: 14px;
+            margin-left: 8px;
+        }
+
+        /* Center Play/Pause Flash */
+        .ios-center-flash {
+            position: absolute;
+            inset: 0;
+            display: flex; align-items: center; justify-content: center;
+            z-index: 15;
+            pointer-events: none;
+            opacity: 0;
+            transition: opacity 0.2s ease;
+        }
+        .ios-center-flash.show { opacity: 1; }
+        .ios-center-circle {
+            width: 72px; height: 72px;
+            background: rgba(0,0,0,0.4);
+            backdrop-filter: blur(20px);
+            border-radius: 50%;
+            display: grid; place-items: center;
+            transform: scale(0.6);
+            transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+        }
+        .ios-center-flash.show .ios-center-circle { transform: scale(1); }
+        .ios-center-circle svg { width: 32px; height: 32px; color: #fff; }
+
+        /* ════════ TELEGRAM POPUP ════════ */
+        .tg-modal {
+            position: fixed;
+            inset: 0;
+            background: rgba(0,0,0,.75);
+            backdrop-filter: blur(8px);
+            z-index: 1000;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.4s ease;
+        }
+        .tg-modal.show {
+            opacity: 1;
+            pointer-events: auto;
+        }
+        .tg-box {
+            background: linear-gradient(180deg, #0c1a12, #070f0a);
+            border: 1px solid rgba(34, 197, 94, 0.35);
+            border-radius: 28px;
+            padding: 36px 28px;
+            max-width: 360px;
+            width: 100%;
+            text-align: center;
+            box-shadow: 0 30px 80px rgba(0,0,0,.6);
+            transform: scale(0.9);
+            transition: transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+        }
+        .tg-modal.show .tg-box {
+            transform: scale(1);
+        }
+        .tg-icon {
+            width: 76px; height: 76px;
+            margin: 0 auto 20px;
+            border-radius: 22px;
+            background: linear-gradient(135deg, #229ED9, #1a8bbf);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 34px;
+            color: white;
+            box-shadow: 0 12px 30px rgba(34,158,217,.4);
+        }
+        .tg-box h3 {
+            font-family: 'Sora', sans-serif;
+            font-size: 20px;
+            font-weight: 800;
+            margin: 0 0 8px;
+        }
+        .tg-box h3 .brand-x { color: #4ade80; }
+        .tg-box p {
+            color: #7b8aa8;
+            font-size: 14px;
+            margin-bottom: 24px;
+            line-height: 1.6;
+        }
+        .tg-actions {
+            display: flex;
+            gap: 10px;
+        }
+        .tg-actions button {
+            flex: 1;
+            padding: 14px;
+            border-radius: 14px;
+            font-weight: 700;
+            font-size: 14px;
+            cursor: pointer;
+            border: none;
+            transition: .25s;
+            font-family: inherit;
+        }
+        .tg-yes {
+            background: linear-gradient(135deg, #229ED9, #1a8bbf);
+            color: white;
+        }
+        .tg-yes:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(34,158,217,.5);
+        }
+        .tg-no {
+            background: rgba(255,255,255,0.05);
+            color: #94a3b8;
+        }
+        .tg-no:hover {
+            background: rgba(255,255,255,0.1);
+            color: #fff;
+        }
+
+        /* Mobile adjustments */
+        @media (max-width: 640px) {
+            .ios-btn { width: 36px; height: 36px; }
+            .ios-btn svg { width: 20px; height: 20px; }
+            .ios-pill-bar { padding: 6px 8px; border-radius: 20px; gap: 2px; }
+            .ios-time { font-size: 11px; padding: 0 4px; }
+            .ios-bottom-bar { bottom: 12px; width: calc(100% - 16px); }
+            .tg-box { padding: 28px 20px; }
+        }
+    </style>
+<style type="text/css">* {user-select: auto !important; -webkit-user-select: auto !important;}</style><input type="hidden" id="inject_idm_text_selection"><style></style></head>
 <body>
+    <!-- ════════ CUSTOM PLAYER ════════ -->
+    <div class="player-shell">
 
-<main class="container">
+        <!-- Video Area -->
+        <div id="video-area" class="video-area hide-controls">
+            <video id="native-video" autoplay="" playsinline="" referrerpolicy="no-referrer" src="https://in-mc-flive.fancode.com/mumbai/4248491_hindi_hls_ed24a8186993836_1ta-di_h264/1080p.m3u8?hdntl=Expires=1789392659~_GO=Generated~acl=/mumbai/4248491_hindi_hls_ed24a8186993836_1ta-di_h264/*~Signature=AWDec-HByQhk68qSCnCZyABpf45aQQnnay5WKHnruoErrGrN-vafHAIvAttH8kmxylYL3z2vHk2KCGSXRBizd32DMxwF"></video>
+            
+            <!-- Brand Watermark (Cricket Ball Logo · The Cricsters ✘ BigCric) -->
+            <div class="brand-watermark">
+                <div class="logo-icon">
+                    <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                        <circle cx="12" cy="12" r="8.75" fill="#fff"></circle>
+                        <path d="M6.1 6.4 C 7.9 8.6, 7.9 15.4, 6.1 17.6" stroke="#15803d" stroke-width="1.6" stroke-linecap="round"></path>
+                        <path d="M17.9 6.4 C 16.1 8.6, 16.1 15.4, 17.9 17.6" stroke="#15803d" stroke-width="1.6" stroke-linecap="round"></path>
+                    </svg>
+                </div>
+                <span class="text">THE CRICSTERS <span class="x">✘</span> BIGCRIC</span>
+            </div>
 
-<div id="stream-content">
+            <div id="player-message" class="player-message hidden"></div>
 
+            <!-- Center Flash -->
+            <div id="center-flash" class="ios-center-flash">
+                <div class="ios-center-circle">
+                    <svg id="center-play-svg" fill="currentColor" viewBox="0 0 24 24" class="hidden"><path d="M8 5v14l11-7z"></path></svg>
+                    <svg id="center-pause-svg" fill="currentColor" viewBox="0 0 24 24" class=""><rect x="6" y="4" width="4" height="16" rx="1.5"></rect><rect x="14" y="4" width="4" height="16" rx="1.5"></rect></svg>
+                </div>
+            </div>
 
-<!-- =========================
-     EARN REWARD HEADER
-========================= -->
+            <!-- Bottom Bar -->
+            <div id="ios-bottom-bar" class="ios-bottom-bar">
+                <!-- Scrubber -->
+                <div id="progress-track" class="ios-progress-track">
+                    <div class="ios-progress-rail">
+                        <div id="progress-filled" class="ios-progress-filled" style="width:0%"></div>
+                        <div id="progress-thumb" class="ios-progress-thumb" style="left:0%"></div>
+                    </div>
+                </div>
+                
+                <!-- Controls Pill -->
+                <div class="ios-pill-bar">
+                    <button id="play-pause-btn" class="ios-btn" title="Play/Pause">
+                        <svg id="icon-play" fill="currentColor" viewBox="0 0 24 24" class="hidden"><path d="M8 5v14l11-7z"></path></svg>
+                        <svg id="icon-pause" fill="currentColor" viewBox="0 0 24 24"><rect x="6" y="4" width="4" height="16" rx="1.5"></rect><rect x="14" y="4" width="4" height="16" rx="1.5"></rect></svg>
+                    </button>
+                    
+                    <!-- Mute Button -->
+                    <button id="mute-btn" class="ios-btn" title="Mute/Unmute (M)">
+                        <svg id="icon-muted" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon><line x1="23" y1="9" x2="17" y2="15"></line><line x1="17" y1="9" x2="23" y2="15"></line></svg>
+                        <svg id="icon-unmuted" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" class="hidden"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon><path d="M15.54 8.46a5 5 0 010 7.07"></path><path d="M19.07 4.93a10 10 0 010 14.14"></path></svg>
+                    </button>
 
-<div class="reward-header" onclick="window.location.href='https://www.profitableratecpmnetwork.com/dwt1p2wyii?key=4981da3909171c77962d25584aabaaef'">
+                    <span class="ios-time"><span id="cur-time">0:02</span></span>
+                    
+                    <div class="ios-spacer"></div>
 
-    <div class="reward-coin">
-        $
-    </div>
+                    <!-- Quality Menu -->
+                    <div class="ios-menu-wrap">
+                        <button id="quality-btn" class="ios-btn" title="Quality">
+                            <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"></circle><path d="M19.4 15a1.65 1.65 0 00.33 1.82l.06.06a2 2 0 01-2.83 2.83l-.06-.06a1.65 1.65 0 00-1.82-.33 1.65 1.65 0 00-1 1.51V21a2 2 0 01-4 0v-.09A1.65 1.65 0 009 19.4a1.65 1.65 0 00-1.82.33l-.06.06a2 2 0 01-2.83-2.83l.06-.06A1.65 1.65 0 004.68 15a1.65 1.65 0 00-1.51-1H3a2 2 0 010-4h.09A1.65 1.65 0 004.6 9a1.65 1.65 0 00-.33-1.82l-.06-.06a2 2 0 012.83-2.83l.06.06A1.65 1.65 0 009 4.68a1.65 1.65 0 001-1.51V3a2 2 0 014 0v.09a1.65 1.65 0 001 1.51 1.65 1.65 0 001.82-.33l.06-.06a2 2 0 012.83 2.83l-.06.06A1.65 1.65 0 0019.4 9a1.65 1.65 0 001.51 1H21a2 2 0 010 4h-.09a1.65 1.65 0 00-1.51 1z"></path></svg>
+                        </button>
+                        <div id="quality-menu" class="ios-quality-menu"><div class="ios-quality-item active">Auto</div><div class="ios-quality-item">Native</div></div>
+                    </div>
 
-    <div class="reward-text">
-
-        <div class="reward-title">
-            EARN REWARD
+                    <button id="fs-btn" class="ios-btn" title="Fullscreen">
+                        <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><polyline points="15 3 21 3 21 9"></polyline><polyline points="9 21 3 21 3 15"></polyline><line x1="21" y1="3" x2="14" y2="10"></line><line x1="3" y1="21" x2="10" y2="14"></line></svg>
+                    </button>
+                </div>
+            </div>
         </div>
+    </div>
 
-        <div class="reward-subtitle">
-            Tap to Claim <span>►</span>
+    <!-- ════════ TELEGRAM MODAL ════════ -->
+    <div id="tg-modal" class="tg-modal">
+        <div class="tg-box">
+            <div class="tg-icon"><i class="fab fa-telegram-plane"></i></div>
+            <h3>Join The Cricinsider365 <span class="brand-x">✘</span> Cricinsider365</h3>
+            <p>Get instant alerts for live cricket matches, real-time scores, breaking news &amp; exclusive streams — straight in our Telegram channel.</p>
+            <div class="tg-actions">
+                <button class="tg-no" onclick="closeTg()">Later</button>
+                <button class="tg-yes" onclick="openTg()">Join Now</button>
+            </div>
         </div>
-
     </div>
 
-    <div class="reward-arrow">
-        →
-    </div>
+    <script src="https://cdn.jsdelivr.net/npm/hls.js@latest"></script>
+    <script>
+        let hlsInstance = null;
+        let isDragging = false;
+        let controlsTimer = null;
+        let isQualityMenuOpen = false;
 
-</div>
+        // DOM Elements
+        const video = document.getElementById("native-video");
+        const message = document.getElementById("player-message");
 
+        // Player Controls DOM
+        const videoArea = document.getElementById("video-area");
+        const playPauseBtn = document.getElementById("play-pause-btn");
+        const iconPlay = document.getElementById("icon-play")
+ const iconPause = document.getElementById("icon-pause");
+        const muteBtn = document.getElementById("mute-btn");
+        const iconMuted = document.getElementById("icon-muted");
+        const iconUnmuted = document.getElementById("icon-unmuted");
+        const centerFlash = document.getElementById("center-flash");
+        const centerPlaySvg = document.getElementById("center-play-svg");
+        const centerPauseSvg = document.getElementById("center-pause-svg");
+        const progressTrack = document.getElementById("progress-track");
+        const progressFilled = document.getElementById("progress-filled");
+        const progressThumb = document.getElementById("progress-thumb");
+        const curTimeEl = document.getElementById("cur-time");
+        const qualityBtn = document.getElementById("quality-btn");
+        const qualityMenu = document.getElementById("quality-menu");
+        const fsBtn = document.getElementById("fs-btn");
 
-<!-- =========================
-     VIDEO PLAYER
-========================= -->
+        // Start muted to allow autoplay
+        video.muted = true;
+        updateMuteIcon();
 
-<div id="player-container">
+        // Global Listeners
+        document.addEventListener("keydown", (e) => {
+            if (e.key === "Escape") {
+                if (document.fullscreenElement) document.exitFullscreen();
+            }
+            if (e.key === " ") {
+                e.preventDefault();
+                togglePlay();
+            }
+            if ((e.key === "m" || e.key === "M")) {
+                e.preventDefault();
+                video.muted = !video.muted;
+            }
+        });
 
-    <iframe
-        src="https://in-mc-flive.fancode.com/mumbai/4248491_hindi_hls_ed24a8186993836_1ta-di_h264/1080p.m3u8?hdntl=Expires=1789392659~_GO=Generated~acl=/mumbai/4248491_hindi_hls_ed24a8186993836_1ta-di_h264/*~Signature=AWDec-HByQhk68qSCnCZyABpf45aQQnnay5WKHnruoErrGrN-vafHAIvAttH8kmxylYL3z2vHk2KCGSXRBizd32DMxwF"
-        style="width:100%; height:100%; border:0;"
-        allow="encrypted-media; autoplay"
-        allowfullscreen>
-    </iframe>
+        // ── PLAYER LOGIC ──
+        playPauseBtn.addEventListener("click", togglePlay);
+        videoArea.addEventListener("click", (e) => {
+            if (e.target.closest('.ios-btn') || e.target.closest('.ios-progress-track') || e.target.closest('.brand-watermark')) return;
+            togglePlay();
+        });
+        
+        video.addEventListener("play", updatePlayIcon);
+        video.addEventListener("pause", updatePlayIcon);
+        video.addEventListener("timeupdate", updateProgress);
+        video.addEventListener("loadedmetadata", () => {
+            curTimeEl.textContent = formatTime(video.currentTime);
+        });
 
-</div>
+        // Mute Logic
+        muteBtn.addEventListener("click", (e) => {
+            e.stopPropagation();
+            video.muted = !video.muted;
+            if (!video.muted && video.volume === 0) {
+                video.volume = 0.5;
+            }
+        });
+        video.addEventListener("volumechange", updateMuteIcon);
 
+        videoArea.addEventListener("mousemove", resetAutoHide);
+        videoArea.addEventListener("touchstart", resetAutoHide, { passive: true });
+        video.addEventListener("dblclick", toggleFullscreen);
 
-<!-- =========================
-     TELEGRAM
-========================= -->
+        progressTrack.addEventListener("mousedown", startDrag);
+        progressTrack.addEventListener("touchstart", startDrag, { passive: false });
+        document.addEventListener("mousemove", onDrag, { passive: false });
+        document.addEventListener("touchmove", onDrag, { passive: false });
+        document.addEventListener("mouseup", endDrag);
+        document.addEventListener("touchend", endDrag);
 
-<div class="info-card">
+        qualityBtn.addEventListener("click", (e) => {
+            e.stopPropagation();
+            qualityMenu.classList.toggle("open");
+            isQualityMenuOpen = qualityMenu.classList.contains("open");
+            resetAutoHide();
+        });
+        document.addEventListener("click", (e) => {
+            if (isQualityMenuOpen && !qualityMenu.contains(e.target) && e.target !== qualityBtn) {
+                qualityMenu.classList.remove("open");
+                isQualityMenuOpen = false;
+            }
+        });
 
-    <h2>
-        <i class="fa-solid fa-bell"></i>
-        Follow us for Updates!
-    </h2>
+        fsBtn.addEventListener("click", toggleFullscreen);
 
-    <a
-        href="https://t.me/+IhSW51QysxU3NzY1"
-        target="_blank"
-        class="action-button">
+        function togglePlay() {
+            if (video.paused) video.play();
+            else video.pause();
+        }
 
-        <i class="fa-brands fa-telegram"></i>
+        function updateMuteIcon() {
+            const isMuted = video.muted || video.volume === 0;
+            iconMuted.classList.toggle("hidden", !isMuted);
+            iconUnmuted.classList.toggle("hidden", isMuted);
+        }
 
-        Click Here To Join Telegram
+        function updatePlayIcon() {
+            const isPlaying = !video.paused;
+            iconPlay.classList.toggle("hidden", isPlaying);
+            iconPause.classList.toggle("hidden", !isPlaying);
+            centerPlaySvg.classList.toggle("hidden", isPlaying);
+            centerPauseSvg.classList.toggle("hidden", !isPlaying);
+            
+            centerFlash.classList.add("show");
+            setTimeout(() => centerFlash.classList.remove("show"), 300);
 
-    </a>
+            resetAutoHide();
+        }
 
-</div>
+        function updateProgress() {
+            if (isDragging) return;
+            if (video.duration) {
+                const pct = (video.currentTime / video.duration) * 100;
+                progressFilled.style.width = pct + '%';
+                progressThumb.style.left = pct + '%';
+                curTimeEl.textContent = formatTime(video.currentTime);
+            }
+        }
 
+        function startDrag(e) {
+            e.preventDefault();
+            isDragging = true;
+            videoArea.classList.remove("hide-controls");
+            seekToEvt(e);
+        }
 
-<!-- =========================
-     SHARE
-========================= -->
+        function onDrag(e) {
+            if (!isDragging) return;
+            e.preventDefault();
+            seekToEvt(e);
+        }
 
-<div class="info-card">
+        function endDrag() {
+            if (!isDragging) return;
+            isDragging = false;
+            resetAutoHide();
+        }
 
-    <h2>
-        <i class="fa-solid fa-link"></i>
-        Copy Link & Share
-    </h2>
+        function seekToEvt(e) {
+            const rect = progressTrack.getBoundingClientRect();
+            const clientX = e.touches ? e.touches[0].clientX : e.clientX;
+            let pct = (clientX - rect.left) / rect.width;
+            pct = Math.max(0, Math.min(1, pct));
+            
+            progressFilled.style.width = (pct * 100) + '%';
+            progressThumb.style.left = (pct * 100) + '%';
+            
+            if (video.duration) {
+                video.currentTime = pct * video.duration;
+                curTimeEl.textContent = formatTime(video.currentTime);
+            }
+        }
 
-    <button
-        class="action-button"
-        id="shareButton">
+        function resetAutoHide() {
+            videoArea.classList.remove("hide-controls");
+            clearTimeout(controlsTimer);
+            if (!video.paused && !isDragging && !isQualityMenuOpen) {
+                controlsTimer = setTimeout(() => {
+                    videoArea.classList.add("hide-controls");
+                }, 3000);
+            }
+        }
 
-        <i class="fa-solid fa-share-nodes"></i>
+        function toggleFullscreen() {
+            if (!document.fullscreenElement) {
+                if (document.documentElement.requestFullscreen) document.documentElement.requestFullscreen();
+            } else {
+                if (document.exitFullscreen) document.exitFullscreen();
+            }
+            resetAutoHide();
+        }
 
-        Click Here To Share This Page Link
+        function formatTime(s) {
+            if (!s || !isFinite(s)) return "0:00";
+            const h = Math.floor(s / 3600);
+            const m = Math.floor((s % 3600) / 60);
+            const sec = Math.floor(s % 60);
+            return h > 0 ? `${h}:${String(m).padStart(2,'0')}:${String(sec).padStart(2,'0')}` : `${m}:${String(sec).padStart(2,'0')}`;
+        }
 
-    </button>
+        // ── STREAM & RESOLUTION LOGIC ──
+        function buildQualityMenu(activeLevel = -1) {
+            qualityMenu.innerHTML = '';
+            const items = [{ name: 'Auto', level: -1 }];
+            
+            if (hlsInstance && hlsInstance.levels.length > 0) {
+                hlsInstance.levels.forEach((lvl, idx) => {
+                    let name = `${lvl.height}p`;
+                    if (lvl.bitrate) {
+                        const mbps = (lvl.bitrate / 1000000).toFixed(1);
+                        name += ` (${mbps} Mbps)`;
+                    }
+                    items.push({ name, level: idx });
+                });
+            } else {
+                items.push({ name: 'Native', level: -2 });
+            }
 
-</div>
+            items.forEach(item => {
+                const el = document.createElement('div');
+                el.className = 'ios-quality-item';
+                if (item.level === activeLevel) el.classList.add('active');
+                el.textContent = item.name;
+                el.addEventListener('click', (e) => {
+                    e.stopPropagation();
+                    if (hlsInstance && item.level >= -1) {
+                        hlsInstance.currentLevel = item.level;
+                    }
+                    qualityMenu.classList.remove("open");
+                    isQualityMenuOpen = false;
+                    buildQualityMenu(item.level);
+                });
+                qualityMenu.appendChild(el);
+            });
+        }
 
+        function loadStream(streamUrl, seekTime = 0) {
+            showMessage("");
+            stopPlayer();
+            
+            // Default mute state to true to allow autoplay, but attempt unmute
+            video.muted = true;
+            updateMuteIcon();
 
-<a href="#" class="back-link">
+            const isM3u8 = streamUrl.includes('.m3u8');
 
-    <i class="fa-solid fa-arrow-left"></i>
+            // Native Safari fallback or non-HLS stream
+            if (!isM3u8 || video.canPlayType("application/vnd.apple.mpegurl")) {
+                video.src = streamUrl;
+                video.addEventListener("loadedmetadata", () => {
+                    if (seekTime > 0) video.currentTime = seekTime;
+                    video.play().catch(() => {
+                        showMessage("Click play to start the stream.");
+                    });
+                    buildQualityMenu(-1);
+                }, { once: true });
+                return;
+            }
 
-    Back to All Streams
+            // HLS.js Logic
+            if (window.Hls && Hls.isSupported()) {
+                hlsInstance = new Hls({
+                    enableWorker: true,
+                    lowLatencyMode: true,
+                    xhrSetup: (xhr) => { xhr.withCredentials = false; },
+                    abrEwmaDefaultEstimate: 5000000,
+                    maxBufferLength: 30,
+                    maxMaxBufferLength: 60
+                });
 
-</a>
+                hlsInstance.loadSource(streamUrl);
+                hlsInstance.attachMedia(video);
 
+                hlsInstance.on(Hls.Events.MANIFEST_PARSED, () => {
+                    buildQualityMenu(-1);
+                    if (seekTime > 0) video.currentTime = seekTime;
+                    video.play().catch(() => {
+                        showMessage("Click play to start the stream.");
+                    });
+                });
 
-</div>
+                hlsInstance.on(Hls.Events.LEVEL_SWITCHED, (event, data) => {
+                    buildQualityMenu(data.level);
+                });
 
-</main>
+                hlsInstance.on(Hls.Events.ERROR, (event, data) => {
+                    if (data.fatal) {
+                        switch (data.type) {
+                            case Hls.ErrorTypes.NETWORK_ERROR:
+                                showMessage("Network error. Trying to recover...");
+                                hlsInstance.startLoad();
+                                break;
+                            case Hls.ErrorTypes.MEDIA_ERROR:
+                                showMessage("Media error. Trying to recover...");
+                                hlsInstance.recoverMediaError();
+                                break;
+                            default:
+                                showMessage("This stream could not be played. Check the URL.");
+                                stopPlayer();
+                                break;
+                        }
+                    }
+                });
+                return;
+            }
 
+            showMessage("This browser cannot play HLS streams.");
+        }
 
-<!-- =========================
-     TELEGRAM POPUP
-========================= -->
+        function stopPlayer() {
+            if (hlsInstance) {
+                hlsInstance.destroy();
+                hlsInstance = null;
+            }
+            video.pause();
+            video.removeAttribute("src");
+            video.load();
+            buildQualityMenu(-1); // Reset menu to empty/default
+        }
 
-<div class="telegram-popup" id="telegramPopup">
+        function showMessage(text) {
+            message.textContent = text;
+            message.classList.toggle("hidden", !text);
+            message.classList.toggle("flex", Boolean(text));
+        }
 
-    <h2>
-        <i class="fa-brands fa-telegram"></i>
-        Support Us!
-    </h2>
+        // ── TELEGRAM POPUP LOGIC ──
+        function openTg() {
+            window.open("https://t.me/+uMLMcSi1UwNlODU1", "_blank");
+            closeTg();
+        }
+        function closeTg() {
+            document.getElementById('tg-modal').classList.remove('show');
+        }
 
-    <p>
-        Join our Telegram channel
-        <strong>@Cricinsider365</strong>
-    </p>
-
-    <a
-        href="https://t.me/+IhSW51QysxU3NzY1"
-        target="_blank">
-
-        <button class="join-btn">
-            Join Now
-        </button>
-
-    </a>
-
-    <button
-        class="joined-btn"
-        onclick="document.getElementById('telegramPopup').style.display='none';">
-
-        Already Joined
-
-    </button>
-
-</div>
-
-
-<script>
-
-
-/* =========================
-   SHARE BUTTON
-========================= */
-
-document
-.getElementById('shareButton')
-.addEventListener('click', async () => {
-
-    const btn =
-        document.getElementById('shareButton');
-
-    const original =
-        btn.innerHTML;
-
-    try {
-
-        await navigator.clipboard.writeText(
-            window.location.href
-        );
-
-        btn.innerHTML =
-            '<i class="fa-solid fa-check"></i> Link Copied!';
-
-        btn.classList.add('copied');
-
+        // Show TG popup after 4 seconds
         setTimeout(() => {
+            document.getElementById('tg-modal').classList.add('show');
+        }, 0);
 
-            btn.innerHTML = original;
+        // Initial state
+        buildQualityMenu(-1);
 
-            btn.classList.remove('copied');
-
-        }, 2000);
-
-    } catch (error) {
-
-        alert(
-            'Unable to copy link. Please copy it manually.'
-        );
-
-    }
-
-});
-
-
-/* =========================
-   TELEGRAM POPUP
-========================= */
-
-setTimeout(() => {
-
-    document
-    .getElementById('telegramPopup')
-    .style.display = 'block';
-
-}, 1500);
+        // ── AUTOLOAD STRICTLY FROM URL PARAMETER (?url=) ──
+        const urlParams = new URLSearchParams(window.location.search);
+        const playUrl = urlParams.get('url') || urlParams.get('play');
+        if (playUrl) {
+            loadStream(playUrl);
+        } else {
+            showMessage("No stream URL provided in URL (e.g., ?url=https://...)");
+        }
+    </script>
 
 
-</script>
-
-</body>
-</html>
+</body></html>
