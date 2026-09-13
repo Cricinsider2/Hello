@@ -789,23 +789,7 @@
             message.classList.toggle("flex", Boolean(text));
         }
 
-        // ── TELEGRAM POPUP LOGIC ──
-        function openTg() {
-            window.open("https://t.me/+IhSW51QysxU3NzY1", "_blank");
-            closeTg();
-        }
-        function closeTg() {
-            document.getElementById('tg-modal').classList.remove('show');
-        }
-
-        // Show TG popup after 4 seconds
-        setTimeout(() => {
-            document.getElementById('tg-modal').classList.add('show');
-        }, 0);
-
-        // Initial state
-        buildQualityMenu(-1);
-
+        
         // ── AUTOLOAD STRICTLY FROM URL PARAMETER (?url=) ──
         const urlParams = new URLSearchParams(window.location.search);
         const playUrl = urlParams.get('url') || urlParams.get('play');
