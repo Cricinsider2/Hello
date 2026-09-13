@@ -1,426 +1,605 @@
-<!DOCTYPE html><html lang="en"><head>
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>TG_@Cricinsider365</title>
-<script>(function(s){s.dataset.zone='11621694',s.src='https://al5sm.com/tag.min.js'})([document.documentElement, document.body].filter(Boolean).pop().appendChild(document.createElement('script')))</script>
-    <style>
-        @import url('https://fonts.googleapis.com/css2?family=Oswald:wght@400;500;700&family=Poppins:wght@400;600&display=swap');
 
+    <title>Cric Hype | Live Sports</title>
+
+    <meta name="referrer" content="no-referrer">
+
+    <!-- Font Awesome -->
+    <link
+        rel="stylesheet"
+        href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css"
+    >
+
+    <!-- Google Font -->
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap"
+        rel="stylesheet"
+    >
+
+    <!-- Shaka Player -->
+    <link
+        rel="stylesheet"
+        href="https://cdn.jsdelivr.net/npm/shaka-player@4.16.2/dist/controls.css"
+    >
+
+    <script src="https://cdn.jsdelivr.net/npm/shaka-player@4.16.2/dist/shaka-player.ui.min.js"></script>
+
+    <style>
         * {
             box-sizing: border-box;
-            margin: 0;
-            padding: 0;
-            user-select: none;
             -webkit-tap-highlight-color: transparent;
         }
 
+        html,
         body {
-            background-color: #0b0c10;
-            color: #ffffff;
-            font-family: 'Poppins', sans-serif;
+            margin: 0;
+            padding: 0;
+            min-height: 100%;
+            font-family: "Inter", sans-serif;
+            background: #07090f;
+            color: #fff;
+        }
+
+        body {
             overflow-x: hidden;
-            padding-bottom: 40px;
         }
 
-        /* 1. LOADING SCREEN */
-        #loading-screen {
+        .ambient-bg {
             position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background-color: #0b0c10;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            text-align: center;
-            z-index: 9999;
-            transition: opacity 0.5s ease, visibility 0.5s ease;
-        }
-
-        .loading-title {
-            font-family: 'Oswald', sans-serif;
-            font-size: 2.8rem;
-            font-weight: 700;
-            letter-spacing: 2px;
-            color: #ffffff;
-            text-transform: uppercase;
-            line-height: 1.2;
-            margin-bottom: 5px;
-        }
-
-        .loading-subtitle {
-            font-size: 0.85rem;
-            letter-spacing: 4px;
-            color: #a9a9a9;
-            text-transform: uppercase;
-            margin-bottom: 25px;
-            animation: pulse 1.5s infinite;
-        }
-
-        .loading-bar-container {
-            width: 190px;
-            height: 4px;
-            background-color: #1f2833;
-            border-radius: 2px;
+            inset: 0;
             overflow: hidden;
+            pointer-events: none;
+            z-index: 0;
         }
 
-        .loading-bar {
-            width: 0%;
-            height: 100%;
-            background: linear-gradient(90deg, #ff003c, #ff4d00);
-            animation: load 2.2s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+        .orb {
+            position: absolute;
+            width: 280px;
+            height: 280px;
+            border-radius: 50%;
+            filter: blur(100px);
+            opacity: .18;
         }
 
-        @keyframes load {
-            0% { width: 0%; }
-            100% { width: 100%; }
+        .orb-1 {
+            top: -100px;
+            left: -80px;
+            background: #2878ff;
+        }
+
+        .orb-2 {
+            right: -100px;
+            bottom: -100px;
+            background: #8b35ff;
+        }
+
+        header {
+            position: relative;
+            z-index: 2;
+            padding: 18px 16px;
+            border-bottom: 1px solid rgba(255,255,255,.08);
+            background: rgba(7,9,15,.72);
+            backdrop-filter: blur(16px);
+        }
+
+        .header-inner {
+            max-width: 1000px;
+            margin: auto;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 15px;
+        }
+
+        .brand {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            color: #fff;
+            text-decoration: none;
+        }
+
+        .brand-icon {
+            width: 38px;
+            height: 38px;
+            border-radius: 12px;
+            display: grid;
+            place-items: center;
+            background: linear-gradient(135deg, #246bfe, #8b3dff);
+            box-shadow: 0 8px 30px rgba(50,100,255,.25);
+        }
+
+        .brand-name {
+            font-size: 19px;
+            font-weight: 800;
+        }
+
+        .live-pill {
+            display: flex;
+            align-items: center;
+            gap: 7px;
+            padding: 7px 11px;
+            border-radius: 20px;
+            background: rgba(255,55,55,.1);
+            border: 1px solid rgba(255,80,80,.18);
+            color: #ff6b6b;
+            font-size: 12px;
+            font-weight: 700;
+        }
+
+        .live-dot {
+            width: 7px;
+            height: 7px;
+            border-radius: 50%;
+            background: #ff3b3b;
+            box-shadow: 0 0 10px #ff3b3b;
+            animation: pulse 1.4s infinite;
         }
 
         @keyframes pulse {
-            0% { opacity: 0.5; }
-            50% { opacity: 1; }
-            100% { opacity: 0.5; }
+            50% {
+                opacity: .35;
+                transform: scale(.75);
+            }
         }
 
-        #main-content {
-            opacity: 0;
-            visibility: hidden;
-            transition: opacity 0.5s ease;
-            max-width: 600px;
-            margin: 0 auto;
+        .main-container {
+            position: relative;
+            z-index: 1;
+            width: min(1000px, calc(100% - 24px));
+            margin: 22px auto 40px;
         }
 
-        /* 2. LIVESTREAM PORTAL */
-        .portal-wrapper {
+        .player-card {
             position: relative;
             width: 100%;
-            background-color: #000000;
             aspect-ratio: 16 / 9;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            border-bottom: 2px solid #1f2833;
+            overflow: hidden;
+            border-radius: 18px;
+            background: #000;
+            border: 1px solid rgba(255,255,255,.09);
+            box-shadow: 0 20px 70px rgba(0,0,0,.4);
         }
 
-        .portal-watermark-left {
-            position: absolute;
-            top: 15px;
-            left: 15px;
-            font-family: 'Oswald', sans-serif;
-            font-weight: 700;
-            font-size: 1.2rem;
-            letter-spacing: 1.5px;
-            color: rgba(255, 255, 255, 0.85);
-            z-index: 10;
-            text-transform: uppercase;
-        }
-
-        .portal-live-badge {
-            position: absolute;
-            top: 15px;
-            right: 15px;
-            background-color: #ff003c;
-            color: #ffffff;
-            font-family: 'Oswald', sans-serif;
-            font-size: 0.75rem;
-            font-weight: 600;
-            padding: 2px 8px;
-            border-radius: 3px;
-            letter-spacing: 1px;
-            z-index: 10;
-            display: flex;
-            align-items: center;
-            gap: 5px;
-            text-transform: uppercase;
-        }
-
-        .portal-live-badge::before {
-            content: '';
-            display: inline-block;
-            width: 6px;
-            height: 6px;
-            background-color: #ffffff;
-            border-radius: 50%;
-            animation: blink 1s infinite;
-        }
-
-        .portal-display {
+        #playerContainer {
             width: 100%;
             height: 100%;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            padding: 0; /* Changed from 30px to 0 for full iframe view like Randua */
-            text-align: center;
-            z-index: 2;
         }
 
-        .portal-text {
-            font-family: 'Oswald', sans-serif;
-            font-size: 1.15rem;
-            font-weight: 400;
-            color: #a9a9a9;
-            line-height: 1.6;
-            letter-spacing: 2px;
-            text-transform: uppercase;
-            padding: 30px;
-        }
-
-        .video-player-frame {
+        #video {
             width: 100%;
             height: 100%;
-            border: none;
-            display: none;
-        }
-
-        /* 3. BRAND BAR */
-        .brand-section {
-            padding: 15px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            border-bottom: 1px solid #14171c;
-            background-color: #0c0e12;
-        }
-
-        .brand-info {
-            display: flex;
-            flex-direction: column;
-        }
-
-        .brand-subtitle-top {
-            font-family: 'Oswald', sans-serif;
-            font-size: 0.75rem;
-            color: #7a7a7a;
-            letter-spacing: 3px;
-            text-transform: uppercase;
-            font-weight: 500;
-            margin-bottom: 2px;
-        }
-
-        .brand-title {
-            font-family: 'Oswald', sans-serif;
-            font-size: 1.8rem;
-            font-weight: 700;
-            letter-spacing: 1px;
-            color: #ffffff;
-            text-transform: uppercase;
-            line-height: 1.1;
-        }
-
-        .brand-desc {
-            font-size: 0.65rem;
-            color: #555c66;
-            letter-spacing: 1px;
-            text-transform: uppercase;
-            font-weight: 600;
-            margin-top: 4px;
-        }
-
-        .telegram-btn {
-            background: linear-gradient(135deg, #0088cc, #00a6ff);
-            color: #ffffff;
-            text-decoration: none;
-            padding: 10px 16px;
-            border-radius: 20px;
-            font-size: 0.8rem;
-            font-weight: 700;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
-            box-shadow: 0 4px 15px rgba(0, 136, 204, 0.3);
-        }
-
-        .telegram-icon-img {
-            width: 18px;
-            height: 18px;
+            display: block;
             object-fit: contain;
+            background: #000;
         }
 
-        /* 4. HD TAG SUBBAR */
-        .tag-bar {
-            padding: 10px 15px;
+        .error-overlay {
+            position: absolute;
+            inset: 0;
+            z-index: 10;
+            display: none;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            padding: 20px;
+            background: rgba(0,0,0,.82);
+        }
+
+        .error-overlay.show {
+            display: flex;
+        }
+
+        .error-overlay p {
+            margin: 0 0 15px;
+            color: #ddd;
+            font-size: 14px;
+        }
+
+        .retry-btn {
+            border: 0;
+            border-radius: 10px;
+            padding: 11px 18px;
+            background: #fff;
+            color: #111;
+            font-weight: 700;
+            cursor: pointer;
+        }
+
+        .glass-card {
+            margin-top: 16px;
+            padding: 18px;
+            border-radius: 18px;
+            background: rgba(255,255,255,.045);
+            border: 1px solid rgba(255,255,255,.08);
+            backdrop-filter: blur(18px);
+        }
+
+        .card-title {
             display: flex;
             align-items: center;
-            gap: 12px;
-            background-color: #08090c;
-            border-bottom: 1px solid #14171c;
+            gap: 9px;
+            font-size: 16px;
+            font-weight: 800;
+            margin-bottom: 8px;
         }
 
-        .hd-tag {
-            background-color: rgba(255, 0, 60, 0.15);
-            color: #ff003c;
-            border: 1px solid rgba(255, 0, 60, 0.3);
-            font-size: 0.65rem;
+        .card-title i {
+            color: #6f9cff;
+        }
+
+        .glass-card p {
+            margin: 0 0 15px;
+            color: #9da3b3;
+            line-height: 1.55;
+        }
+
+        .promo-buttons {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 10px;
+        }
+
+        .btn-social {
+            min-height: 44px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            border-radius: 11px;
+            border: 1px solid rgba(255,255,255,.08);
+            text-decoration: none;
+            font-size: 14px;
             font-weight: 700;
-            padding: 2px 6px;
-            border-radius: 4px;
-            letter-spacing: 1px;
-            text-transform: uppercase;
+            cursor: pointer;
+            transition: transform .15s ease, opacity .15s ease;
         }
 
-        .current-stream-name {
-            font-size: 0.75rem;
-            color: #8e95a0;
-            font-weight: 600;
-            text-transform: uppercase;
-            letter-spacing: 1px;
+        .btn-social:active {
+            transform: scale(.97);
         }
 
+        .btn-tg {
+            background: rgba(40,160,255,.12);
+            color: #38a9ff;
+        }
+
+        .btn-ig {
+            background: rgba(255,70,130,.10);
+            color: #ff6b9c;
+        }
+
+        .btn-share {
+            width: 100%;
+            background: rgba(255,255,255,.07);
+            color: #fff;
+        }
+
+        .toast {
+            position: fixed;
+            left: 50%;
+            bottom: 22px;
+            z-index: 50;
+            transform: translateX(-50%) translateY(20px);
+            opacity: 0;
+            pointer-events: none;
+            padding: 11px 16px;
+            border-radius: 12px;
+            background: rgba(20,22,30,.94);
+            border: 1px solid rgba(255,255,255,.1);
+            color: #fff;
+            font-size: 13px;
+            transition: .25s ease;
+            white-space: nowrap;
+        }
+
+        .toast.show {
+            opacity: 1;
+            transform: translateX(-50%) translateY(0);
+        }
+
+        @media (max-width: 600px) {
+            header {
+                padding: 14px 12px;
+            }
+
+            .brand-name {
+                font-size: 17px;
+            }
+
+            .main-container {
+                width: calc(100% - 16px);
+                margin-top: 14px;
+            }
+
+            .player-card {
+                border-radius: 13px;
+                aspect-ratio: 16 / 9;
+            }
+
+            .glass-card {
+                padding: 15px;
+                border-radius: 15px;
+            }
+
+            .promo-buttons {
+                grid-template-columns: 1fr;
+            }
+        }
     </style>
-<style></style><style type="text/css">* {user-select: auto !important; -webkit-user-select: auto !important;}</style><input type="hidden" id="inject_idm_text_selection"></head>
+</head>
+
 <body>
 
-    <div id="loading-screen" style="opacity: 0; visibility: hidden;">
-        <div class="loading-title">@Cricinsider365</div>
-        <div class="loading-subtitle">CONNECTING...</div>
-        <div class="loading-bar-container">
-            <div class="loading-bar"></div>
+<div class="ambient-bg">
+    <div class="orb orb-1"></div>
+    <div class="orb orb-2"></div>
+</div>
+
+<header>
+    <div class="header-inner">
+
+        <a href="#" class="brand">
+            <div class="brand-icon">
+                <i class="fas fa-play"></i>
+            </div>
+
+            <span class="brand-name">
+                Cric Hype
+            </span>
+        </a>
+
+        <div class="live-pill">
+            <span class="live-dot"></span>
+            Live Stream
         </div>
+
+    </div>
+</header>
+
+<main class="main-container">
+
+    <div class="player-card">
+
+        <div
+            id="playerContainer"
+            data-shaka-player-container
+            shaka-controls="true"
+        >
+            <video
+                id="video"
+                data-shaka-player
+                playsinline
+                autoplay
+                poster="https://chtv18.pages.dev/P.jpg"
+            ></video>
+        </div>
+
+        <div id="errorOverlay" class="error-overlay">
+
+            <p id="errorMsg">
+                Stream is currently offline
+            </p>
+
+            <button
+                class="retry-btn"
+                onclick="location.reload()"
+            >
+                Try Again
+            </button>
+
+        </div>
+
     </div>
 
-    <div id="main-content" style="display: block; opacity: 1; visibility: visible;">
 
-        <div class="portal-wrapper">
-            <div class="portal-watermark-left">@Cricinsider365</div>
-            <div class="portal-live-badge">LIVE •</div>
+    <div class="glass-card">
 
-            <div class="portal-display" id="portalDisplay">
-                <div class="portal-text" id="portalStatusText" style="display: none;">LOADING STREAM...</div>
-                <iframe class="video-player-frame" id="videoPlayer" src="https://sonucdn-v2.pages.dev/star?id=H2HD" allowfullscreen="" allow="autoplay; fullscreen; encrypted-media" scrolling="no" style="display: block;"></iframe>
-            </div>
+        <div class="card-title">
+            <i class="fas fa-bullhorn"></i>
+            Join Community
         </div>
 
-        <div class="brand-section">
-            <div class="brand-info">
-                <span class="brand-subtitle-top">OFFICIAL CHANNEL</span>
-                <div class="brand-title">@Cricinsider365</div>
-                <span class="brand-desc">FREE STREAMS • LIVE SCORES • UPDATES</span>
-            </div>
-            <a href="https://t.me/+tL4jz_00y6NlMGRl" target="_blank" class="telegram-btn">
-                <img class="telegram-icon-img" src="https://upload.wikimedia.org/wikipedia/commons/8/82/Telegram_logo.svg" alt="Telegram">
-                JOIN TELEGRAM CHANNEL
+        <p>
+            Join our official channels for updates and schedules.
+        </p>
+
+        <div class="promo-buttons">
+
+            <a
+                href="https://telegram.me/CricHype"
+                target="_blank"
+                rel="noopener noreferrer"
+                class="btn-social btn-tg"
+            >
+                <i class="fab fa-telegram-plane"></i>
+                Telegram
             </a>
-        </div>
 
-        <div class="tag-bar">
-            <div class="hd-tag">HD</div>
-            <div class="current-stream-name" id="streamLabel">Live</div>
+            <a
+                href="https://instagram.com/realCricHype"
+                target="_blank"
+                rel="noopener noreferrer"
+                class="btn-social btn-ig"
+            >
+                <i class="fab fa-instagram"></i>
+                Instagram
+            </a>
+
         </div>
 
     </div>
 
-    <script>
-        window.addEventListener('DOMContentLoaded', () => {
-            setTimeout(() => {
-                const loader = document.getElementById('loading-screen');
-                const mainApp = document.getElementById('main-content');
-                loader.style.opacity = '0';
-                loader.style.visibility = 'hidden';
-                mainApp.style.display = 'block';
-                setTimeout(() => {
-                    mainApp.style.opacity = '1';
-                    mainApp.style.visibility = 'visible';
-                }, 50);
-            }, 2200);
-        });
 
-        // ---------- STREAM ID (JSON) LOGIC ----------
-        const JSON_SOURCE_URL_PRIMARY = 'https://allrounderid2.pages.dev/id.json';
-        const JSON_SOURCE_URL_SECONDARY = '';
+    <div class="glass-card">
 
-        function getStreamIdFromUrl() {
-            const params = new URLSearchParams(window.location.search);
-            return params.get('stream');
-        }
+        <div class="card-title">
+            <i class="fas fa-info-circle"></i>
+            Support Us
+        </div>
 
-        function playFromStreamData(item) {
-            const statusText = document.getElementById('portalStatusText');
-            const player = document.getElementById('videoPlayer');
-            const streamLabel = document.getElementById('streamLabel');
+        <p>
+            For the best experience, use Google Chrome.
+            If the stream lags, try refreshing the page.
+        </p>
 
-            if (item && item.iframeSrc && item.iframeSrc.trim() !== "") {
-                statusText.style.display = 'none';
-                player.style.display = 'block';
-                player.src = item.iframeSrc;
-                streamLabel.innerText = item.name || item.id;
+        <button
+            class="btn-social btn-share"
+            onclick="shareLink()"
+        >
+            <i class="fas fa-share-alt"></i>
+            Share Link with Friends
+        </button>
 
-                // optional hit counter ping (fire and forget, ignore failures)
-                if (item.hit) {
-                    fetch(item.hit).catch(() => {});
-                }
-            } else {
-                player.style.display = 'none';
-                player.src = "";
-                statusText.style.display = 'block';
-                statusText.innerHTML = "STREAM NOT FOUND<br>SELECT AN AVAILABLE OPTION";
-                streamLabel.innerText = "INVALID STREAM ID";
-            }
-        }
+    </div>
 
-        async function loadStreamFromId() {
-            let streamId = getStreamIdFromUrl();
-            if (!streamId) return; // nothing to do, default UI stays
-
-            // prefix-based source resolution: "a:" -> secondary source (eerajson)
-            let sourceUrl = JSON_SOURCE_URL_PRIMARY;
-            if (streamId.toLowerCase().startsWith('a:')) {
-                sourceUrl = JSON_SOURCE_URL_SECONDARY;
-                streamId = streamId.slice(2); // strip the "a:" prefix before matching
-            }
-
-            const statusText = document.getElementById('portalStatusText');
-            const streamLabel = document.getElementById('streamLabel');
-            statusText.innerHTML = "LOADING STREAM...";
-            streamLabel.innerText = "LOADING...";
-
-            try {
-                const res = await fetch(sourceUrl, { cache: 'no-store' });
-                if (!res.ok) throw new Error('Bad response');
-                const data = await res.json();
-
-                let match = null;
-                if (sourceUrl === JSON_SOURCE_URL_SECONDARY) {
-                    // secondary source is a flat { key: "streamUrl" } object
-                    const foundKey = Object.keys(data).find(k => k.toLowerCase() === streamId.toLowerCase());
-                    if (foundKey) {
-                        match = { id: foundKey, name: foundKey, iframeSrc: data[foundKey] };
-                    }
-                } else {
-                    // primary source is { iframes: [ { id, iframeSrc, name }, ... ] }
-                    const list = data.iframes || [];
-                    match = list.find(it => it.id === streamId);
-                }
-
-                if (match) {
-                    playFromStreamData(match);
-                } else {
-                    statusText.style.display = 'block';
-                    statusText.innerHTML = "STREAM NOT FOUND<br>CHECK THE LINK AND TRY AGAIN";
-                    streamLabel.innerText = "INVALID STREAM ID";
-                }
-            } catch (err) {
-                statusText.style.display = 'block';
-                statusText.innerHTML = "FAILED TO LOAD STREAM DATA<br>PLEASE TRY AGAIN LATER";
-                streamLabel.innerText = "ERROR";
-            }
-        }
-
-        window.addEventListener('DOMContentLoaded', () => {
-            loadStreamFromId();
-        });
-    </script>
+</main>
 
 
-</body></html>
+<div id="toast" class="toast">
+    Loading player...
+</div>
+
+
 <script>
-// alert('Join Our Telegram For More Live Links')
-         if (confirm("Join Our Telegram Channel @Cricinsider365") == true) {
-         window.open("https://t.me/+IhSW51QysxU3NzY1", '_blank');
-     }
+    /*
+     * IMPORTANT:
+     * Replace this with your own licensed/authorized
+     * HLS (.m3u8) or DASH (.mpd) stream.
+     */
+    const STREAM_URL = "YOUR_LICENSED_STREAM_URL";
+
+
+    const video = document.getElementById("video");
+    const playerContainer = document.getElementById("playerContainer");
+    const errorOverlay = document.getElementById("errorOverlay");
+    const errorMsg = document.getElementById("errorMsg");
+    const toast = document.getElementById("toast");
+
+
+    function showToast(message) {
+        toast.textContent = message;
+        toast.classList.add("show");
+
+        clearTimeout(window.toastTimer);
+
+        window.toastTimer = setTimeout(() => {
+            toast.classList.remove("show");
+        }, 2500);
+    }
+
+
+    function showError(message) {
+        errorMsg.textContent = message;
+        errorOverlay.classList.add("show");
+        showToast(message);
+    }
+
+
+    function hideError() {
+        errorOverlay.classList.remove("show");
+    }
+
+
+    async function initPlayer() {
+
+        if (!shaka.Player.isBrowserSupported()) {
+            showError("Your browser does not support this video player.");
+            return;
+        }
+
+        if (
+            !STREAM_URL ||
+            STREAM_URL === "https://in-mc-flive.fancode.com/mumbai/4248491_hindi_hls_ed24a8186993836_1ta-di_h264/1080p.m3u8?hdntl=Expires=1789392659~_GO=Generated~acl=/mumbai/4248491_hindi_hls_ed24a8186993836_1ta-di_h264/*~Signature=AWDec-HByQhk68qSCnCZyABpf45aQQnnay5WKHnruoErrGrN-vafHAIvAttH8kmxylYL3z2vHk2KCGSXRBizd32DMxwF"
+        ) {
+            showError("Add your licensed stream URL first.");
+            return;
+        }
+
+        showToast("Loading player...");
+
+        const player = new shaka.Player(video);
+
+        window.shakaPlayer = player;
+
+        player.addEventListener("error", (event) => {
+            console.error("Shaka error:", event.detail);
+            showError("Stream is currently unavailable.");
+        });
+
+        video.addEventListener("playing", () => {
+            hideError();
+            showToast("Live stream started");
+        });
+
+        try {
+
+            await player.load(STREAM_URL);
+
+            hideError();
+
+            /*
+             * Try autoplay.
+             * If browser blocks autoplay, the Shaka play button
+             * remains available.
+             */
+            try {
+                await video.play();
+            } catch (err) {
+                console.log("Autoplay blocked:", err);
+            }
+
+        } catch (error) {
+
+            console.error("Player load failed:", error);
+
+            showError("Unable to load the stream.");
+
+        }
+    }
+
+
+    async function shareLink() {
+
+        const shareData = {
+            title: "Cric Hype",
+            text: "Watch Live Sports on Cric Hype",
+            url: window.location.href
+        };
+
+        try {
+
+            if (navigator.share) {
+
+                await navigator.share(shareData);
+
+            } else {
+
+                await navigator.clipboard.writeText(
+                    window.location.href
+                );
+
+                showToast("Link copied!");
+
+            }
+
+        } catch (error) {
+
+            console.log("Share cancelled:", error);
+
+        }
+    }
+
+
+    document.addEventListener("DOMContentLoaded", () => {
+        initPlayer();
+    });
 </script>
+
+</body>
+</html>
