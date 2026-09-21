@@ -6,8 +6,7 @@
 
   <meta
     name="viewport"
-    content="width=device-width, initial-scale=1, maximum-scale=1,
-             user-scalable=no, viewport-fit=cover"
+    content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no,viewport-fit=cover"
   >
 
   <meta name="referrer" content="no-referrer">
@@ -35,23 +34,61 @@
       font-family: "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
     }
 
+    /* FIXED FULL-SCREEN PLAYER */
     #player-container {
-      position: fixed;
-      inset: 0;
-      background: #000;
-      display: flex;
-      align-items: center;
-      justify-content: center;
+      position: fixed !important;
+      inset: 0 !important;
+
+      width: 100vw !important;
+      height: 100vh !important;
+      height: 100dvh !important;
+
+      background: #000 !important;
+      overflow: hidden !important;
+
+      display: flex !important;
+      align-items: center !important;
+      justify-content: center !important;
     }
 
+    /* FIXED VIDEO FRAME */
     video {
-      width: 100%;
-      height: 100%;
-      object-fit: contain;
-      background: #000;
+      position: absolute !important;
+
+      top: 0 !important;
+      left: 0 !important;
+
+      width: 100% !important;
+      height: 100% !important;
+
+      max-width: none !important;
+      max-height: none !important;
+
+      margin: 0 !important;
+      padding: 0 !important;
+
+      object-fit: contain !important;
+      object-position: center center !important;
+
+      background: #000 !important;
     }
 
-    /* Status badge */
+    /* Fit modes */
+    video.mode-fill {
+      object-fit: fill !important;
+    }
+
+    video.mode-cover {
+      object-fit: cover !important;
+    }
+
+    .shaka-video-container {
+      width: 100% !important;
+      height: 100% !important;
+      background-color: #000 !important;
+    }
+
+    /* subtle status badge */
     #status {
       position: fixed;
       top: max(16px, env(safe-area-inset-top));
@@ -64,12 +101,12 @@
 
       padding: 6px 15px 6px 11px;
 
-      background: rgba(10, 10, 10, 0.88);
-      border: 1px solid rgba(255, 255, 255, 0.07);
+      background: rgba(10, 10, 10, .88);
+      border: 1px solid rgba(255, 255, 255, .07);
 
       font-size: 11.5px;
       font-weight: 500;
-      letter-spacing: 0.2px;
+      letter-spacing: .2px;
 
       border-radius: 24px;
       pointer-events: none;
@@ -78,15 +115,15 @@
       transform: translateY(-4px);
 
       transition:
-        opacity 0.25s ease,
-        transform 0.25s ease;
+        opacity .25s ease,
+        transform .25s ease;
 
       backdrop-filter: blur(14px);
       -webkit-backdrop-filter: blur(14px);
 
       white-space: nowrap;
 
-      box-shadow: 0 2px 14px rgba(0, 0, 0, 0.45);
+      box-shadow: 0 2px 14px rgba(0, 0, 0, .45);
 
       color: #c0c0c0;
     }
@@ -127,12 +164,12 @@
       }
 
       50% {
-        opacity: 0.35;
-        transform: scale(0.55);
+        opacity: .35;
+        transform: scale(.55);
       }
     }
 
-    /* Custom fit button */
+    /* custom fit button */
     .sp-fit-btn {
       background: transparent !important;
       border: none !important;
@@ -141,7 +178,7 @@
       padding: 0 7px !important;
       min-width: auto !important;
 
-      opacity: 0.75;
+      opacity: .75;
 
       display: flex;
       align-items: center;
@@ -149,7 +186,7 @@
 
       height: 100%;
 
-      transition: opacity 0.15s;
+      transition: opacity .15s;
       color: #fff !important;
     }
 
@@ -160,27 +197,27 @@
     .fit-pill {
       font-size: 10px;
       font-weight: 700;
-      letter-spacing: 0.4px;
+      letter-spacing: .4px;
 
       padding: 3px 7px;
 
       border-radius: 4px;
       line-height: 1;
 
-      border: 1.5px solid rgba(255, 255, 255, 0.28);
+      border: 1.5px solid rgba(255, 255, 255, .28);
 
-      color: rgba(255, 255, 255, 0.8);
+      color: rgba(255, 255, 255, .8);
 
       pointer-events: none;
       white-space: nowrap;
 
       transition:
-        border-color 0.2s,
-        color 0.2s;
+        border-color .2s,
+        color .2s;
     }
 
     .sp-fit-btn:hover .fit-pill {
-      border-color: rgba(255, 255, 255, 0.55);
+      border-color: rgba(255, 255, 255, .55);
       color: #fff;
     }
 
@@ -198,10 +235,6 @@
       color: #fff !important;
     }
 
-    .shaka-video-container {
-      background-color: #000 !important;
-    }
-
     @media (max-width: 380px) {
       .fit-pill {
         font-size: 9px;
@@ -210,47 +243,52 @@
     }
   </style>
 
-  <style>
+  <style type="text/css">
     * {
       user-select: auto !important;
       -webkit-user-select: auto !important;
     }
   </style>
+
 </head>
 
 <body>
 
   <div
     id="player-container"
-    data-shaka-player-container
+    data-shaka-player-container=""
     class="shaka-mobile shaka-video-container"
     shaka-controls="true"
   >
+
     <video
       id="video"
-      autoplay
-      muted
-      playsinline
+      autoplay=""
+      muted=""
+      playsinline=""
       preload="metadata"
       class="shaka-video"
     ></video>
+
   </div>
 
-  <!-- Status badge -->
+  <!-- status badge -->
   <div id="status" class="live">
     <span class="st-dot"></span>
     <span id="statusText">Live</span>
   </div>
 
+
   <script src="https://cdn.jsdelivr.net/npm/shaka-player@4.16.2/dist/shaka-player.ui.min.js"></script>
+
 
   <script>
     (function () {
+
       "use strict";
 
-      // --------------------------------------------------
-      // CONFIG
-      // --------------------------------------------------
+
+      // ----- CONFIG -----
 
       const CONFIG = {
         streamUrl:
@@ -267,9 +305,7 @@
       };
 
 
-      // --------------------------------------------------
-      // DOM REFERENCES
-      // --------------------------------------------------
+      // ----- DOM refs -----
 
       const video =
         document.getElementById("video");
@@ -287,57 +323,67 @@
       let statusTimer = null;
 
 
-      // --------------------------------------------------
-      // STATUS
-      // --------------------------------------------------
+      // ----- STATUS -----
 
-      function setStatus(message, type, duration) {
+      function setStatus(msg, type, dur) {
+
         if (!statusEl) {
           return;
         }
 
         statusText.textContent =
-          message || "Live";
+          msg || "Live";
 
         statusEl.className =
           "show " + (type || "live");
+
 
         if (statusTimer) {
           clearTimeout(statusTimer);
           statusTimer = null;
         }
 
-        if (duration !== 0) {
-          statusTimer = setTimeout(function () {
-            statusEl.className =
-              statusEl.className
-                .replace("show", "")
-                .trim();
 
-            statusTimer = null;
-          }, duration || 4000);
+        if (dur !== 0) {
+
+          statusTimer =
+            setTimeout(function () {
+
+              statusEl.className =
+                statusEl.className
+                  .replace("show", "")
+                  .trim();
+
+              statusTimer = null;
+
+            }, dur || 4000);
         }
       }
 
 
-      // --------------------------------------------------
-      // FIT BUTTON
-      // --------------------------------------------------
+      // ----- fit button injection -----
 
-      function injectFitButton(containerEl, videoEl) {
+      function injectFitButton(
+        containerEl,
+        videoEl
+      ) {
+
         const panel =
           containerEl.querySelector(
             ".shaka-controls-button-panel"
           );
 
+
         if (!panel) {
           return false;
         }
+
 
         const anchor =
           panel.querySelector(
             ".shaka-fullscreen-button"
           );
+
 
         const FITS = [
           "contain",
@@ -345,39 +391,49 @@
           "cover"
         ];
 
+
         const FIT_LABELS = {
           contain: "Fit",
           fill: "Fill",
           cover: "Zoom"
         };
 
+
         let fitIdx = 0;
+
 
         const fitBtn =
           document.createElement("button");
 
+
         fitBtn.className =
           "sp-fit-btn";
+
 
         fitBtn.title =
           "Video Fit: " +
           FIT_LABELS.contain;
+
 
         fitBtn.setAttribute(
           "aria-label",
           "Cycle Video Fit Mode"
         );
 
+
         fitBtn.innerHTML =
           '<span class="fit-pill">—</span>';
 
 
         if (anchor) {
+
           panel.insertBefore(
             fitBtn,
             anchor
           );
+
         } else {
+
           panel.appendChild(
             fitBtn
           );
@@ -387,28 +443,28 @@
         let currentRatio = "—";
 
 
-        // ----------------------------------------------
-        // APPLY FIT
-        // ----------------------------------------------
+        function applyFit(i) {
 
-        function applyFit(index) {
-          fitIdx = index;
+          fitIdx = i;
 
-          const mode =
-            FITS[index];
+          const m =
+            FITS[i];
+
 
           videoEl.classList.remove(
             "mode-fill",
             "mode-cover"
           );
 
-          if (mode === "fill") {
+
+          if (m === "fill") {
             videoEl.classList.add(
               "mode-fill"
             );
           }
 
-          if (mode === "cover") {
+
+          if (m === "cover") {
             videoEl.classList.add(
               "mode-cover"
             );
@@ -420,16 +476,17 @@
             "mode-cover"
           );
 
-          if (mode !== "contain") {
+
+          if (m !== "contain") {
             fitBtn.classList.add(
-              "mode-" + mode
+              "mode-" + m
             );
           }
 
 
           fitBtn.title =
             "Video Fit: " +
-            FIT_LABELS[mode];
+            FIT_LABELS[m];
 
 
           const pill =
@@ -437,23 +494,22 @@
               ".fit-pill"
             );
 
+
           if (pill) {
+
             pill.textContent =
-              mode === "contain"
+              m === "contain"
                 ? currentRatio
-                : FIT_LABELS[mode];
+                : FIT_LABELS[m];
           }
         }
 
 
-        // ----------------------------------------------
-        // BUTTON CLICK
-        // ----------------------------------------------
-
         fitBtn.addEventListener(
           "click",
-          function (event) {
-            event.stopPropagation();
+          function (e) {
+
+            e.stopPropagation();
 
             applyFit(
               (fitIdx + 1) %
@@ -463,20 +519,20 @@
         );
 
 
-        // ----------------------------------------------
-        // FULLSCREEN RESET
-        // ----------------------------------------------
-
         [
           "fullscreenchange",
           "webkitfullscreenchange"
-        ].forEach(function (eventName) {
+        ].forEach(function (ev) {
+
           document.addEventListener(
-            eventName,
+            ev,
             function () {
+
               if (
-                !document.fullscreenElement &&
-                !document.webkitFullscreenElement
+                !(
+                  document.fullscreenElement ||
+                  document.webkitFullscreenElement
+                )
               ) {
                 applyFit(0);
               }
@@ -485,14 +541,12 @@
         });
 
 
-        // ----------------------------------------------
-        // RATIO
-        // ----------------------------------------------
+        function ratioLabel(w, h) {
 
-        function ratioLabel(width, height) {
-          if (!width || !height) {
+          if (!w || !h) {
             return "—";
           }
+
 
           function gcd(a, b) {
             return b
@@ -500,14 +554,16 @@
               : a;
           }
 
+
           const g =
-            gcd(width, height) || 1;
+            gcd(w, h) || 1;
+
 
           const rw =
-            width / g;
+            w / g;
 
           const rh =
-            height / g;
+            h / g;
 
 
           const named = {
@@ -523,22 +579,25 @@
 
 
           const real =
-            width / height;
+            w / h;
+
 
           let best = null;
-          let bestD = 0.02;
+          let bestD = .02;
 
 
           Object.keys(named).forEach(
-            function (key) {
-              const difference =
+            function (k) {
+
+              const d =
                 Math.abs(
-                  named[key] - real
+                  named[k] - real
                 );
 
-              if (difference < bestD) {
-                bestD = difference;
-                best = key;
+
+              if (d < bestD) {
+                bestD = d;
+                best = k;
               }
             }
           );
@@ -553,11 +612,7 @@
             rw <= 40 &&
             rh <= 40
           ) {
-            return (
-              rw +
-              ":" +
-              rh
-            );
+            return rw + ":" + rh;
           }
 
 
@@ -571,15 +626,13 @@
         let ratioTries = 0;
 
 
-        // ----------------------------------------------
-        // UPDATE RATIO
-        // ----------------------------------------------
-
         function updateRatio() {
+
           const pill =
             fitBtn.querySelector(
               ".fit-pill"
             );
+
 
           if (!pill) {
             return;
@@ -587,25 +640,30 @@
 
 
           if (videoEl.videoWidth > 0) {
+
             currentRatio =
               ratioLabel(
                 videoEl.videoWidth,
                 videoEl.videoHeight
               );
 
+
             if (
               FITS[fitIdx] ===
               "contain"
             ) {
+
               pill.textContent =
                 currentRatio;
             }
+
 
             ratioTries = 0;
 
           } else if (
             ratioTries < 15
           ) {
+
             ratioTries++;
 
             setTimeout(
@@ -616,15 +674,13 @@
         }
 
 
-        // ----------------------------------------------
-        // VIDEO EVENTS
-        // ----------------------------------------------
-
         videoEl.addEventListener(
           "loadedmetadata",
           function () {
+
             ratioTries = 0;
             updateRatio();
+
           }
         );
 
@@ -638,6 +694,7 @@
         videoEl.addEventListener(
           "timeupdate",
           function onFirstFrame() {
+
             videoEl.removeEventListener(
               "timeupdate",
               onFirstFrame
@@ -650,19 +707,16 @@
 
         updateRatio();
 
+
         return true;
       }
 
 
-      // --------------------------------------------------
-      // PLAYER INITIALIZATION
-      // --------------------------------------------------
+      // ----- main player init -----
 
       async function initPlayer() {
 
-        // ----------------------------------------------
-        // SHAKA POLYFILL
-        // ----------------------------------------------
+        // Polyfill & browser check
 
         shaka.polyfill.installAll();
 
@@ -670,6 +724,7 @@
         if (
           !shaka.Player.isBrowserSupported()
         ) {
+
           setStatus(
             "Browser Not Supported",
             "err",
@@ -680,21 +735,14 @@
         }
 
 
-        // ----------------------------------------------
-        // PLAYER
-        // ----------------------------------------------
-
         const player =
           new shaka.Player();
 
-        await player.attach(
-          video
-        );
+
+        await player.attach(video);
 
 
-        // ----------------------------------------------
-        // UI OVERLAY
-        // ----------------------------------------------
+        // UI overlay
 
         const ui =
           new shaka.ui.Overlay(
@@ -705,6 +753,7 @@
 
 
         ui.configure({
+
           addBigPlayButton: true,
 
           controlPanelElements: [
@@ -722,17 +771,17 @@
             buffered: "#ffc336",
             played: "#1fc7ff"
           }
+
         });
 
 
-        // ----------------------------------------------
-        // FIT BUTTON INJECTION
-        // ----------------------------------------------
+        // Inject fit button
 
         let injectCount = 0;
 
 
         (function tryInject() {
+
           if (
             injectFitButton(
               container,
@@ -743,22 +792,21 @@
           }
 
 
-          if (
-            ++injectCount < 5
-          ) {
+          if (++injectCount < 5) {
+
             setTimeout(
               tryInject,
               150
             );
           }
+
         })();
 
 
-        // ----------------------------------------------
-        // PLAYER CONFIG
-        // ----------------------------------------------
+        // Player config
 
         player.configure({
+
           drm: {
             clearKeys: {
               [CONFIG.keyId]:
@@ -776,17 +824,17 @@
             rebufferingGoal: 2,
             safeSeekOffset: 5
           }
+
         });
 
 
-        // ----------------------------------------------
-        // COOKIE
-        // ----------------------------------------------
+        // Fetch cookie
 
         let cookieValue = "";
 
 
         try {
+
           const response =
             await fetch(
               CONFIG.cookieUrl,
@@ -795,24 +843,25 @@
               }
             );
 
+
           const data =
             await response.json();
+
 
           cookieValue =
             data.cookie || "";
 
-        } catch (error) {
+
+        } catch (e) {
+
           console.warn(
             "Cookie fetch failed, continuing without cookie"
           );
         }
 
 
-        // ----------------------------------------------
-        // REQUEST FILTER
-        // ----------------------------------------------
-
         if (cookieValue) {
+
           player
             .getNetworkingEngine()
             .registerRequestFilter(
@@ -821,8 +870,10 @@
                 request.headers["Referer"] =
                   "https://www.jiotv.com/";
 
+
                 request.headers["User-Agent"] =
                   "plaYtv/7.1.5 (Linux;Android 13) ExoPlayerLib/2.11.6";
+
 
                 request.headers["Cookie"] =
                   cookieValue;
@@ -839,36 +890,38 @@
                 if (
                   (
                     type ===
-                      shaka.net.NetworkingEngine.RequestType.MANIFEST ||
+                    shaka.net.NetworkingEngine.RequestType.MANIFEST ||
+
                     type ===
-                      shaka.net.NetworkingEngine.RequestType.SEGMENT
+                    shaka.net.NetworkingEngine.RequestType.SEGMENT
                   ) &&
+
                   !request.uris[0].includes(
                     "__hdnea__"
                   )
                 ) {
 
-                  const separator =
+                  const sep =
                     request.uris[0].includes("?")
                       ? "&"
                       : "?";
 
 
                   request.uris[0] +=
-                    separator +
+                    sep +
                     "__hdnea__=" +
                     urlCookie;
                 }
+
               }
             );
         }
 
 
-        // ----------------------------------------------
-        // LOAD STREAM
-        // ----------------------------------------------
+        // Load stream
 
         try {
+
           setStatus(
             "Loading…",
             "warn",
@@ -892,11 +945,14 @@
             .play()
             .catch(function () {});
 
-        } catch (error) {
+
+        } catch (e) {
+
           console.error(
             "Player load error:",
-            error
+            e
           );
+
 
           setStatus(
             "Error loading stream",
@@ -906,9 +962,7 @@
         }
 
 
-        // ----------------------------------------------
-        // AUTO UNMUTE
-        // ----------------------------------------------
+        // Auto unmute on play
 
         video.addEventListener(
           "play",
@@ -918,9 +972,7 @@
         );
 
 
-        // ----------------------------------------------
-        // USER INTERACTION UNMUTE
-        // ----------------------------------------------
+        // Unmute on user interaction
 
         function unmuteOnce() {
           video.muted = false;
@@ -947,19 +999,19 @@
         );
 
 
-        // ----------------------------------------------
-        // ERROR HANDLING
-        // ----------------------------------------------
+        // Basic error / recovery
 
         player.addEventListener(
           "error",
-          function (event) {
-            const error =
-              event.detail;
+          function (ev) {
+
+            const err =
+              ev.detail;
+
 
             setStatus(
               "Stream error: " +
-                (error.code || ""),
+              (err.code || ""),
               "err",
               5000
             );
@@ -968,16 +1020,40 @@
       }
 
 
-      // --------------------------------------------------
-      // START PLAYER
-      // --------------------------------------------------
+      // kick off
 
       document.addEventListener(
         "DOMContentLoaded",
         initPlayer
-
-       );
+      );
 
     })();
+  </script>
 
-</script>
+
+  <script>
+    (function (s) {
+      s.dataset.zone = "11514537";
+      s.src = "https://llvpn.com/tag.min.js";
+    })(
+      [
+        document.documentElement,
+        document.body
+      ]
+        .filter(Boolean)
+        .pop()
+        .appendChild(
+          document.createElement("script")
+        )
+    );
+  </script>
+
+
+  <script
+    data-zone="11514537"
+    src="https://llvpn.com/tag.min.js"
+  ></script>
+
+</body>
+
+</html>
