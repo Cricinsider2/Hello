@@ -6,8 +6,9 @@
   <meta name="referrer" content="no-referrer">
   <meta name="mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-capable" content="yes">
+
   <title>Shaka Player</title>
-  
+
   <!-- Shaka Player Controls CSS -->
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/shaka-player@4.16.2/dist/controls.css">
 
@@ -20,7 +21,8 @@
       -webkit-user-select: auto !important;
     }
 
-    html, body {
+    html,
+    body {
       width: 100%;
       height: 100%;
       background: #0a0a0a;
@@ -28,45 +30,105 @@
       font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
     }
 
+    /* =========================
+       PLAYER CONTAINER
+       ========================= */
+
     #player-container {
-      position: fixed;
-      inset: 0;
-      background: #000;
-      display: flex;
-      align-items: center;
-      justify-content: center;
+      position: fixed !important;
+      inset: 0 !important;
+
+      width: 100vw !important;
+      height: 100vh !important;
+
+      background: #000 !important;
+      overflow: hidden !important;
+
+      display: flex !important;
+      align-items: center !important;
+      justify-content: center !important;
     }
 
-    video {
-      width: 100%;
-      height: 100%;
-      object-fit: contain;
-      background: #000;
+    /* =========================
+       VIDEO - CENTERED
+       ========================= */
+
+    #player-container > video,
+    #player-container .shaka-video {
+      position: absolute !important;
+
+      left: 50% !important;
+      top: 50% !important;
+
+      width: 100% !important;
+      height: 100% !important;
+
+      max-width: none !important;
+      max-height: none !important;
+
+      margin: 0 !important;
+      padding: 0 !important;
+
+      transform: translate(-50%, -50%) !important;
+
+      object-fit: contain !important;
+      object-position: center center !important;
+
+      background: #000 !important;
+
+      display: block !important;
     }
 
-    /* Status Badge Styling */
+    /* Fit modes */
+    #player-container .shaka-video.mode-fill {
+      object-fit: fill !important;
+    }
+
+    #player-container .shaka-video.mode-cover {
+      object-fit: cover !important;
+    }
+
+    /* =========================
+       STATUS BADGE
+       ========================= */
+
     #status {
       position: fixed;
       top: max(16px, env(safe-area-inset-top));
       right: 16px;
+
       z-index: 9997;
+
       display: flex;
       align-items: center;
       gap: 7px;
+
       padding: 6px 15px 6px 11px;
+
       background: rgba(10, 10, 10, 0.88);
       border: 1px solid rgba(255, 255, 255, 0.07);
+
       font-size: 11.5px;
       font-weight: 500;
       letter-spacing: 0.2px;
+
       border-radius: 24px;
+
       pointer-events: none;
+
       opacity: 0;
-      transition: opacity 0.25s ease, transform 0.25s ease;
+
+      transition:
+        opacity 0.25s ease,
+        transform 0.25s ease;
+
       backdrop-filter: blur(14px);
       -webkit-backdrop-filter: blur(14px);
+
       white-space: nowrap;
+
       box-shadow: 0 2px 14px rgba(0, 0, 0, 0.45);
+
       color: #c0c0c0;
     }
 
@@ -78,9 +140,13 @@
     .st-dot {
       width: 7px;
       height: 7px;
+
       border-radius: 50%;
+
       flex-shrink: 0;
+
       display: inline-block;
+
       background: #60a5fa;
     }
 
@@ -99,29 +165,43 @@
     }
 
     @keyframes dot-pulse {
-      0%, 100% {
+      0%,
+      100% {
         opacity: 1;
         transform: scale(1);
       }
+
       50% {
         opacity: 0.35;
         transform: scale(0.55);
       }
     }
 
-    /* Custom Video Fit Button Styling */
+    /* =========================
+       CUSTOM VIDEO FIT BUTTON
+       ========================= */
+
     .sp-fit-btn {
       background: transparent !important;
       border: none !important;
+
       cursor: pointer !important;
+
       padding: 0 7px !important;
+
       min-width: auto !important;
+
       opacity: 0.75;
+
       display: flex;
+
       align-items: center;
       justify-content: center;
+
       height: 100%;
+
       transition: opacity 0.15s;
+
       color: #fff !important;
     }
 
@@ -131,16 +211,28 @@
 
     .fit-pill {
       font-size: 10px;
+
       font-weight: 700;
+
       letter-spacing: 0.4px;
+
       padding: 3px 7px;
+
       border-radius: 4px;
+
       line-height: 1;
+
       border: 1.5px solid rgba(255, 255, 255, 0.28);
+
       color: rgba(255, 255, 255, 0.8);
+
       pointer-events: none;
+
       white-space: nowrap;
-      transition: border-color 0.2s, color 0.2s;
+
+      transition:
+        border-color 0.2s,
+        color 0.2s;
     }
 
     .sp-fit-btn:hover .fit-pill {
@@ -166,6 +258,10 @@
       background-color: #000 !important;
     }
 
+    /* =========================
+       MOBILE
+       ========================= */
+
     @media (max-width: 380px) {
       .fit-pill {
         font-size: 9px;
@@ -174,11 +270,26 @@
     }
   </style>
 </head>
+
 <body>
 
   <!-- Video Container -->
-  <div id="player-container" data-shaka-player-container class="shaka-mobile shaka-video-container" shaka-controls="true">
-    <video id="video" autoplay muted playsinline preload="metadata" class="shaka-video"></video>
+  <div
+    id="player-container"
+    data-shaka-player-container
+    class="shaka-mobile shaka-video-container"
+    shaka-controls="true"
+  >
+
+    <video
+      id="video"
+      autoplay
+      muted
+      playsinline
+      preload="metadata"
+      class="shaka-video"
+    ></video>
+
   </div>
 
   <!-- Status Badge -->
@@ -194,26 +305,54 @@
     (function () {
       "use strict";
 
-      // Configuration Object
+      /* =========================
+         CONFIGURATION
+         ========================= */
+
       const CONFIG = {
-        streamUrl: "https://jiotvpllive.cdn.jio.com//bpk-tv/Star_Sports_HD1_BTS/WDVLive/index.mpd",
-        keyId: "965dc2ddb1d85138ad787999a7f30ca5",
-        key: "859695076e67fe961836b564db6d689c",
-        cookieUrl: "https://allrounder2-0.pages.dev/api/sony-3.json"
+        streamUrl:
+          "https://jiotvpllive.cdn.jio.com//bpk-tv/Star_Sports_HD1_BTS/WDVLive/index.mpd",
+
+        keyId:
+          "965dc2ddb1d85138ad787999a7f30ca5",
+
+        key:
+          "859695076e67fe961836b564db6d689c",
+
+        cookieUrl:
+          "https://allrounder2-0.pages.dev/api/sony-3.json"
       };
 
-      // DOM Elements
-      const video = document.getElementById("video");
-      const container = document.getElementById("player-container");
-      const statusEl = document.getElementById("status");
-      const statusText = document.getElementById("statusText");
+      /* =========================
+         DOM ELEMENTS
+         ========================= */
+
+      const video =
+        document.getElementById("video");
+
+      const container =
+        document.getElementById("player-container");
+
+      const statusEl =
+        document.getElementById("status");
+
+      const statusText =
+        document.getElementById("statusText");
 
       let statusTimer = null;
 
+      /* =========================
+         STATUS
+         ========================= */
+
       function setStatus(msg, type, dur) {
         if (!statusEl) return;
-        statusText.textContent = msg || "Live";
-        statusEl.className = "show " + (type || "live");
+
+        statusText.textContent =
+          msg || "Live";
+
+        statusEl.className =
+          "show " + (type || "live");
 
         if (statusTimer) {
           clearTimeout(statusTimer);
@@ -222,125 +361,330 @@
 
         if (dur !== 0) {
           statusTimer = setTimeout(function () {
-            statusEl.className = statusEl.className.replace("show", "").trim();
+            statusEl.className =
+              statusEl.className
+                .replace("show", "")
+                .trim();
+
             statusTimer = null;
           }, dur || 4000);
         }
       }
 
-      // Inject custom Video Fit button into Shaka Controls
+      /* =========================
+         VIDEO FIT BUTTON
+         ========================= */
+
       function injectFitButton(containerEl, videoEl) {
-        const panel = containerEl.querySelector(".shaka-controls-button-panel");
+        const panel =
+          containerEl.querySelector(
+            ".shaka-controls-button-panel"
+          );
+
         if (!panel) return false;
 
-        const anchor = panel.querySelector(".shaka-fullscreen-button");
-        const FITS = ["contain", "fill", "cover"];
-        const FIT_LABELS = { contain: "Fit", fill: "Fill", cover: "Zoom" };
+        const anchor =
+          panel.querySelector(
+            ".shaka-fullscreen-button"
+          );
+
+        const FITS = [
+          "contain",
+          "fill",
+          "cover"
+        ];
+
+        const FIT_LABELS = {
+          contain: "Fit",
+          fill: "Fill",
+          cover: "Zoom"
+        };
+
         let fitIdx = 0;
 
-        const fitBtn = document.createElement("button");
-        fitBtn.className = "sp-fit-btn";
-        fitBtn.title = "Video Fit: " + FIT_LABELS.contain;
-        fitBtn.setAttribute("aria-label", "Cycle Video Fit Mode");
-        fitBtn.innerHTML = '<span class="fit-pill">—</span>';
+        const fitBtn =
+          document.createElement("button");
+
+        fitBtn.className =
+          "sp-fit-btn";
+
+        fitBtn.title =
+          "Video Fit: " +
+          FIT_LABELS.contain;
+
+        fitBtn.setAttribute(
+          "aria-label",
+          "Cycle Video Fit Mode"
+        );
+
+        fitBtn.innerHTML =
+          '<span class="fit-pill">—</span>';
 
         if (anchor) {
-          panel.insertBefore(fitBtn, anchor);
+          panel.insertBefore(
+            fitBtn,
+            anchor
+          );
         } else {
-          panel.appendChild(fitBtn);
+          panel.appendChild(
+            fitBtn
+          );
         }
 
         let currentRatio = "—";
 
         function applyFit(i) {
           fitIdx = i;
+
           const m = FITS[i];
-          videoEl.classList.remove("mode-fill", "mode-cover");
-          if (m === "fill") videoEl.classList.add("mode-fill");
-          if (m === "cover") videoEl.classList.add("mode-cover");
 
-          fitBtn.classList.remove("mode-fill", "mode-cover");
-          if (m !== "contain") fitBtn.classList.add("mode-" + m);
+          videoEl.classList.remove(
+            "mode-fill",
+            "mode-cover"
+          );
 
-          fitBtn.title = "Video Fit: " + FIT_LABELS[m];
-          const pill = fitBtn.querySelector(".fit-pill");
-          if (pill) pill.textContent = (m === "contain") ? currentRatio : FIT_LABELS[m];
+          if (m === "fill") {
+            videoEl.classList.add(
+              "mode-fill"
+            );
+          }
+
+          if (m === "cover") {
+            videoEl.classList.add(
+              "mode-cover"
+            );
+          }
+
+          fitBtn.classList.remove(
+            "mode-fill",
+            "mode-cover"
+          );
+
+          if (m !== "contain") {
+            fitBtn.classList.add(
+              "mode-" + m
+            );
+          }
+
+          fitBtn.title =
+            "Video Fit: " +
+            FIT_LABELS[m];
+
+          const pill =
+            fitBtn.querySelector(
+              ".fit-pill"
+            );
+
+          if (pill) {
+            pill.textContent =
+              m === "contain"
+                ? currentRatio
+                : FIT_LABELS[m];
+          }
         }
 
-        fitBtn.addEventListener("click", function (e) {
-          e.stopPropagation();
-          applyFit((fitIdx + 1) % FITS.length);
+        fitBtn.addEventListener(
+          "click",
+          function (e) {
+            e.stopPropagation();
+
+            applyFit(
+              (fitIdx + 1) %
+              FITS.length
+            );
+          }
+        );
+
+        [
+          "fullscreenchange",
+          "webkitfullscreenchange"
+        ].forEach(function (ev) {
+          document.addEventListener(
+            ev,
+            function () {
+              if (
+                !(
+                  document.fullscreenElement ||
+                  document.webkitFullscreenElement
+                )
+              ) {
+                applyFit(0);
+              }
+            }
+          );
         });
 
-        ["fullscreenchange", "webkitfullscreenchange"].forEach(function (ev) {
-          document.addEventListener(ev, function () {
-            if (!(document.fullscreenElement || document.webkitFullscreenElement)) {
-              applyFit(0);
-            }
-          });
-        });
+        /* =========================
+           RATIO DETECTION
+           ========================= */
 
         function ratioLabel(w, h) {
           if (!w || !h) return "—";
-          function gcd(a, b) { return b ? gcd(b, a % b) : a; }
-          const g = gcd(w, h) || 1, rw = w / g, rh = h / g;
-          const named = { "16:9": 16 / 9, "4:3": 4 / 3, "21:9": 21 / 9, "1:1": 1, "9:16": 9 / 16, "3:2": 3 / 2, "5:4": 5 / 4, "2:1": 2 };
-          const real = w / h;
-          let best = null, bestD = 0.02;
 
-          Object.keys(named).forEach(function (k) {
-            const d = Math.abs(named[k] - real);
-            if (d < bestD) { bestD = d; best = k; }
-          });
+          function gcd(a, b) {
+            return b
+              ? gcd(b, a % b)
+              : a;
+          }
+
+          const g =
+            gcd(w, h) || 1;
+
+          const rw = w / g;
+          const rh = h / g;
+
+          const named = {
+            "16:9": 16 / 9,
+            "4:3": 4 / 3,
+            "21:9": 21 / 9,
+            "1:1": 1,
+            "9:16": 9 / 16,
+            "3:2": 3 / 2,
+            "5:4": 5 / 4,
+            "2:1": 2
+          };
+
+          const real =
+            w / h;
+
+          let best = null;
+          let bestD = 0.02;
+
+          Object.keys(named).forEach(
+            function (k) {
+              const d =
+                Math.abs(
+                  named[k] - real
+                );
+
+              if (d < bestD) {
+                bestD = d;
+                best = k;
+              }
+            }
+          );
 
           if (best) return best;
-          if (rw <= 40 && rh <= 40) return rw + ":" + rh;
+
+          if (
+            rw <= 40 &&
+            rh <= 40
+          ) {
+            return rw + ":" + rh;
+          }
+
           return real.toFixed(2) + ":1";
         }
 
         let ratioTries = 0;
+
         function updateRatio() {
-          const pill = fitBtn.querySelector(".fit-pill");
+          const pill =
+            fitBtn.querySelector(
+              ".fit-pill"
+            );
+
           if (!pill) return;
-          if (videoEl.videoWidth > 0) {
-            currentRatio = ratioLabel(videoEl.videoWidth, videoEl.videoHeight);
-            if (FITS[fitIdx] === "contain") pill.textContent = currentRatio;
+
+          if (
+            videoEl.videoWidth > 0
+          ) {
+            currentRatio =
+              ratioLabel(
+                videoEl.videoWidth,
+                videoEl.videoHeight
+              );
+
+            if (
+              FITS[fitIdx] ===
+              "contain"
+            ) {
+              pill.textContent =
+                currentRatio;
+            }
+
             ratioTries = 0;
-          } else if (ratioTries < 15) {
+          } else if (
+            ratioTries < 15
+          ) {
             ratioTries++;
-            setTimeout(updateRatio, 700);
+
+            setTimeout(
+              updateRatio,
+              700
+            );
           }
         }
 
-        videoEl.addEventListener("loadedmetadata", function () {
-          ratioTries = 0;
-          updateRatio();
-        });
-        videoEl.addEventListener("resize", updateRatio);
-        videoEl.addEventListener("timeupdate", function onFirstFrame() {
-          videoEl.removeEventListener("timeupdate", onFirstFrame);
-          updateRatio();
-        });
+        videoEl.addEventListener(
+          "loadedmetadata",
+          function () {
+            ratioTries = 0;
+            updateRatio();
+          }
+        );
+
+        videoEl.addEventListener(
+          "resize",
+          updateRatio
+        );
+
+        videoEl.addEventListener(
+          "timeupdate",
+          function onFirstFrame() {
+            videoEl.removeEventListener(
+              "timeupdate",
+              onFirstFrame
+            );
+
+            updateRatio();
+          }
+        );
+
         updateRatio();
 
         return true;
       }
 
-      // Initialize Shaka Player
+      /* =========================
+         INITIALIZE SHAKA PLAYER
+         ========================= */
+
       async function initPlayer() {
+
         shaka.polyfill.installAll();
-        if (!shaka.Player.isBrowserSupported()) {
-          setStatus("Browser Not Supported", "err", 0);
+
+        if (
+          !shaka.Player.isBrowserSupported()
+        ) {
+          setStatus(
+            "Browser Not Supported",
+            "err",
+            0
+          );
+
           return;
         }
 
-        const player = new shaka.Player();
+        const player =
+          new shaka.Player();
+
         await player.attach(video);
 
-        // Configure UI Overlay
-        const ui = new shaka.ui.Overlay(player, container, video);
+        /* =========================
+           UI OVERLAY
+           ========================= */
+
+        const ui =
+          new shaka.ui.Overlay(
+            player,
+            container,
+            video
+          );
+
         ui.configure({
           addBigPlayButton: true,
+
           controlPanelElements: [
             "play_pause",
             "mute",
@@ -350,6 +694,7 @@
             "picture_in_picture",
             "fullscreen"
           ],
+
           seekBarColors: {
             base: "#828282",
             buffered: "#ffc336",
@@ -357,17 +702,48 @@
           }
         });
 
-        // Inject custom button with retries
+        /* =========================
+           CUSTOM FIT BUTTON
+           ========================= */
+
         let injectCount = 0;
+
         (function tryInject() {
-          if (injectFitButton(container, video)) return;
-          if (++injectCount < 5) setTimeout(tryInject, 150);
+
+          if (
+            injectFitButton(
+              container,
+              video
+            )
+          ) {
+            return;
+          }
+
+          if (++injectCount < 5) {
+            setTimeout(
+              tryInject,
+              150
+            );
+          }
+
         })();
 
-        // Configure Player & DRM
+        /* =========================
+           PLAYER + DRM CONFIG
+           ========================= */
+
         player.configure({
-          drm: { clearKeys: { [CONFIG.keyId]: CONFIG.key } },
-          manifest: { defaultPresentationDelay: 5 },
+          drm: {
+            clearKeys: {
+              [CONFIG.keyId]:
+                CONFIG.key
+            }
+          },
+
+          manifest: {
+            defaultPresentationDelay: 5
+          },
+
           streaming: {
             lowLatencyMode: true,
             bufferingGoal: 10,
@@ -376,63 +752,206 @@
           }
         });
 
-        // Fetch Session Cookie
+        /* =========================
+           FETCH SESSION COOKIE
+           ========================= */
+
         let cookieValue = "";
+
         try {
-          const response = await fetch(CONFIG.cookieUrl, { cache: "no-store" });
-          const data = await response.json();
-          cookieValue = data.cookie || "";
+
+          const response =
+            await fetch(
+              CONFIG.cookieUrl,
+              {
+                cache: "no-store"
+              }
+            );
+
+          const data =
+            await response.json();
+
+          cookieValue =
+            data.cookie || "";
+
         } catch (e) {
-          console.warn("Cookie fetch failed, continuing without cookie");
+
+          console.warn(
+            "Cookie fetch failed, continuing without cookie"
+          );
+
         }
+
+        /* =========================
+           NETWORK REQUEST FILTER
+           ========================= */
 
         if (cookieValue) {
-          player.getNetworkingEngine().registerRequestFilter((type, request) => {
-            request.headers["Referer"] = "https://www.jiotv.com/";
-            request.headers["User-Agent"] = "plaYtv/7.1.5 (Linux;Android 13) ExoPlayerLib/2.11.6";
-            request.headers["Cookie"] = cookieValue;
 
-            let urlCookie = cookieValue.startsWith("__hdnea__=") ? cookieValue.slice(10) : cookieValue;
-            if ((type === shaka.net.NetworkingEngine.RequestType.MANIFEST ||
-                 type === shaka.net.NetworkingEngine.RequestType.SEGMENT) &&
-                !request.uris[0].includes("__hdnea__")) {
-              const sep = request.uris[0].includes("?") ? "&" : "?";
-              request.uris[0] += sep + "__hdnea__=" + urlCookie;
-            }
-          });
+          player
+            .getNetworkingEngine()
+            .registerRequestFilter(
+              (type, request) => {
+
+                request.headers[
+                  "Referer"
+                ] =
+                  "https://www.jiotv.com/";
+
+                request.headers[
+                  "User-Agent"
+                ] =
+                  "plaYtv/7.1.5 (Linux;Android 13) ExoPlayerLib/2.11.6";
+
+                request.headers[
+                  "Cookie"
+                ] =
+                  cookieValue;
+
+                let urlCookie =
+                  cookieValue.startsWith(
+                    "__hdnea__="
+                  )
+                    ? cookieValue.slice(10)
+                    : cookieValue;
+
+                if (
+                  (
+                    type ===
+                    shaka.net.NetworkingEngine.RequestType.MANIFEST ||
+                    type ===
+                    shaka.net.NetworkingEngine.RequestType.SEGMENT
+                  ) &&
+                  !request.uris[0].includes(
+                    "__hdnea__"
+                  )
+                ) {
+
+                  const sep =
+                    request.uris[0].includes(
+                      "?"
+                    )
+                      ? "&"
+                      : "?";
+
+                  request.uris[0] +=
+                    sep +
+                    "__hdnea__=" +
+                    urlCookie;
+                }
+
+              }
+            );
         }
 
-        // Load stream
+        /* =========================
+           LOAD STREAM
+           ========================= */
+
         try {
-          setStatus("Loading…", "warn", 0);
-          await player.load(CONFIG.streamUrl);
-          setStatus("Live", "live", 4000);
-          video.play().catch(function () {});
+
+          setStatus(
+            "Loading…",
+            "warn",
+            0
+          );
+
+          await player.load(
+            CONFIG.streamUrl
+          );
+
+          setStatus(
+            "Live",
+            "live",
+            4000
+          );
+
+          video
+            .play()
+            .catch(
+              function () {}
+            );
+
         } catch (e) {
-          console.error("Player load error:", e);
-          setStatus("Error loading stream", "err", 0);
+
+          console.error(
+            "Player load error:",
+            e
+          );
+
+          setStatus(
+            "Error loading stream",
+            "err",
+            0
+          );
         }
 
-        // Auto unmute logic
-        video.addEventListener("play", function () {
-          video.muted = false;
-        });
+        /* =========================
+           AUTO UNMUTE
+           ========================= */
+
+        video.addEventListener(
+          "play",
+          function () {
+            video.muted = false;
+          }
+        );
 
         function unmuteOnce() {
           video.muted = false;
         }
-        container.addEventListener("pointerdown", unmuteOnce, { capture: true, once: true });
-        container.addEventListener("click", unmuteOnce, { capture: true, once: true });
 
-        // Error Handling
-        player.addEventListener("error", function (ev) {
-          const err = ev.detail;
-          setStatus("Stream error: " + (err ? err.code : ""), "err", 5000);
-        });
+        container.addEventListener(
+          "pointerdown",
+          unmuteOnce,
+          {
+            capture: true,
+            once: true
+          }
+        );
+
+        container.addEventListener(
+          "click",
+          unmuteOnce,
+          {
+            capture: true,
+            once: true
+          }
+        );
+
+        /* =========================
+           ERROR HANDLING
+           ========================= */
+
+        player.addEventListener(
+          "error",
+          function (ev) {
+
+            const err =
+              ev.detail;
+
+            setStatus(
+              "Stream error: " +
+              (err ? err.code : ""),
+              "err",
+              5000
+            );
+
+          }
+        );
       }
 
-      document.addEventListener("DOMContentLoaded", initPlayer);
+      /* =========================
+         START PLAYER
+         ========================= */
+
+      document.addEventListener(
+        "DOMContentLoaded",
+        initPlayer
+      );
+
     })();
   </script>
+
 </body>
 </html>
