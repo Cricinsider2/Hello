@@ -91,7 +91,7 @@
         player.configure({
             drm: {
                 clearKeys: {
-                    'aefc2c8d1c8840f1b6981f856c9269ba': "cf8ea114c45b4d6596b2748258ab74d6"
+                    '335dad778109954503dcbb21dc92015f': "24bfd75d436cbf73168a2a2dccd40281"
                 }
             }
         });
@@ -115,7 +115,7 @@ window.player = player;
         controls.addEventListener("error", onUIErrorEvent);
 
         try {
-            await player.load("https://dice-live-oc.akamaized.net/hdntl=exp=1776767523~acl=%2f*~id=54ab4108-7958-4a51-a1bf-ffb3e6835f9d~data=hdntl,aXA9MzguMTM3LjMzLjEyMiZleHA9MTc3NjY4MTE1MiZlaWQ9ODM3OTE3Jm9pZD0yMiZ0eXBlPVZPRCZ1aWQ9bnVsbCZjaWQ9bnVsbCZwdD1udWxs~hmac=465dbf8d31288a70457aa681805f89ac7f0b1b367cad62e411752d52ecbedad4/dash/live/2093749/219026-314033/manifest-d.mpd");
+            await player.load("https://otte.live.fly.ww.aiv-cdn.net/syd-nitro/live/clients/dash/enc/ghwcl6hv68/out/v1/83536910d8034e9b9895a20fbe1c1687/cenc.mpd");
             console.log("The video has now been loaded!");
         } catch (error) {
             onPlayerError(error);
