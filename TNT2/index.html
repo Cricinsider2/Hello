@@ -104,33 +104,6 @@ if(join){
 location.href = "https://t.me/+JF3k_AwXqLU3MDI1";
 }
 
-const urlParams=new URLSearchParams(window.location.search);
-const id=urlParams.get('id');
-const iframe=document.getElementById('main-iframe');
-
-if(id){
-fetch('HIN')
-.then(res=>res.json())
-.then(data=>{
-const targetData=data.iframes.find(item=>item.id===id);
-if(targetData && targetData.iframeSrc){
-iframe.src=targetData.iframeSrc;
-
-if(targetData.hit){
-fetch(targetData.hit).catch(()=>{});
-}
-
-}else{
-showError("Stream not found");
-}
-})
-.catch(()=>{
-showError("Error loading data");
-});
-}else{
-showError("No ID provided");
-}
-
 function showError(msg){
 const h2=document.createElement('h2');
 h2.className='error-msg';
