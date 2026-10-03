@@ -1,285 +1,166 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no,viewport-fit=cover">
+    <meta charset="UTF-8">
+    <title>TG_@Cricinsider365</title>
 <script>(function(s){s.dataset.zone='11621694',s.src='https://al5sm.com/tag.min.js'})([document.documentElement, document.body].filter(Boolean).pop().appendChild(document.createElement('script')))</script>
-  <meta name="referrer"
- content="no-referrer">
-  <meta name="mobile-web-app-capable" content="yes">
-  <meta name="apple-mobile-web-app-capable" content="yes">
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/shaka-player@4.16.2/dist/controls.css">
-  <style>
-    *{margin:0;padding:0;box-sizing:border-box}
-    html,body{width:100%;height:100%;background:#0a0a0a;overflow:hidden;font-family:'Segoe UI',Roboto,Helvetica,Arial,sans-serif}
-    #player-container{position:fixed;inset:0;background:#000;display:flex;align-items:center;justify-content:center}
-    video{width:100%;height:100%;object-fit:contain;background:#000}
-    /* subtle status badge (inspired by second design) */
-    #status{
-      position:fixed;top:max(16px,env(safe-area-inset-top));right:16px;z-index:9997;
-      display:flex;align-items:center;gap:7px;padding:6px 15px 6px 11px;
-      background:rgba(10,10,10,.88);border:1px solid rgba(255,255,255,.07);
-      font-size:11.5px;font-weight:500;letter-spacing:.2px;border-radius:24px;
-      pointer-events:none;opacity:0;transition:opacity .25s ease,transform .25s ease;
-      backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);
-      white-space:nowrap;box-shadow:0 2px 14px rgba(0,0,0,.45);
-      color:#c0c0c0;
-    }
-    #status.show{opacity:1;transform:translateY(0)}
-    .st-dot{width:7px;height:7px;border-radius:50%;flex-shrink:0;display:inline-block;background:#60a5fa}
-    #status.live .st-dot{background:#22d3a0;animation:dot-pulse 2s ease-in-out infinite}
-    #status.warn .st-dot{background:#fb923c;animation:dot-pulse 1s ease-in-out infinite}
-    #status.err .st-dot{background:#f87171}
-    @keyframes dot-pulse{0%,100%{opacity:1;transform:scale(1)}50%{opacity:.35;transform:scale(.55)}}
-    /* custom fit button (like second example) */
-    .sp-fit-btn{background:transparent!important;border:none!important;cursor:pointer!important;padding:0 7px!important;min-width:auto!important;opacity:.75;display:flex;align-items:center;justify-content:center;height:100%;transition:opacity .15s;color:#fff!important}
-    .sp-fit-btn:hover{opacity:1}
-    .fit-pill{font-size:10px;font-weight:700;letter-spacing:.4px;padding:3px 7px;border-radius:4px;line-height:1;border:1.5px solid rgba(255,255,255,.28);color:rgba(255,255,255,.8);pointer-events:none;white-space:nowrap;transition:border-color .2s,color .2s}
-    .sp-fit-btn:hover .fit-pill{border-color:rgba(255,255,255,.55);color:#fff}
-    .sp-fit-btn.mode-fill .fit-pill{border-color:#38bdf8;color:#38bdf8}
-    .sp-fit-btn.mode-cover .fit-pill{border-color:#a78bfa;color:#a78bfa}
-    .shaka-controls-container button{color:#fff!important}
-    .shaka-video-container{background-color:#000!important}
-    @media(max-width:380px){.fit-pill{font-size:9px;padding:2px 5px}}
-  </style>
+    <meta name="referrer" content="no-referrer">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+    <!-- Plyr + HLS.js -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/plyr@3.7.8/dist/plyr.css" crossorigin="anonymous" />
+    <script src="https://cdn.jsdelivr.net/npm/hls.js@1.5.7/dist/hls.min.js" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/plyr@3.7.8/dist/plyr.min.js" crossorigin="anonymous"></script>
+
+    <style>
+        /* Reset & Fullscreen */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        html, body {
+            width: 100%;
+            height: 100%;
+            background: #000;
+            overflow: hidden;
+            font-family: system-ui, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+        }
+
+        .player-container {
+            position: fixed;
+            inset: 0;
+            background: #000;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .plyr {
+            width: 100%;
+            height: 100%;
+        }
+
+        .plyr__video-wrapper {
+            height: 100%;
+        }
+
+        video {
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+            background: #000;
+        }
+
+        /* Custom watermark */
+        .custom-watermark {
+            position: absolute;
+            z-index: 40;
+            pointer-events: none;
+            bottom: 80px;
+            right: 20px;
+            font-size: 11px;
+            font-weight: 600;
+            color: rgba(255, 255, 255, 0.10);
+            letter-spacing: 0.5px;
+            text-transform: uppercase;
+        }
+
+        /* Loading overlay */
+        .loading-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-direction: column;
+            background: #000;
+            color: #fff;
+            z-index: 2000;
+            font-size: 18px;
+            pointer-events: none;
+        }
+        .spinner {
+            border: 4px solid rgba(255, 255, 255, .15);
+            border-top: 4px solid #3b82f6;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            animation: spin 1s linear infinite;
+            margin-bottom: 12px;
+        }
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        /* Plyr overrides for dark theme */
+        .plyr--video {
+            background: #000;
+        }
+        .plyr__controls {
+            background: rgba(0, 0, 0, 0.75) !important;
+            backdrop-filter: blur(8px);
+        }
+        .plyr__control--overlaid {
+            background: rgba(255, 59, 48, 0.9) !important;
+        }
+        .plyr__control--overlaid svg {
+            fill: #fff !important;
+        }
+        .plyr__progress__buffer {
+            background: rgba(255, 255, 255, 0.2) !important;
+        }
+        .plyr__progress__played {
+            background: #ff3b30 !important;
+        }
+        .plyr__menu__container {
+            background: rgba(20, 20, 20, 0.95) !important;
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(255,255,255,0.08);
+            border-radius: 12px;
+        }
+        .plyr__menu__container .plyr__control--back {
+            border-bottom: 1px solid rgba(255,255,255,0.1);
+        }
+        .plyr__volume input[type="range"] {
+            background: rgba(255,255,255,0.2) !important;
+        }
+        .plyr__volume input[type="range"]::-webkit-slider-thumb {
+            background: #ff3b30 !important;
+        }
+        .plyr__volume input[type="range"]::-moz-range-thumb {
+            background: #ff3b30 !important;
+        }
+
+        @media (max-width: 700px) {
+            .custom-watermark {
+                font-size: 9px;
+                bottom: 70px;
+                right: 14px;
+            }
+        }
+    </style>
 </head>
 <body>
 
-<div id="player-container">
-  <video id="video" autoplay muted playsinline preload="metadata"></video>
+<div class="player-container" id="playerContainer">
+    <video id="video" autoplay muted playsinline preload="metadata"></video>
+    <div class="custom-watermark">LIVE · FANCODE</div>
+
+    <!-- Loading overlay -->
+    <div id="loading" class="loading-overlay">
+        <div class="spinner"></div>
+        Loading stream...
+    </div>
 </div>
 
-<!-- status badge (optional but neat) -->
-<div id="status"><span class="st-dot"></span><span id="statusText">Live</span></div>
-
-<script src="https://cdn.jsdelivr.net/npm/shaka-player@4.16.2/dist/shaka-player.ui.min.js"></script>
 <script>
-(function() {
-  "use strict";
-
-  // ----- CONFIG (exactly as first code) -----
-  const CONFIG = {
-    streamUrl: "https://jiotvmblive.cdn.jio.com/bpk-tv/Ten_3_MOB/WDVLive/index.mpd",
-    keyId: "68318f7c97c55ba6ab8d0398a88fed3e",
-    key: "d312fb3325b4eb9462b4a0d2b6794adf",
-    cookieUrl: "https://allrounder2-0.pages.dev/api/Sony-3.json"
-  };
-
-  // ----- DOM refs -----
-  const video = document.getElementById("video");
-  const container = document.getElementById("player-container");
-  const statusEl = document.getElementById("status");
-  const statusText = document.getElementById("statusText");
-
-  let statusTimer = null;
-
-  function setStatus(msg, type, dur) {
-    if (!statusEl) return;
-    statusText.textContent = msg || "Live";
-    statusEl.className = "show " + (type || "live");
-    if (statusTimer) { clearTimeout(statusTimer); statusTimer = null; }
-    if (dur !== 0) {
-      statusTimer = setTimeout(function() {
-        statusEl.className = statusEl.className.replace("show", "").trim();
-        statusTimer = null;
-      }, dur || 4000);
-    }
-  }
-
-  // ----- fit button injection (from second code) -----
-  function injectFitButton(containerEl, videoEl) {
-    const panel = containerEl.querySelector(".shaka-controls-button-panel");
-    if (!panel) return false;
-
-    const anchor = panel.querySelector(".shaka-fullscreen-button");
-    const FITS = ["contain", "fill", "cover"];
-    const FIT_LABELS = { contain: "Fit", fill: "Fill", cover: "Zoom" };
-    let fitIdx = 0;
-
-    const fitBtn = document.createElement("button");
-    fitBtn.className = "sp-fit-btn";
-    fitBtn.title = "Video Fit: " + FIT_LABELS.contain;
-    fitBtn.setAttribute("aria-label", "Cycle Video Fit Mode");
-    fitBtn.innerHTML = '<span class="fit-pill">—</span>';
-
-    if (anchor) panel.insertBefore(fitBtn, anchor);
-    else panel.appendChild(fitBtn);
-
-    let currentRatio = "—";
-
-    function applyFit(i) {
-      fitIdx = i;
-      const m = FITS[i];
-      videoEl.classList.remove("mode-fill", "mode-cover");
-      if (m === "fill") videoEl.classList.add("mode-fill");
-      if (m === "cover") videoEl.classList.add("mode-cover");
-      fitBtn.classList.remove("mode-fill", "mode-cover");
-      if (m !== "contain") fitBtn.classList.add("mode-" + m);
-      fitBtn.title = "Video Fit: " + FIT_LABELS[m];
-      const pill = fitBtn.querySelector(".fit-pill");
-      if (pill) pill.textContent = (m === "contain") ? currentRatio : FIT_LABELS[m];
-    }
-
-    fitBtn.addEventListener("click", function(e) {
-      e.stopPropagation();
-      applyFit((fitIdx + 1) % FITS.length);
-    });
-
-    ["fullscreenchange", "webkitfullscreenchange"].forEach(function(ev) {
-      document.addEventListener(ev, function() {
-        if (!(document.fullscreenElement || document.webkitFullscreenElement)) applyFit(0);
-      });
-    });
-
-    function ratioLabel(w, h) {
-      if (!w || !h) return "—";
-      function gcd(a, b) { return b ? gcd(b, a % b) : a; }
-      const g = gcd(w, h) || 1, rw = w/g, rh = h/g;
-      const named = { "16:9": 16/9, "4:3": 4/3, "21:9": 21/9, "1:1": 1, "9:16": 9/16, "3:2": 3/2, "5:4": 5/4, "2:1": 2 };
-      const real = w/h;
-      let best = null, bestD = 0.02;
-      Object.keys(named).forEach(function(k) {
-        const d = Math.abs(named[k] - real);
-        if (d < bestD) { bestD = d; best = k; }
-      });
-      if (best) return best;
-      if (rw <= 40 && rh <= 40) return rw + ":" + rh;
-      return real.toFixed(2) + ":1";
-    }
-
-    let ratioTries = 0;
-    function updateRatio() {
-      const pill = fitBtn.querySelector(".fit-pill");
-      if (!pill) return;
-      if (videoEl.videoWidth > 0) {
-        currentRatio = ratioLabel(videoEl.videoWidth, videoEl.videoHeight);
-        if (FITS[fitIdx] === "contain") pill.textContent = currentRatio;
-        ratioTries = 0;
-      } else if (ratioTries < 15) {
-        ratioTries++;
-        setTimeout(updateRatio, 700);
-      }
-    }
-
-    videoEl.addEventListener("loadedmetadata", function() { ratioTries = 0; updateRatio(); });
-    videoEl.addEventListener("resize", updateRatio);
-    videoEl.addEventListener("timeupdate", function onFirstFrame() {
-      videoEl.removeEventListener("timeupdate", onFirstFrame);
-      updateRatio();
-    });
-    updateRatio();
-
-    return true;
-  }
-
-  // ----- main player init (first code logic) -----
-  async function initPlayer() {
-    // Polyfill & browser check
-    shaka.polyfill.installAll();
-    if (!shaka.Player.isBrowserSupported()) {
-      setStatus("Browser Not Supported", "err", 0);
-      return;
-    }
-
-    const player = new shaka.Player();
-    await player.attach(video);
-
-    // UI overlay
-    const ui = new shaka.ui.Overlay(player, container, video);
-    ui.configure({
-      addBigPlayButton: true,
-      controlPanelElements: [
-        "play_pause",
-        "mute",
-        "time_and_duration",
-        "spacer",
-        "quality",
-        "picture_in_picture",
-        "fullscreen"
-      ],
-      seekBarColors: {
-        base: "#828282",
-        buffered: "#ffc336",
-        played: "#1fc7ff"
-      }
-    });
-
-    // Inject fit button (from second code)
-    let injectCount = 0;
-    (function tryInject() {
-      if (injectFitButton(container, video)) return;
-      if (++injectCount < 5) setTimeout(tryInject, 150);
-    })();
-
-    // Player config (first code)
-    player.configure({
-      drm: { clearKeys: { [CONFIG.keyId]: CONFIG.key } },
-      manifest: { defaultPresentationDelay: 5 },
-      streaming: {
-        lowLatencyMode: true,
-        bufferingGoal: 10,
-        rebufferingGoal: 2,
-        safeSeekOffset: 5
-      }
-    });
-
-    // Fetch cookie (first code)
-    let cookieValue = "";
-    try {
-      const response = await fetch(CONFIG.cookieUrl, { cache: "no-store" });
-      const data = await response.json();
-      cookieValue = data.cookie || "";
-    } catch(e) {
-      console.warn("Cookie fetch failed, continuing without cookie");
-    }
-
-    if (cookieValue) {
-      player.getNetworkingEngine().registerRequestFilter((type, request) => {
-        request.headers["Referer"] = "https://www.jiotv.com/";
-        request.headers["User-Agent"] = "plaYtv/7.1.5 (Linux;Android 13) ExoPlayerLib/2.11.6";
-        request.headers["Cookie"] = cookieValue;
-
-        let urlCookie = cookieValue.startsWith("__hdnea__=") ? cookieValue.slice(10) : cookieValue;
-        if ((type === shaka.net.NetworkingEngine.RequestType.MANIFEST ||
-             type === shaka.net.NetworkingEngine.RequestType.SEGMENT) &&
-            !request.uris[0].includes("__hdnea__")) {
-          const sep = request.uris[0].includes("?") ? "&" : "?";
-          request.uris[0] += sep + "__hdnea__=" + urlCookie;
-        }
-      });
-    }
-
-    // Load stream (first code)
-    try {
-      setStatus("Loading…", "warn", 0);
-      await player.load(CONFIG.streamUrl);
-      setStatus("Live", "live", 4000);
-      video.play().catch(function() {});
-    } catch(e) {
-      console.error("Player load error:", e);
-      setStatus("Error loading stream", "err", 0);
-    }
-
-    // Auto unmute on play (first code)
-    video.addEventListener("play", function() {
-      video.muted = false;
-    });
-
-    // Also unmute on any user interaction (like second)
-    function unmuteOnce() { video.muted = false; }
-    container.addEventListener("pointerdown", unmuteOnce, { capture: true, once: true });
-    container.addEventListener("click", unmuteOnce, { capture: true, once: true });
-
-    // Basic error / recovery (keep status updated)
-    player.addEventListener("error", function(ev) {
-      const err = ev.detail;
-      setStatus("Stream error: " + (err.code || ""), "err", 5000);
-    });
-  }
-
-  // kick off
-  document.addEventListener("DOMContentLoaded", initPlayer);
-})();
+    function _0x1219(){const _0x373d21=['isSupported','4zVvOuc','filter','muted','withCredentials','4472094ChTbVa','Events','currentLevel','none','volume','style','17559900HwFpFh','1674561gpCrfM','2367189ahEKfR','912506rZVlFa','target','container','NETWORK_ERROR','progress','getElementById','video','sort','play','fatal','addEventListener','20UpFHVg','745947yVhMDR','src','closest','.plyr__control--pressed','qualitychange','4517825pmCYcC','MANIFEST_PARSED','loadeddata','ErrorTypes','paused','hidden','current-time','flex','log','height','attachMedia','settings','ended','pause','MEDIA_ERROR','playerContainer','quality','visibilitychange','fullscreen','click','loading','https://sunny-relay-friend.lovable.app/api/public/px/sony?url=https://sliv.tgaadi.workers.dev/ten1hd.m3u8','map','2vqZuwv','warn','6fXPWKn','mute','destroy','type','levels','Using\x20native\x20HLS\x20fallback','48omEOlB','recoverMediaError','.plyr__control[data-plyr=\x22play\x22]','catch','display','length'];_0x1219=function(){return _0x373d21;};return _0x1219();}function _0x5b1c(_0x5775ed,_0x4e3dff){const _0x121904=_0x1219();return _0x5b1c=function(_0x5b1ca6,_0x5eb857){_0x5b1ca6=_0x5b1ca6-0x19d;let _0x134a14=_0x121904[_0x5b1ca6];return _0x134a14;},_0x5b1c(_0x5775ed,_0x4e3dff);}(function(_0x278960,_0x4a712e){const _0x1c00b9=_0x5b1c,_0x30bf46=_0x278960();while(!![]){try{const _0x373125=-parseInt(_0x1c00b9(0x1d6))/0x1*(-parseInt(_0x1c00b9(0x1ae))/0x2)+parseInt(_0x1c00b9(0x1c8))/0x3*(-parseInt(_0x1c00b9(0x1bd))/0x4)+parseInt(_0x1c00b9(0x1db))/0x5*(parseInt(_0x1c00b9(0x1b0))/0x6)+-parseInt(_0x1c00b9(0x1ca))/0x7*(-parseInt(_0x1c00b9(0x1b6))/0x8)+parseInt(_0x1c00b9(0x1c9))/0x9*(parseInt(_0x1c00b9(0x1d5))/0xa)+-parseInt(_0x1c00b9(0x1c1))/0xb+-parseInt(_0x1c00b9(0x1c7))/0xc;if(_0x373125===_0x4a712e)break;else _0x30bf46['push'](_0x30bf46['shift']());}catch(_0xe37871){_0x30bf46['push'](_0x30bf46['shift']());}}}(_0x1219,0x814e4),(function(){'use strict';const _0x1197b7=_0x5b1c;const _0x5f4cd8=_0x1197b7(0x1ac),_0x9cf393={'video':document[_0x1197b7(0x1cf)]('video'),'container':document[_0x1197b7(0x1cf)](_0x1197b7(0x1a6)),'loading':document[_0x1197b7(0x1cf)]('loading')};let _0x5e1cda=null,_0x3c0ed5=null,_0x5bb7ae=![],_0x30b2cf=![];function _0x1c5af5(){const _0x162d38=_0x1197b7;if(_0x9cf393[_0x162d38(0x1ab)])_0x9cf393[_0x162d38(0x1ab)]['style']['display']=_0x162d38(0x1c4);}function _0x51fdb6(){const _0x5defa5=_0x1197b7;if(_0x9cf393[_0x5defa5(0x1ab)])_0x9cf393[_0x5defa5(0x1ab)][_0x5defa5(0x1c6)][_0x5defa5(0x1ba)]=_0x5defa5(0x19e);}function _0x3e1cba(){const _0x51dd28=_0x1197b7;if(_0x5e1cda){try{_0x5e1cda[_0x51dd28(0x1b2)]();}catch(_0x361a29){}_0x5e1cda=null;}if(_0x3c0ed5){try{_0x3c0ed5[_0x51dd28(0x1b2)]();}catch(_0x16b206){}_0x3c0ed5=null;}}function _0x5f2850(_0x36ba62){const _0x32edd6=_0x1197b7;_0x36ba62['addEventListener'](_0x32edd6(0x1d2),function(){_0x5bb7ae=![];}),document[_0x32edd6(0x1d4)](_0x32edd6(0x1aa),function(_0x561696){const _0xcd5a02=_0x32edd6,_0x29fd24=_0x561696[_0xcd5a02(0x1cb)][_0xcd5a02(0x1d8)](_0xcd5a02(0x1d9))||_0x561696[_0xcd5a02(0x1cb)][_0xcd5a02(0x1d8)](_0xcd5a02(0x1b8));_0x29fd24&&(!_0x36ba62[_0xcd5a02(0x1df)]?_0x5bb7ae=!![]:_0x5bb7ae=![]);}),_0x36ba62[_0x32edd6(0x1d4)](_0x32edd6(0x1a4),function(){const _0x429747=_0x32edd6;!_0x36ba62[_0x429747(0x1a3)]&&!_0x5bb7ae&&_0x30b2cf&&setTimeout(()=>{const _0x1836f2=_0x429747;_0x36ba62[_0x1836f2(0x1df)]&&!_0x36ba62[_0x1836f2(0x1a3)]&&!_0x5bb7ae&&_0x36ba62[_0x1836f2(0x1d2)]()[_0x1836f2(0x1b9)](()=>{});},0x1f4),setTimeout(()=>{_0x5bb7ae=![];},0x64);}),setInterval(()=>{const _0x2b95fa=_0x32edd6;_0x36ba62['paused']&&!_0x36ba62[_0x2b95fa(0x1a3)]&&!_0x5bb7ae&&_0x30b2cf&&_0x36ba62[_0x2b95fa(0x1d2)]()[_0x2b95fa(0x1b9)](()=>{});},0xbb8);}async function _0x2067cd(){const _0x49dc74=_0x1197b7,_0x398657=_0x9cf393[_0x49dc74(0x1d0)],_0x572f08=_0x9cf393[_0x49dc74(0x1cc)];_0x51fdb6(),_0x3e1cba();try{if(Hls[_0x49dc74(0x1bc)]()){const _0x3eeb9a=new Hls({'maxMaxBufferLength':0x64,'liveSyncDurationCount':0x3,'liveMaxLatencyDurationCount':0x6,'enableWorker':!![],'xhrSetup':_0x43fc43=>{const _0x4e1ffc=_0x49dc74;_0x43fc43[_0x4e1ffc(0x1c0)]=![];}});_0x5e1cda=_0x3eeb9a,_0x3eeb9a['loadSource'](_0x5f4cd8),_0x3eeb9a[_0x49dc74(0x1a1)](_0x398657),_0x3eeb9a['on'](Hls[_0x49dc74(0x1c2)][_0x49dc74(0x1dc)],function(){const _0x4ddb7a=_0x49dc74,_0x1d29a2=_0x3eeb9a[_0x4ddb7a(0x1b4)][_0x4ddb7a(0x1ad)](_0x32b001=>_0x32b001[_0x4ddb7a(0x1a0)])[_0x4ddb7a(0x1be)](Boolean)[_0x4ddb7a(0x1d1)]((_0x2378c3,_0x1b9c04)=>_0x2378c3-_0x1b9c04);_0x3c0ed5=new Plyr(_0x398657,{'controls':['play-large',_0x4ddb7a(0x1d2),'progress',_0x4ddb7a(0x19d),'mute',_0x4ddb7a(0x1c5),_0x4ddb7a(0x1a2),_0x4ddb7a(0x1a9)],'settings':[_0x4ddb7a(0x1a7)],'quality':{'default':_0x1d29a2[_0x1d29a2[_0x4ddb7a(0x1bb)]-0x1]||0x2d0,'options':_0x1d29a2[_0x4ddb7a(0x1bb)]?_0x1d29a2:[0x168,0x1e0,0x2d0,0x438],'forced':!![],'onChange':_0x5d866a=>{_0x3eeb9a['levels']['forEach']((_0x384664,_0x2b575b)=>{const _0x1d4916=_0x5b1c;if(_0x384664[_0x1d4916(0x1a0)]===_0x5d866a)_0x3eeb9a[_0x1d4916(0x1c3)]=_0x2b575b;});}}}),_0x398657[_0x4ddb7a(0x1bf)]=![],_0x398657[_0x4ddb7a(0x1a4)](),_0x30b2cf=!![],_0x398657[_0x4ddb7a(0x1d4)](_0x4ddb7a(0x1dd),_0x1c5af5),setTimeout(_0x1c5af5,0xbb8),_0x5f2850(_0x398657),_0x3c0ed5['on'](_0x4ddb7a(0x1da),_0x1e3e2e=>{});}),_0x3eeb9a['on'](Hls[_0x49dc74(0x1c2)]['ERROR'],function(_0x33f567,_0x200ceb){const _0x55e3c8=_0x49dc74;if(_0x200ceb[_0x55e3c8(0x1d3)]){if(_0x200ceb['type']===Hls[_0x55e3c8(0x1de)][_0x55e3c8(0x1cd)])_0x3eeb9a['startLoad']();else _0x200ceb[_0x55e3c8(0x1b3)]===Hls[_0x55e3c8(0x1de)][_0x55e3c8(0x1a5)]?_0x3eeb9a[_0x55e3c8(0x1b7)]():(console[_0x55e3c8(0x1af)]('Fatal\x20HLS\x20error:',_0x200ceb),_0x49f62d(_0x398657));}});}else _0x49f62d(_0x398657);}catch(_0x51e51b){console['error']('Init\x20error:',_0x51e51b),_0x49f62d(_0x398657);}}function _0x49f62d(_0x4edfd0){const _0xc198bc=_0x1197b7;console[_0xc198bc(0x19f)](_0xc198bc(0x1b5)),_0x3e1cba(),_0x4edfd0[_0xc198bc(0x1d7)]=_0x5f4cd8,_0x4edfd0[_0xc198bc(0x1bf)]=![],_0x3c0ed5=new Plyr(_0x4edfd0,{'controls':['play-large','play',_0xc198bc(0x1ce),_0xc198bc(0x19d),_0xc198bc(0x1b1),_0xc198bc(0x1c5),_0xc198bc(0x1a2),_0xc198bc(0x1a9)]}),_0x4edfd0[_0xc198bc(0x1a4)](),_0x30b2cf=!![],_0x4edfd0['addEventListener'](_0xc198bc(0x1dd),_0x1c5af5),setTimeout(_0x1c5af5,0xbb8),_0x5f2850(_0x4edfd0);}document[_0x1197b7(0x1d4)]('DOMContentLoaded',()=>{_0x2067cd();}),document[_0x1197b7(0x1d4)](_0x1197b7(0x1a8),()=>{const _0x32fdd1=_0x1197b7,_0x539f88=_0x9cf393[_0x32fdd1(0x1d0)];!document[_0x32fdd1(0x1e0)]&&_0x539f88&&_0x539f88[_0x32fdd1(0x1df)]&&!_0x539f88['ended']&&_0x30b2cf&&_0x539f88[_0x32fdd1(0x1d2)]()[_0x32fdd1(0x1b9)](()=>{});});}()));
+</script>
 </script>
 </body>
 </html>
