@@ -1,430 +1,493 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Authorized Shaka Player</title>
 
-<meta name="referrer" content="no-referrer">
+<meta charset="UTF-8">
 
-<script src="https://cdn.jsdelivr.net/npm/shaka-player@4.16.2/dist/shaka-player.ui.min.js"></script>
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/shaka-player@4.16.2/dist/controls.css">
+<meta
+    name="viewport"
+    content="width=device-width, initial-scale=1.0"
+>
+
+<meta
+    name="referrer"
+    content="no-referrer"
+>
+
+<title>Live Player</title>
+
+<script src="https://cdn.jsdelivr.net/npm/shaka-player@5.1.10/dist/shaka-player.ui.min.js"></script>
+
+<link
+    rel="stylesheet"
+    href="https://cdn.jsdelivr.net/npm/shaka-player@5.1.10/dist/controls.min.css"
+>
 
 <style>
-*{margin:0;padding:0;box-sizing:border-box}
 
-html,body{
-width:100%;
-height:100%;
-background:#000;
-overflow:hidden;
-font-family:'Segoe UI',Roboto,Helvetica,Arial,sans-serif
-}
-
-.shaka-video-container{
-position:fixed;
-inset:0;
-background:#000;
-display:flex;
-align-items:center;
-justify-content:center
+html,
+body {
+    width: 100%;
+    height: 100%;
+    margin: 0;
+    padding: 0;
+    overflow: hidden;
+    background: #000;
 }
 
-video{
-width:100%;
-height:100%;
-object-fit:contain;
-background:#000
+.shaka-video-container {
+    width: 100%;
+    height: 100%;
+    background: #000;
 }
 
-.custom-watermark{
-position:absolute;
-z-index:40;
-pointer-events:none;
-top:65%;
-left:6%;
-transform:translateY(-50%);
-font-size:11px;
-font-weight:600;
-color:rgba(255,255,255,0.12)
+#videoPlayer {
+    width: 100%;
+    height: 100%;
+    background: #000;
+    object-fit: contain;
 }
 
-.block-overlay{
-position:fixed;
-inset:0;
-z-index:99999;
-display:flex;
-align-items:center;
-justify-content:center;
-background:radial-gradient(circle at center,#1a1a1a 0%,#000 100%);
-text-align:center
-}
-
-.block-box{
-padding:40px;
-max-width:500px;
-width:90%;
-background:rgba(20,20,20,0.95);
-border-radius:16px;
-border:1px solid rgba(255,255,255,0.1);
-box-shadow:0 20px 50px rgba(0,0,0,0.5);
-animation:fadeInUp 0.6s ease-out
-}
-
-@keyframes fadeInUp{
-from{
-opacity:0;
-transform:translateY(30px)
-}
-to{
-opacity:1;
-transform:translateY(0)
-}
-}
-
-.block-title{
-font-size:42px;
-font-weight:800;
-color:#fff;
-text-transform:uppercase;
-letter-spacing:2px;
-margin-bottom:20px;
-text-shadow:0 0 10px rgba(255,0,0,0.3)
-}
-
-.block-sub{
-font-size:14px;
-font-weight:500;
-color:rgba(255,255,255,0.6);
-line-height:1.6
-}
-
-@media(max-width:700px){
-.custom-watermark{
-font-size:9px;
-top:60%;
-left:16%
-}
-
-.block-title{
-font-size:28px
-}
-
-.block-box{
-padding:25px
-}
-
-.block-sub{
-font-size:12px
-}
-}
 </style>
+
 </head>
 
 <body>
 
-<div class="shaka-video-container" id="player-container">
-<video
-id="video"
-autoplay
-muted
-playsinline
-preload="metadata">
-</video>
+<div
+    id="videoContainer"
+    class="shaka-video-container"
+>
 
-<div class="custom-watermark"></div>
+    <video
+        id="videoPlayer"
+        playsinline
+        autoplay
+        muted
+    ></video>
+
 </div>
 
+
 <script>
-(function(){
 
-function isSandboxedEnv(){
-    try{
-        if(window.self===window.top){
-            return false;
-        }
+const STREAM_URL =
+    "https://jiotvpllive.cdn.jio.com//bpk-tv/Star_Sports_HD1_BTS/WDVLive/index.mpd";
 
-        if(
-            window.frameElement &&
-            window.frameElement.hasAttribute("sandbox")
-        ){
-            return true;
-        }
 
-        try{
-            document.domain=document.domain;
+const DRM_KEYS =
+    "45825561f4ef516691a9e16d1d35dd1d:3951fe7fbf4b0b33e6246fc401f76797,bf95222d9be85d85a91281e796e99481:bc932276031b3e63758cf67b147c3557,f217e9fe133e5b948c323abef1e39b47:63640dc4430d14003def0c97a2dbab4d,eda3132244745c10920b01536bc8a75b:2b5f8bdba279032943a040078bb22b35,06dd6287c4b956419d15d6c8e513aeed:a82d6b850b5c281c0054fc6d55e1c6ba";
 
-            if(
-                window.frameElement &&
-                !window.frameElement.getAttribute("sandbox")
-            ){
-                return false;
-            }
-        }catch(e){
-            return true;
-        }
 
-        return false;
+const COOKIE_JSON_URL =
+    "https://sonujson-v4.pages.dev/Data/sports.json";
 
-    }catch(e){
-        return true;
-    }
-}
 
-function triggerBlockScreen(title,message){
+const CHANNEL_ID =
+    "E1HD";
 
-    const container=
-        document.getElementById("player-container");
 
-    const video=
-        document.getElementById("video");
-
-    try{
-        video.pause();
-        video.removeAttribute("src");
-        video.load();
-    }catch(e){}
-
-    const overlay=
-        document.createElement("div");
-
-    overlay.className="block-overlay";
-    overlay.id="sandbox-block-display";
-
-    overlay.innerHTML=
-        <div class="block-box">
-            <div class="block-title">${title}</div>
-            <div class="block-sub">${message}</div>
-        </div>
-    ;
-
-    document.body.appendChild(overlay);
-
-    container.style.display="none";
-}
-
-if(isSandboxedEnv()){
-
-    triggerBlockScreen(
-        "Disable Sandbox",
-        "Opening Chrome Browser Only & Disable Ad blocker"
+const videoElement =
+    document.getElementById(
+        "videoPlayer"
     );
 
-    return;
+
+const videoContainer =
+    document.getElementById(
+        "videoContainer"
+    );
+
+
+let player;
+let ui;
+
+
+function parseDrmKeys(value) {
+
+    const clearKeys = {};
+
+    const pairs =
+        String(value || "")
+            .split(",")
+            .map(
+                pair =>
+                    pair.trim()
+            )
+            .filter(Boolean);
+
+
+    for (
+        const pair of pairs
+    ) {
+
+        const separator =
+            pair.indexOf(":");
+
+
+        if (
+            separator === -1
+        ) {
+
+            console.warn(
+                "Invalid DRM pair:",
+                pair
+            );
+
+            continue;
+        }
+
+
+        const kid =
+            pair
+                .slice(
+                    0,
+                    separator
+                )
+                .trim()
+                .toLowerCase();
+
+
+        const key =
+            pair
+                .slice(
+                    separator + 1
+                )
+                .trim()
+                .toLowerCase();
+
+
+        if (
+            !kid ||
+            !key
+        ) {
+
+            continue;
+        }
+
+
+        clearKeys[kid] =
+            key;
+
+    }
+
+
+    return clearKeys;
 }
 
-const CONFIG={
 
-    streamUrl:
-        "https://jiotvpllive.cdn.jio.com/bpk-tv/Star_Sports_HD1_BTS/WDVLive/index.mpd",
+async function getCookie() {
 
-    drmKeys:
-        "45825561f4ef516691a9e16d1d35dd1d:3951fe7fbf4b0b33e6246fc401f76797,bf95222d9be85d85a91281e796e99481:bc932276031b3e63758cf67b147c3557,f217e9fe133e5b948c323abef1e39b47:63640dc4430d14003def0c97a2dbab4d,eda3132244745c10920b01536bc8a75b:2b5f8bdba279032943a040078bb22b35,06dd6287c4b956419d15d6c8e513aeed:a82d6b850b5c281c0054c6d55e1c6ba",
+    const response =
+        await fetch(
+            COOKIE_JSON_URL,
+            {
+                method: "GET",
+                cache: "no-store"
+            }
+        );
 
-    cookieUrl:
-        ""
-};
 
-document.addEventListener(
-    "DOMContentLoaded",
-    async()=>{
+    if (
+        !response.ok
+    ) {
+
+        throw new Error(
+            "Cookie JSON request failed: " +
+            response.status
+        );
+
+    }
+
+
+    const data =
+        await response.json();
+
+
+    if (
+        !data ||
+        !Array.isArray(
+            data.channels
+        )
+    ) {
+
+        throw new Error(
+            "Invalid JSON format."
+        );
+
+    }
+
+
+    const channel =
+        data.channels.find(
+            item =>
+                String(
+                    item.id || ""
+                )
+                    .trim()
+                    .toLowerCase() ===
+                CHANNEL_ID
+                    .toLowerCase()
+        );
+
+
+    if (!channel) {
+
+        throw new Error(
+            "Channel not found: " +
+            CHANNEL_ID
+        );
+
+    }
+
+
+    const cookie =
+        String(
+            channel.cookie || ""
+        ).trim();
+
+
+    if (!cookie) {
+
+        throw new Error(
+            "Cookie not found for " +
+            CHANNEL_ID
+        );
+
+    }
+
+
+    return cookie;
+}
+
+
+function configureStreamRequests(
+    cookie
+) {
+
+    if (!cookie) {
+        return;
+    }
+
+
+    const networkingEngine =
+        player.getNetworkingEngine();
+
+
+    if (!networkingEngine) {
+        return;
+    }
+
+
+    networkingEngine.registerRequestFilter(
+        (type, request) => {
+
+            if (
+                !request.uris ||
+                !request.uris[0]
+            ) {
+
+                return;
+            }
+
+
+            request.headers =
+                request.headers || {};
+
+
+            request.headers["Cookie"] =
+                cookie;
+
+
+            const url =
+                request.uris[0];
+
+
+            if (
+                (type === 0 || type === 1) &&
+                !url.includes(
+                    "__hdnea="
+                ) &&
+                !url.includes(
+                    "__hdnea__"
+                ) &&
+                !url.includes(
+                    "hdnts="
+                )
+            ) {
+
+                request.uris[0] =
+                    url +
+                    (
+                        url.includes("?")
+                            ? "&"
+                            : "?"
+                    ) +
+                    cookie;
+
+            }
+
+        }
+    );
+}
+
+
+function configureDrm() {
+
+    const clearKeys =
+        parseDrmKeys(
+            DRM_KEYS
+        );
+
+
+    player.configure({
+
+        drm: {
+            clearKeys:
+                clearKeys
+        },
+
+        manifest: {
+            defaultPresentationDelay: 5
+        },
+
+        streaming: {
+            lowLatencyMode: true,
+            bufferingGoal: 10,
+            rebufferingGoal: 2,
+            safeSeekOffset: 5
+        }
+
+    });
+}
+
+
+async function initPlayer() {
+
+    try {
 
         shaka.polyfill.installAll();
 
-        if(!shaka.Player.isBrowserSupported()){
-            return;
+
+        if (
+            !shaka.Player
+                .isBrowserSupported()
+        ) {
+
+            throw new Error(
+                "This browser does not support Shaka Player."
+            );
+
         }
 
-        const video=
-            document.getElementById("video");
 
-        const container=
-            document.getElementById("player-container");
-
-        video.muted=true;
-
-        const player=
+        player =
             new shaka.Player();
 
-        await player.attach(video);
 
-        const ui=
+        await player.attach(
+            videoElement
+        );
+
+
+        ui =
             new shaka.ui.Overlay(
                 player,
-                container,
-                video
+                videoContainer,
+                videoElement
             );
+
 
         ui.configure({
 
-            addBigPlayButton:true,
-
-            controlPanelElements:[
-                "mute",
+            controlPanelElements: [
                 "play_pause",
                 "time_and_duration",
+                "mute",
+                "volume",
                 "spacer",
                 "quality",
                 "picture_in_picture",
                 "fullscreen"
-            ],
+            ]
 
-            seekBarColors:{
-                base:"white",
-                buffered:"red",
-                played:"green"
-            }
         });
 
-        const clearKeys={};
 
-        CONFIG.drmKeys
-            .split(",")
-            .map(pair=>pair.trim())
-            .filter(Boolean)
-            .forEach(pair=>{
-
-                const separator=
-                    pair.indexOf(":");
-
-                if(separator===-1){
-                    return;
-                }
-
-                const kid=
-                    pair
-                        .slice(0,separator)
-                        .trim()
-                        .toLowerCase();
-
-                const key=
-                    pair
-                        .slice(separator+1)
-                        .trim()
-                        .toLowerCase();
-
-                if(kid && key){
-                    clearKeys[kid]=key;
-                }
-            });
-
-        player.configure({
-
-            drm:{
-                clearKeys:clearKeys
-            },
-
-            manifest:{
-                defaultPresentationDelay:5
-            },
-
-            streaming:{
-                lowLatencyMode:true,
-                bufferingGoal:10,
-                rebufferingGoal:2,
-                safeSeekOffset:5
-            }
-        });
-
-        let cookieValue="__hdnea__=st=1791278723~exp=1791300323~acl=/bpk-tv/Star_Sports_HD1_BTS/WDVLive/*~hmac=2535d8512c609e07c53514560c60a15230e5bd0a89e71c22414045d1530fcd07";
-
-        if(CONFIG.cookieUrl){
-
-            try{
-
-                const response=
-                    await fetch(
-                        CONFIG.cookieUrl,
-                        {
-                            cache:"no-store"
-                        }
-                    );
-
-                const data=
-                    await response.json();
-
-                cookieValue=
-                    data.cookie || "";
-
-            }catch(e){
+        player.addEventListener(
+            "error",
+            event => {
 
                 console.error(
-                    "Cookie request failed:",
-                    e
+                    "Shaka Player Error:",
+                    event.detail
                 );
-            }
-        }
 
-        if(cookieValue){
-
-            player
-                .getNetworkingEngine()
-                .registerRequestFilter(
-                    (type,request)=>{
-
-                        if(
-                            !request.uris ||
-                            !request.uris[0]
-                        ){
-                            return;
-                        }
-
-                        if(
-                            type ===
-                                shaka.net.NetworkingEngine
-                                    .RequestType.MANIFEST ||
-                            type ===
-                                shaka.net.NetworkingEngine
-                                    .RequestType.SEGMENT
-                        ){
-
-                            if(
-                                !request.uris[0]
-                                    .includes("__hdnea__")
-                            ){
-const separator=
-                                    request.uris[0]
-                                        .includes("?")
-                                        ? "&"
-                                        : "?";
-
-                                request.uris[0]+=
-                                    separator+
-                                    cookieValue;
-                            }
-                        }
-                    }
-                );
-        }
-
-        try{
-
-            await player.load(
-                CONFIG.streamUrl
-            );
-
-            video
-                .play()
-                .catch(()=>{});
-
-        }catch(error){
-
-            console.error(
-                "Stream loading failed:",
-                error
-            );
-        }
-
-        video.addEventListener(
-            "play",
-            ()=>{
-                video.muted=false;
             }
         );
+
+
+        const cookie =
+            await getCookie();
+
+
+        configureStreamRequests(
+            cookie
+        );
+
+
+        configureDrm();
+
+
+        await player.load(
+            STREAM_URL
+        );
+
+
+        try {
+
+            await videoElement.play();
+
+        } catch (error) {
+
+            console.log(
+                "Autoplay blocked."
+            );
+
+        }
+
+
+    } catch (error) {
+
+        console.error(
+            "Player initialization failed:",
+            error
+        );
+
+    }
+
+}
+
+
+initPlayer();
+
+
+window.addEventListener(
+    "beforeunload",
+    () => {
+
+        if (player) {
+
+            player.destroy()
+                .catch(
+                    () => {}
+                );
+
+        }
+
     }
 );
 
-})();
 </script>
 
 </body>
