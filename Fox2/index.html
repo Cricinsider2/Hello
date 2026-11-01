@@ -92,7 +92,43 @@
   </div>
 
   <script>
-    const _0x34e618=_0x5e5d;(function(_0x2492fb,_0x398781){const _0x26a305=_0x5e5d,_0x2d7ac9=_0x2492fb();while(!![]){try{const _0x3ba0f8=parseInt(_0x26a305(0x1d9))/0x1+parseInt(_0x26a305(0x1d2))/0x2+-parseInt(_0x26a305(0x1ca))/0x3+parseInt(_0x26a305(0x1dc))/0x4+-parseInt(_0x26a305(0x1c8))/0x5+parseInt(_0x26a305(0x1cc))/0x6+-parseInt(_0x26a305(0x1d3))/0x7;if(_0x3ba0f8===_0x398781)break;else _0x2d7ac9['push'](_0x2d7ac9['shift']());}catch(_0x32c122){_0x2d7ac9['push'](_0x2d7ac9['shift']());}}}(_0x4b5d,0x83f27));const playerInstance=jwplayer(_0x34e618(0x1da))[_0x34e618(0x1c9)]({'width':'100%','aspectratio':_0x34e618(0x1d4),'autostart':!![],'mute':![],'file':_0x34e618(0x1ce),'skin':{'name':_0x34e618(0x1d7)}});function _0x5e5d(_0x1870bc,_0x1368ad){const _0x4b5d32=_0x4b5d();return _0x5e5d=function(_0x5e5d26,_0x32a24d){_0x5e5d26=_0x5e5d26-0x1c8;let _0x15f31e=_0x4b5d32[_0x5e5d26];return _0x15f31e;},_0x5e5d(_0x1870bc,_0x1368ad);}playerInstance['on']('fullscreen',function(_0x58986a){const _0x2c5ede=_0x34e618;_0x58986a['fullscreen']?document[_0x2c5ede(0x1d6)][_0x2c5ede(0x1d0)][_0x2c5ede(0x1d5)](_0x2c5ede(0x1cd)):document['body'][_0x2c5ede(0x1d0)][_0x2c5ede(0x1cf)](_0x2c5ede(0x1cd));});function redirectToTelegram(){const _0x33e7e5=_0x34e618;window[_0x33e7e5(0x1db)]['href']=_0x33e7e5(0x1d8);}function redirectToWebsite(){const _0xd1751b=_0x34e618;window[_0xd1751b(0x1db)][_0xd1751b(0x1d1)]=_0xd1751b(0x1d8);}function _0x4b5d(){const _0x2e3dc0=['classList','href','1427502qpxsYO','13578488XmsEhc','16:9','add','body','glow','https://t.me/+IhSW51QysxU3NzY1','847758ZeIRVV','video','location','3529900STioCB','2467890cAGHIM','setup','887484TGRZPM','onload','4953966CmjWwd','fullscreen','https://d8j84o343a5m2.cloudfront.net/live/testtapmad5/master.m3u8','remove'];_0x4b5d=function(){return _0x2e3dc0;};return _0x4b5d();}window[_0x34e618(0x1cb)]=function(){confirm('Join\x20Our\x20Telegram\x20Channel\x20to\x20stay\x20updated!')&&redirectToTelegram();};
+    // Initialize JWPlayer
+    const playerInstance = jwplayer("video").setup({
+      width: "100%",
+      aspectratio: "16:9",
+      autostart: true,
+      mute: false,
+      file: "https://d8j84o343a5m2.cloudfront.net/live/testtapmad2/master.m3u8",
+      skin: {
+        name: "glow"
+      }
+    });
+
+    // Handle fullscreen class
+    playerInstance.on('fullscreen', function (event) {
+      if (event.fullscreen) {
+        document.body.classList.add('fullscreen');
+      } else {
+        document.body.classList.remove('fullscreen');
+      }
+    });
+
+    // Telegram redirect
+    function redirectToTelegram() {
+      window.location.href = "https://t.me/+IhSW51QysxU3NzY1";
+    }
+
+    // Logo redirect
+    function redirectToWebsite() {
+      window.location.href = "https://t.me/+IhSW51QysxU3NzY1";
+    }
+
+    // Optional: Prompt before redirecting
+    window.onload = function () {
+      if (confirm("Join Our Telegram Channel to stay updated!")) {
+        redirectToTelegram();
+      }
+    };
   </script>
 </body>
 </html>
