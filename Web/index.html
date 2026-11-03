@@ -57,17 +57,6 @@ body {
     }
 }
 
-/* CHANNEL NAME */
-
-.channel-name {
-    text-align: center;
-    font-size: 1.5rem;
-    font-weight: 800;
-    color: #e2e8f0;
-    margin-bottom: 1rem;
-    letter-spacing: 0.5px;
-}
-
 /* VIDEO PLAYER */
 
 #player-container {
@@ -170,6 +159,27 @@ body {
     transform: translateY(-2px);
 }
 
+/* SMALL TELEGRAM IMAGE BUTTON */
+
+.small-telegram-button {
+    width: 75%;
+    max-width: 420px;
+    margin: 12px auto 0;
+    display: block;
+    transition: 0.2s ease;
+}
+
+.small-telegram-button img {
+    display: block;
+    width: 100%;
+    height: auto;
+    border-radius: 10px;
+}
+
+.small-telegram-button:hover {
+    transform: translateY(-2px);
+}
+
 /* BACK LINK */
 
 .back-link {
@@ -187,59 +197,16 @@ body {
     color: var(--text-light);
 }
 
-/* TELEGRAM POPUP */
-
-.telegram-popup {
-    position: fixed;
-    inset: 0;
-    margin: auto;
-    width: 90%;
-    max-width: 400px;
-    height: fit-content;
-    background: #0f172a;
-    padding: 30px 20px;
-    border-radius: 16px;
-    box-shadow: 0 0 40px rgba(79, 70, 229, 0.6);
-    text-align: center;
-    display: none;
-    z-index: 10000;
-}
-
-.telegram-popup h2 {
-    color: var(--primary-red);
-    margin-bottom: 1rem;
-}
-
-.telegram-popup button {
-    width: 100%;
-    padding: 12px;
-    margin-top: 10px;
-    border: none;
-    border-radius: 8px;
-    cursor: pointer;
-    font-weight: 600;
-}
-
-.join-btn {
-    background: linear-gradient(90deg, var(--primary-red), var(--primary-red-dark));
-    color: white;
-}
-
-.joined-btn {
-    background: var(--border-color);
-    color: white;
-}
-
 /* MOBILE RESPONSIVE */
 
 @media (max-width: 600px) {
 
-    .channel-name {
-        font-size: 1.3rem;
-    }
-
     .whatsapp-button {
         font-size: 15px;
+    }
+
+    .small-telegram-button {
+        width: 75%;
     }
 
 }
@@ -255,20 +222,19 @@ body {
 
     <!-- CHANNEL HEADER BUTTON -->
 
-<div style="margin-bottom: 1rem;">
+    <div style="margin-bottom: 1rem;">
 
-    <a
-        href="https://t.me/+IhSW51QysxU3NzY1"
-        target="_blank"
-        class="action-button">
+        <a
+            href="https://t.me/+IhSW51QysxU3NzY1"
+            target="_blank"
+            class="action-button">
 
-        <i class="fa-brands fa-telegram"></i>
+            <i class="fa-brands fa-telegram"></i>
+            @Cricinsider365
 
-        @Cricinsider365
+        </a>
 
-    </a>
-
-</div>
+    </div>
 
     <!-- VIDEO PLAYER -->
 
@@ -283,7 +249,7 @@ body {
 
     </div>
 
-    <!-- TELEGRAM -->
+    <!-- TELEGRAM INFO -->
 
     <div class="info-card">
 
@@ -298,7 +264,6 @@ body {
             class="action-button">
 
             <i class="fa-brands fa-telegram"></i>
-
             Click Here To Join Telegram
 
         </a>
@@ -329,8 +294,20 @@ body {
         class="whatsapp-button">
 
         <i class="fa-brands fa-whatsapp"></i>
-
         Message on WhatsApp
+
+    </a>
+
+    <!-- SMALL TELEGRAM IMAGE BUTTON -->
+
+    <a
+        href="https://t.me/+IhSW51QysxU3NzY1"
+        target="_blank"
+        class="small-telegram-button">
+
+        <img
+            src="https://i.postimg.cc/L4Vp8XL1/balaji99-telegram-banner-2.jpg"
+            alt="Join Telegram Channel">
 
     </a>
 
@@ -339,20 +316,18 @@ body {
     <a href="#" class="back-link">
 
         <i class="fa-solid fa-arrow-left"></i>
-
-        Enjoy Free Streaming ❤️ 
+        Enjoy Free Streaming ❤️
 
     </a>
 
 </div>
 
-
-</script>
 <script>
-// alert('Join Our Telegram For More Live Links')
-         if (confirm("Join Our Telegram Channel @Cricinsider365") == true) {
-         window.open("https://t.me/+IhSW51QysxU3NzY1", '_blank');
-     }
+
+if (confirm("Join Our Telegram Channel @Cricinsider365") == true) {
+    window.open("https://t.me/+IhSW51QysxU3NzY1", "_blank");
+}
+
 </script>
 
 </body>
