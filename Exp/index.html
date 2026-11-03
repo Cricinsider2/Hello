@@ -1,255 +1,121 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Cricinsider365</title>
+<!DOCTYPE html><html lang="en"><head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>TG_@Cricinsider365</title>
+<!-- Google tag (gtag.js) -->
+<script async="" src=""></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
 
-  <link rel="icon" href="https://upload.wikimedia.org/wikipedia/commons/3/35/Superman_logo.svg">
+  gtag('config', 'G-SMZXC121E6');
+</script>
+<style>
+html,body{
+margin:0;
+padding:0;
+background:#000;
+overflow:hidden;
+width:100%;
+height:100%;
+}
 
-  <style>
-    * {
-      margin: 0;
-      padding: 0;
-      box-sizing: border-box;
-      font-family: 'Poppins', sans-serif;
-    }
+#main-iframe{
+width:100%;
+height:100%;
+border:none;
+display:block;
+position:absolute;
+top:0;
+left:0;
+}
 
-    body {
-      background-color: #000;
-      color: #fff;
-      padding-bottom: 80px; /* bottom bar space */
-    }
+.telegram-btn{
+position:absolute;
+top:15px;
+left:15px;
+z-index:9999;
+display:flex;
+align-items:center;
+gap:12px;
+background:linear-gradient(135deg,#1e88e5,#1565c0);
+padding:10px 16px;
+border-radius:14px;
+text-decoration:none;
+color:#fff;
+font-size:16px;
+font-weight:600;
+font-family:Arial,sans-serif;
+box-shadow:0 6px 18px rgba(0,0,0,0.5);
+}
 
-    /* HEADER */
-    header {
-      position: relative;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      padding: 20px;
-      background: #111;
-      border-bottom: 2px solid #ff3c00;
-    }
+.telegram-icon{
+width:34px;
+height:34px;
+background:rgba(255,255,255,0.15);
+border-radius:50%;
+display:flex;
+align-items:center;
+justify-content:center;
+border:2px solid #fff;
+}
 
-    header img {
-      width: 150px;
-      max-width: 45vw;
-      border-radius: 16px;
-      box-shadow: 0 0 22px rgba(255, 60, 0, 0.9);
-    }
+.telegram-icon svg{
+width:18px;
+height:18px;
+fill:#fff;
+}
 
-    /* ABOUT BUTTON */
-    .about-btn {
-      position: absolute;
-      left: 15px;
-      top: 50%;
-      transform: translateY(-50%);
-      padding: 7px 14px;
-      font-size: 0.8rem;
-      font-weight: 600;
-      border-radius: 20px;
-      background: linear-gradient(90deg, #ff3c00, #ff6600);
-      color: #fff;
-      border: none;
-      cursor: pointer;
-      box-shadow: 0 0 8px rgba(255, 60, 0, 0.6);
-    }
-
-    /* CONTAINER */
-    .container {
-      padding: 20px;
-      display: flex;
-      flex-direction: column;
-      gap: 25px;
-    }
-
-    /* CARD */
-    .card {
-      background: linear-gradient(to bottom, #2a0000, #000);
-      border-radius: 14px;
-      overflow: hidden;
-      box-shadow: 0 0 12px rgba(255, 60, 0, 0.45);
-      transition: 0.3s;
-    }
-
-    .card:hover {
-      transform: scale(1.02);
-    }
-
-    .card img {
-      width: 100%;
-      display: block;
-    }
-
-    .card-content {
-      padding: 15px;
-      text-align: center;
-    }
-
-    .card-content h2 {
-      font-size: 1.1rem;
-      margin-bottom: 10px;
-    }
-
-    .card-content p {
-      font-size: 0.9rem;
-      color: #ccc;
-      margin-top: 10px;
-    }
-
-    /* MATCH BUTTONS */
-    .btn-group {
-      display: flex;
-      justify-content: center;
-      gap: 15px;
-      margin-top: 10px;
-    }
-
-    .btn {
-      padding: 10px 20px;
-      font-weight: 600;
-      border-radius: 8px;
-      color: #fff;
-      text-decoration: none;
-      transition: 0.3s;
-      font-size: 0.9rem;
-    }
-
-    .btn-hindi {
-      background: linear-gradient(90deg, #ff3c00, #ff6600);
-    }
-
-    .btn-english {
-      background: linear-gradient(90deg, #0047ff, #009dff);
-    }
-
-    .btn:hover {
-      transform: scale(1.05);
-    }
-
-    /* MODAL */
-    .modal {
-      display: none;
-      position: fixed;
-      inset: 0;
-      background: rgba(0,0,0,0.9);
-      z-index: 999;
-      padding: 20px;
-      overflow-y: auto;
-    }
-
-    .modal-content {
-      max-width: 900px;
-      margin: auto;
-      background: #111;
-      padding: 25px;
-      border-radius: 12px;
-      box-shadow: 0 0 20px rgba(255, 60, 0, 0.6);
-    }
-
-    .close-btn {
-      text-align: right;
-      margin-bottom: 10px;
-    }
-
-    .close-btn button {
-      background: #ff3c00;
-      border: none;
-      color: #fff;
-      padding: 6px 14px;
-      border-radius: 6px;
-      cursor: pointer;
-      font-weight: 600;
-    }
-
-    /* TELEGRAM FIXED BOTTOM BAR */
-    .telegram-btn {
-      position: fixed;
-      bottom: 0;
-      left: 0;
-      width: 100%;
-      padding: 14px 10px;
-      background: linear-gradient(90deg, #0088cc, #00aaff);
-      font-size: 1rem;
-      font-weight: 600;
-      color: #fff;
-      text-decoration: none;
-      text-align: center;
-      z-index: 1000;
-      box-shadow: 0 -4px 15px rgba(0, 136, 204, 0.5);
-    }
-  </style>
-</head>
+.error-msg{
+color:white;
+text-align:center;
+font-family:sans-serif;
+margin-top:20px;
+position:absolute;
+width:100%;
+top:50%;
+transform:translateY(-50%);
+}
+</style>
+<style type="text/css">* {user-select: auto !important; -webkit-user-select: auto !important;}</style><input type="hidden" id="inject_idm_text_selection"><style></style></head>
 
 <body>
 
-  <header>
-    <button class="about-btn" onclick="openModal()">About</button>
-    <img src="https://i.postimg.cc/fRSw4ZRD/IMG-20250925-223757.jpg" alt="Cricinsider365 Logo">
-  </header>
+<a href="https://t.me/+IhSW51QysxU3NzY1" target="_blank" class="telegram-btn">
 
-  <div class="container">
+<div class="telegram-icon">
+<svg viewBox="0 0 24 24">
+<path d="M9.993 15.674l-.398 5.604c.57 0 .817-.245 1.113-.54l2.67-2.557 5.53 4.047c1.014.558 1.734.264 1.987-.939l3.6-16.86.001-.001c.3-1.4-.506-1.95-1.496-1.58L1.27 9.64c-1.37.53-1.35 1.29-.233 1.64l5.68 1.77L19.29 5.73c.59-.39 1.13-.175.69.215"></path>
+</svg>
+</div>
 
-    <!-- MATCH CARD 1 -->
-    <div class="card">
-      <img src="https://i.postimg.cc/nLzkZhx7/1768821872539-h.jpg">
-      <div class="card-content">
-        <h2>INDIA Vs USA</h2>
-        <div class="btn-group">
-          <a href="http://insiderlivehd.pages.dev/Willow" class="btn btn-hindi">Hindi 🎙️</a>
-          <a href="http://insiderlivehd.pages.dev/Willow" class="btn btn-english">English 🎧</a>
-        </div>
-        <p>Watch Live • Tap Hindi or English</p>
-      </div>
-    </div>
+<span>Join @Cricinsider365</span>
 
-    <!-- MATCH CARD 2 -->
-    <div class="card">
-      <img src="https://i.postimg.cc/nLzkZhx7/1768821872539-h.jpg">
-      <div class="card-content">
-        <h2>FOR iOs Users</h2>
-        <div class="btn-group">
-          <a href="http://insiderlivehd.pages.dev/Willow" class="btn btn-hindi">Hindi 🎙️</a>
-          <a href="http://insiderlivehd.pages.dev/Willow" class="btn btn-english">English 🎧</a>
-        </div>
-        <p>Watch Live • Tap Hindi or English</p>
-      </div>
-    </div>
+</a>
 
-  </div>
-
-  <!-- JOIN TELEGRAM FIXED BAR -->
-  <a href="https://t.me/+IhSW51QysxU3NzY1" target="_blank" class="telegram-btn">
-    📢 Join Our Telegram For Free Live Match Links
-  </a>
-
-  <!-- DISCLAIMER MODAL -->
-  <div class="modal" id="disclaimerModal">
-    <div class="modal-content">
-      <div class="close-btn">
-        <button onclick="closeModal()">Close</button>
-      </div>
-      <p>
-        Cricinsider365 does not host, upload or stream any content.  
-        All links redirect to third-party websites available publicly on the internet.
-      </p>
-    </div>
-  </div>
-
-  <script>
-    function openModal() {
-      document.getElementById("disclaimerModal").style.display = "block";
-    }
-    function closeModal() {
-      document.getElementById("disclaimerModal").style.display = "none";
-    }
-  </script>
+<iframe id="main-iframe" allowfullscreen="" allow="encrypted-media; fullscreen; autoplay" src="https://newball.pages.dev/TEN3"></iframe>
 <script>
-// alert('Join Our Telegram For More Live Links')
-         if (confirm("Join Our Telegram Channel @Cricinsider365") == true) {
-         window.open("https://t.me/+IhSW51QysxU3NzY1", '_blank');
-     }
+window.addEventListener('DOMContentLoaded',()=>{
+
+const join = confirm("Join Our Telegram Channel");
+
+if(join){
+location.href = "https://t.me/+IhSW51QysxU3NzY1";
+}
+
+function showError(msg){
+const h2=document.createElement('h2');
+h2.className='error-msg';
+h2.innerText=msg;
+document.body.appendChild(h2);
+iframe.style.display='none';
+const badge=document.querySelector('.telegram-btn');
+if(badge) badge.style.display='none';
+}
+
+});
 </script>
-</body>
-</html>
+
+
+</body></html>
