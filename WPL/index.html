@@ -1,134 +1,632 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <meta http-equiv="X-UA-Compatible" content="IE=edge">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Cricinsider365</title>
-  <script src="https://content.jwplatform.com/libraries/KB5zFt7A.js"></script>
-  <style>
-    body {
-      margin: 0;
-      font-family: Arial, sans-serif;
-      background: linear-gradient(to bottom, #000000, #1a1a1a);
-      color: white;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      height: 100vh;
-      overflow: hidden;
-    }
+<!DOCTYPE html><html lang="en"><head><style type="text/css">* {user-select: auto !important; -webkit-user-select: auto !important;}</style><input type="hidden" id="inject_idm_text_selection">
 
-    #logo {
-      position: absolute;
-      top: 80px;
-      left: 50%;
-      transform: translateX(-50%);
-      cursor: pointer;
-    }
 
-    #logo img {
-      width: 180px;
-      height: auto;
-    }
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <meta name="referrer" content="no-referrer">
+    <title> · Live Player</title>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&amp;family=Sora:wght@600;700;800&amp;family=JetBrains+Mono:wght@400;600&amp;display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    
+    <style>
+        .hidden { display: none !important; }
+        .flex { display: flex !important; }
 
-    #video {
-      width: 90%;
-      max-width: 720px;
-      margin: 60px auto 20px auto;
-      border: 2px solid #1e90ff;
-      border-radius: 10px;
-      overflow: hidden;
-      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.6);
-      transition: border 0.3s;
-    }
+        * {
+            box-sizing: border-box;
+            -webkit-tap-highlight-color: transparent;
+        }
 
-    .fullscreen #video {
-      border: none;
-      box-shadow: none;
-    }
+        html, body {
+            margin: 0;
+            padding: 0;
+            width: 100%;
+            height: 100%;
+            min-height: 100vh;
+            background: #000;
+            color: #fff;
+            font-family: 'Roboto', 'Inter', Arial, sans-serif;
+            overflow: hidden;
+            user-select: none;
+        }
 
-    #telegramButton {
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      width: 250px;
-      height: 50px;
-      background: linear-gradient(90deg, #1e90ff, #001f3f);
-      color: white;
-      font-weight: bold;
-      font-size: 16px;
-      border: none;
-      border-radius: 25px;
-      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.4);
-      cursor: pointer;
-      overflow: hidden;
-      position: relative;
-      transition: transform 0.3s, box-shadow 0.3s;
-    }
+        .player-shell {
+            position: absolute;
+            inset: 0;
+            background: #000;
+            overflow: hidden;
+            width: 100%;
+            height: 100%;
+        }
 
-    #telegramButton:hover {
-      transform: scale(1.05);
-      box-shadow: 0 6px 12px rgba(0, 0, 0, 0.6);
-      background: linear-gradient(90deg, #001f3f, #1e90ff);
-    }
-  </style>
-</head>
+        .video-area {
+            position: absolute;
+            inset: 0;
+            background: #000;
+            overflow: hidden;
+            width: 100%;
+            height: 100%;
+        }
+
+        #native-video {
+            position: absolute;
+            inset: 0;
+            width: 100% !important;
+            height: 100% !important;
+            object-fit: contain;
+            background: #000;
+            display: block;
+            transition: object-fit 0.2s ease, filter 0.1s ease;
+        }
+
+        #native-video.fit-contain { object-fit: contain !important; }
+        #native-video.fit-cover { object-fit: cover !important; }
+        #native-video.fit-fill { object-fit: fill !important; }
+        #native-video.fit-16-9 {
+            object-fit: fill !important;
+            aspect-ratio: 16 / 9;
+            margin: auto;
+        }
+
+        .tap-surface {
+            position: absolute;
+            inset: 0;
+            z-index: 10;
+            cursor: pointer;
+            touch-action: none;
+        }
+
+        .brand-watermark {
+            position: absolute;
+            top: calc(env(safe-area-inset-top, 0px) + 20px);
+            left: env(safe-area-inset-left, 16px);
+            z-index: 20;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            background: rgba(0, 0, 0, 0.55);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            padding: 5px 10px;
+            border-radius: 20px;
+            border: 1px solid rgba(255, 255, 255, 0.12);
+            pointer-events: none;
+            opacity: 0.8;
+        }
+
+        .brand-watermark .logo-icon {
+            width: 17px;
+            height: 17px;
+            border-radius: 5px;
+            background: linear-gradient(135deg, #6366f1, #ec4899);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 10px;
+            color: white;
+        }
+
+        .brand-watermark .text {
+            font-family: 'Sora', sans-serif;
+            font-size: 10.5px;
+            font-weight: 700;
+            letter-spacing: 0.3px;
+            color: #fff;
+        }
+
+        @media (max-width: 640px) {
+            .brand-watermark { 
+                top: calc(env(safe-area-inset-top, 0px) + 16px);
+                left: calc(env(safe-area-inset-left, 0px) + 12px); 
+                padding: 4px 8px;
+            }
+            .brand-watermark .text { font-size: 9px; }
+            .brand-watermark .logo-icon { width: 15px; height: 15px; font-size: 9px; }
+        }
+
+        .center-spinner-wrap {
+            position: absolute;
+            inset: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 25;
+            pointer-events: none;
+        }
+        .loading-spinner {
+            width: 52px;
+            height: 52px;
+            border: 4px solid rgba(255, 255, 255, 0.22);
+            border-top-color: #ff0046;
+            border-radius: 50%;
+            animation: spin-loop 0.75s linear infinite;
+        }
+        @keyframes spin-loop {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        .player-message {
+            position: absolute;
+            inset: 0;
+            background-color: rgba(10, 10, 10, 0.94);
+            text-align: center;
+            padding: 0 1.5rem;
+            font-size: 0.95rem;
+            line-height: 1.4;
+            color: #e2e8f0;
+            z-index: 55;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            gap: 16px;
+        }
+        .retry-btn {
+            background: #ff0046;
+            color: #ffffff;
+            border: none;
+            border-radius: 4px;
+            padding: 10px 22px;
+            font-family: inherit;
+            font-size: 14px;
+            font-weight: 700;
+            cursor: pointer;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            transition: background 0.2s ease;
+        }
+        .retry-btn:hover { background: #e0003e; }
+
+        .status-toast {
+            position: absolute;
+            top: 24px;
+            right: 24px;
+            background: rgba(20, 20, 20, 0.92);
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            padding: 7px 14px;
+            border-radius: 4px;
+            font-size: 12px;
+            font-weight: 600;
+            letter-spacing: 0.3px;
+            color: #fff;
+            z-index: 35;
+            opacity: 0;
+            transform: translateY(-4px);
+            transition: opacity 0.2s ease, transform 0.2s ease;
+            pointer-events: none;
+        }
+        .status-toast.show {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* Stats for Nerds Panel */
+        .stats-panel {
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            background: rgba(10, 10, 12, 0.9);
+            border: 1px solid rgba(255, 255, 255, 0.18);
+            border-radius: 8px;
+            padding: 12px 16px;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 11.5px;
+            color: #e2e8f0;
+            z-index: 45;
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.7);
+            max-width: 320px;
+            line-height: 1.6;
+        }
+        .stats-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.12);
+            padding-bottom: 6px;
+            margin-bottom: 8px;
+            font-weight: 700;
+            color: #ff0046;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+        .stats-close {
+            cursor: pointer;
+            color: #94a3b8;
+            font-size: 14px;
+            transition: color 0.15s;
+        }
+        .stats-close:hover { color: #fff; }
+        .stats-row {
+            display: flex;
+            justify-content: space-between;
+            gap: 12px;
+        }
+        .stats-label { color: #94a3b8; }
+        .stats-val { color: #38bdf8; font-weight: 600; text-align: right; }
+
+        @media (max-width: 640px) {
+            .stats-panel {
+                top: 10px;
+                left: 10px;
+                right: 10px;
+                max-width: none;
+                font-size: 10.5px;
+                padding: 10px 12px;
+            }
+        }
+
+        /* VLC Style Center Gesture HUD */
+        .gesture-hud {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: rgba(15, 15, 15, 0.88);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            padding: 14px 22px;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            color: #fff;
+            font-size: 14px;
+            font-weight: 600;
+            z-index: 26;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.15s ease;
+        }
+        .gesture-hud.show { opacity: 1; }
+        .gesture-hud-bar {
+            width: 80px;
+            height: 6px;
+            background: rgba(255,255,255,0.25);
+            border-radius: 3px;
+            overflow: hidden;
+            position: relative;
+        }
+        .gesture-hud-fill {
+            height: 100%;
+            background: #ff0046;
+            width: 0%;
+        }
+
+        .center-play-btn {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 68px;
+            height: 68px;
+            background: rgba(0, 0, 0, 0.65);
+            border: 2px solid rgba(255, 255, 255, 0.85);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #fff;
+            cursor: pointer;
+            z-index: 22;
+            transition: transform 0.15s ease, background 0.2s ease, opacity 0.2s ease;
+        }
+        .center-play-btn svg {
+            width: 28px;
+            height: 28px;
+            fill: #fff;
+            margin-left: 3px;
+        }
+        .center-play-btn:hover {
+            transform: translate(-50%, -50%) scale(1.06);
+            background: #ff0046;
+            border-color: #ff0046;
+        }
+
+        .player-controls {
+            position: absolute;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            z-index: 30;
+            display: flex;
+            flex-direction: column;
+            background: linear-gradient(0deg, rgba(0,0,0,0.88) 0%, rgba(0,0,0,0.5) 70%, transparent 100%);
+            padding: 0 12px calc(env(safe-area-inset-bottom, 0px) + 2px) 12px;
+            transition: opacity 0.2s ease, transform 0.2s ease;
+        }
+
+        .hide-controls .player-controls {
+            opacity: 0;
+            transform: translateY(100%);
+            pointer-events: none;
+        }
+        .hide-controls .center-play-btn {
+            opacity: 0;
+            pointer-events: none;
+        }
+
+        .progress-container {
+            position: relative;
+            width: 100%;
+            height: 16px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+        }
+        .progress-rail {
+            width: 100%;
+            height: 3px;
+            background: rgba(255, 255, 255, 0.26);
+            position: relative;
+            transition: height 0.12s ease;
+        }
+        .progress-container:hover .progress-rail { height: 5px; }
+        .progress-filled {
+            position: absolute;
+            left: 0;
+            top: 0;
+            height: 100%;
+            background: #ff0046;
+            width: 0%;
+        }
+        .progress-thumb {
+            position: absolute;
+            top: 50%;
+            width: 12px;
+            height: 12px;
+            background: #fff;
+            border-radius: 50%;
+            transform: translate(-50%, -50%) scale(0);
+            box-shadow: 0 0 4px rgba(0,0,0,0.8);
+            transition: transform 0.12s ease;
+        }
+        .progress-container:hover .progress-thumb { transform: translate(-50%, -50%) scale(1); }
+
+        .button-bar {
+            width: 100%;
+            height: 44px;
+            display: flex;
+            align-items: center;
+            gap: 3px;
+        }
+
+        .control-btn {
+            background: transparent;
+            border: none;
+            width: 36px;
+            height: 36px;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            color: #d1d5db;
+            border-radius: 4px;
+            transition: color 0.15s, transform 0.1s;
+        }
+        .control-btn:hover { color: #fff; }
+        .control-btn:active { transform: scale(0.92); }
+        .control-btn.active { color: #ff0046; }
+        .control-btn svg {
+            width: 19px;
+            height: 19px;
+            pointer-events: none;
+            fill: currentColor;
+        }
+
+        .time-display {
+            font-size: 13px;
+            color: #e5e7eb;
+            font-variant-numeric: tabular-nums;
+            margin-left: 6px;
+            font-weight: 500;
+        }
+
+        .live-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 5px;
+            font-size: 11px;
+            font-weight: 700;
+            text-transform: uppercase;
+            color: #9ca3af;
+            margin-left: 8px;
+            letter-spacing: 0.5px;
+            cursor: pointer;
+            padding: 3px 6px;
+            border-radius: 3px;
+            transition: color 0.15s;
+        }
+        .live-badge.is-live { color: #ff0046; }
+        .live-dot {
+            width: 6px;
+            height: 6px;
+            background: currentColor;
+            border-radius: 50%;
+        }
+
+        .ui-spacer { flex: 1; }
+
+        .menu-wrap { position: relative; }
+        .popup-menu {
+            position: absolute;
+            bottom: calc(100% + 10px);
+            right: 0;
+            background: rgba(18, 18, 18, 0.96);
+            border: 1px solid rgba(255, 255, 255, 0.14);
+            box-shadow: 0 8px 30px rgba(0,0,0,0.8);
+            border-radius: 4px;
+            padding: 6px 0;
+            min-width: 140px;
+            max-height: 220px;
+            overflow-y: auto;
+            z-index: 60;
+            opacity: 0;
+            pointer-events: none;
+            transform: translateY(6px);
+            transition: opacity 0.15s ease, transform 0.15s ease;
+        }
+        .popup-menu.open {
+            opacity: 1;
+            pointer-events: auto;
+            transform: translateY(0);
+        }
+        .popup-item {
+            padding: 8px 14px;
+            font-size: 13px;
+            color: #ccc;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            transition: background 0.1s, color 0.1s;
+        }
+        .popup-item:hover {
+            background: rgba(255, 255, 255, 0.08);
+            color: #fff;
+        }
+        .popup-item.active {
+            color: #ff0046;
+            font-weight: 700;
+        }
+        .popup-item.active::after {
+            content: "✓";
+            font-size: 12px;
+            color: #ff0046;
+            margin-left: 8px;
+        }
+
+        @media (max-width: 640px) {
+            .control-btn { width: 32px; height: 32px; }
+            .control-btn svg { width: 17px; height: 17px; }
+            .button-bar { height: 40px; }
+            .time-display { font-size: 11px; }
+            .player-controls { padding: 0 8px calc(env(safe-area-inset-bottom, 0px) + 2px) 8px; }
+        }
+    </style>
+<script src="https://acscdn.com/script/aclib.js" async="" data-ad="https://acscdn.com/script/aclib.js"></script></head>
 <body>
+    <div class="player-shell">
+        <div id="video-area" class="video-area">
+            <video id="native-video" class="fit-contain" autoplay="" playsinline="" referrerpolicy="no-referrer" src="https://sonyeventsglobal.akamaized.net/hls/live/2119921/cricodi_2411/HIN/master.m3u8?hdnea=exp=1795540992~acl=/*~id=65cb92abc1d68edb5c2bdacea3611aea-1795497792177~hmac=0340e8ffb8b0afded328ae3bb09aca4f3786100ff00692ffec3bdb7349e4d30e"></video>
+            
+            <div id="tap-surface" class="tap-surface"></div>
 
-  <!-- Logo -->
-  <div id="logo" onclick="redirectToWebsite()">
-    <img src="https://i.postimg.cc/fRSw4ZRD/IMG-20250925-223757.jpg" alt="Logo" />
-  </div>
+            <div class="brand-watermark">
+                <div class="logo-icon"><i class="fab fa-telegram-plane"></i></div>
+                <span class="text">@SportsEera</span>
+            </div>
 
-  <!-- Video Player -->
-  <div id="video"></div>
+            <div id="status-toast" class="status-toast">Fit: Contain</div>
 
-  <!-- Telegram Button -->
-  <div id="telegramButton" onclick="redirectToTelegram()">
-    Join Telegram For More Live Links 
-  </div>
+            
+            <div id="stats-panel" class="stats-panel hidden">
+                <div class="stats-header">
+                    <span><i class="fas fa-chart-line"></i> Stream Stats</span>
+                    <i id="stats-close-btn" class="fas fa-times stats-close"></i>
+                </div>
+                <div class="stats-row"><span class="stats-label">Resolution:</span><span id="stat-res" class="stats-val">-</span></div>
+                <div class="stats-row"><span class="stats-label">Bitrate:</span><span id="stat-bitrate" class="stats-val">-</span></div>
+                <div class="stats-row"><span class="stats-label">Buffer Health:</span><span id="stat-buffer" class="stats-val">-</span></div>
+                <div class="stats-row"><span class="stats-label">Live Latency:</span><span id="stat-latency" class="stats-val">-</span></div>
+                <div class="stats-row"><span class="stats-label">Dropped Frames:</span><span id="stat-dropped" class="stats-val">0</span></div>
+                <div class="stats-row"><span class="stats-label">Codec / Engine:</span><span id="stat-engine" class="stats-val">HLS.js</span></div>
+            </div>
 
-  <script>
-    // Initialize JWPlayer
-    const playerInstance = jwplayer("video").setup({
-      width: "100%",
-      aspectratio: "16:9",
-      autostart: true,
-      mute: false,
-      file: "https://loura-lassun-stream.lovable.app/api/public/hls?url=https://sonuxssliv.pages.dev/sliv/ten3hd.m3u8",
-      skin: {
-        name: "glow"
-      }
-    });
+            
+            <div id="gesture-hud" class="gesture-hud">
+                <i id="gesture-icon" class="fas fa-volume-up"></i>
+                <div class="gesture-hud-bar">
+                    <div id="gesture-fill" class="gesture-hud-fill"></div>
+                </div>
+                <span id="gesture-text">100%</span>
+            </div>
 
-    // Handle fullscreen class
-    playerInstance.on('fullscreen', function (event) {
-      if (event.fullscreen) {
-        document.body.classList.add('fullscreen');
-      } else {
-        document.body.classList.remove('fullscreen');
-      }
-    });
+            <div id="loading-spinner" class="center-spinner-wrap hidden">
+                <div class="loading-spinner"></div>
+            </div>
 
-    // Telegram redirect
-    function redirectToTelegram() {
-      window.location.href = "https://t.me/+IhSW51QysxU3NzY1";
-    }
+            <div id="center-play-btn" class="center-play-btn hidden">
+                <svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"></path></svg>
+            </div>
 
-    // Logo redirect
-    function redirectToWebsite() {
-      window.location.href = "https://t.me/+IhSW51QysxU3NzY1";
-    }
+            <div id="player-message" class="player-message hidden">
+                <div id="player-msg-text"></div>
+                <button id="retry-btn" class="retry-btn hidden">
+                    <i class="fas fa-redo-alt"></i> Try Again
+                </button>
+            </div>
 
-    // Optional: Prompt before redirecting
-    window.onload = function () {
-      if (confirm("Join Our Telegram Channel to stay updated!")) {
-        redirectToTelegram();
-      }
-    };
-  </script>
-<script>(function(s){s.dataset.zone='11621694',s.src='https://al5sm.com/tag.min.js'})([document.documentElement, document.body].filter(Boolean).pop().appendChild(document.createElement('script')))</script>
-</body>
-</html>
+            <div id="player-controls" class="player-controls">
+                <div id="progress-track" class="progress-container">
+                    <div class="progress-rail">
+                        <div id="progress-filled" class="progress-filled"></div>
+                        <div id="progress-thumb" class="progress-thumb"></div>
+                    </div>
+                </div>
+
+                <div class="button-bar">
+                    <button id="play-pause-btn" class="control-btn" title="Play/Pause">
+                        <svg id="icon-play" viewBox="0 0 24 24" class="hidden"><path d="M8 5v14l11-7z"></path></svg>
+                        <svg id="icon-pause" viewBox="0 0 24 24"><path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z"></path></svg>
+                    </button>
+                    
+                    <button id="mute-btn" class="control-btn" title="Mute/Unmute">
+                        <svg id="icon-muted" viewBox="0 0 24 24"><path d="M16.5 12c0-1.77-1.02-3.29-2.5-4.03v2.21l2.45 2.45c.03-.2.05-.41.05-.63zm2.5 0c0 .94-.2 1.82-.54 2.64l1.51 1.51C20.63 14.91 21 13.5 21 12c0-4.28-2.99-7.86-7-8.77v2.06c2.89.86 5 3.54 5 6.71zM4.27 3L3 4.27 7.73 9H3v6h4l5 5v-6.73l4.25 4.25c-.67.52-1.42.93-2.25 1.18v2.06c1.38-.31 2.63-.95 3.69-1.81L19.73 21 21 19.73l-9-9L4.27 3zM12 4L9.91 6.09 12 8.18V4z"></path></svg>
+                        <svg id="icon-unmuted" viewBox="0 0 24 24" class="hidden"><path d="M3 9v6h4l5 5V4L7 9H3zm13.5 3c0-1.77-1.02-3.29-2.5-4.03v8.05c1.48-.73 2.5-2.25 2.5-4.02zM14 3.23v2.06c2.89.86 5 3.54 5 6.71s-2.11 5.85-5 6.71v2.06c4.01-.91 7-4.49 7-8.77s-2.99-7.86-7-8.77z"></path></svg>
+                    </button>
+
+                    <span class="time-display" id="cur-time">0:03</span>
+                    <div id="live-badge" class="live-badge is-live" title="Sync to live stream">
+                        <div class="live-dot"></div> Live
+                    </div>
+
+                    <div class="ui-spacer"></div>
+
+                    
+                    <div class="menu-wrap hidden" id="audio-wrap">
+                        <button id="audio-btn" class="control-btn" title="Audio Track">
+                            <i class="fas fa-language" style="font-size:16px;"></i>
+                        </button>
+                        <div id="audio-menu" class="popup-menu"></div>
+                    </div>
+
+                    
+                    <button id="aspect-btn" class="control-btn" title="Cycle Aspect / Stretch">
+                        <svg viewBox="0 0 24 24"><path d="M19 12h-2v3h-3v2h5v-5zM7 9h3V7H5v5h2V9zm14-6H3c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h18c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm0 16.01H3V4.99h18v14.02z"></path></svg>
+                    </button>
+
+                    
+                    <div class="menu-wrap">
+                        <button id="quality-btn" class="control-btn" title="Quality Settings">
+                            <svg viewBox="0 0 24 24"><path d="M19.14 12.94c.04-.3.06-.61.06-.94 0-.32-.02-.64-.07-.94l2.03-1.58c.18-.14.23-.41.12-.61l-1.92-3.32c-.12-.22-.37-.29-.59-.22l-2.39.96c-.5-.38-1.03-.7-1.62-.94l-.36-2.54c-.04-.24-.24-.41-.48-.41h-3.84c-.24 0-.43.17-.47.41l-.36 2.54c-.59.24-1.13.57-1.62.94l-2.39-.96c-.22-.08-.47 0-.59.22L2.74 8.87c-.12.21-.08.47.12.61l2.03 1.58c-.05.3-.09.63-.09.94s.02.64.07.94l-2.03 1.58c-.18.14-.23.41-.12.61l1.92 3.32c.12.22.37.29.59.22l2.39-.96c.5.38 1.03.7 1.62.94l.36 2.54c.05.24.24.41.48.41h3.84c.24 0 .44-.17.47-.41l.36-2.54c.59-.24 1.13-.56 1.62-.94l2.39.96c.22.08.47 0 .59-.22l1.92-3.32c.12-.22.07-.47-.12-.61l-2.01-1.58zM12 15.6c-1.98 0-3.6-1.62-3.6-3.6s1.62-3.6 3.6-3.6 3.6 1.62 3.6 3.6-1.62 3.6-3.6 3.6z"></path></svg>
+                        </button>
+                        <div id="quality-menu" class="popup-menu"><div class="popup-item active">Auto</div><div class="popup-item">Native</div></div>
+                    </div>
+
+                    
+                    <button id="stats-btn" class="control-btn" title="Stats for Nerds">
+                        <i class="fas fa-info-circle" style="font-size:15px;"></i>
+                    </button>
+
+                    
+                    <button id="pip-btn" class="control-btn" title="Picture in Picture">
+                        <i class="fas fa-clone" style="font-size:14px;"></i>
+                    </button>
+
+                    
+                    <button id="fs-btn" class="control-btn" title="Toggle Fullscreen">
+                        <svg viewBox="0 0 24 24"><path d="M7 14H5v5h5v-2H7v-3zm-2-4h2V7h3V5H5v5zm12 7h-3v2h5v-5h-2v3zM14 5v2h3v3h2V5h-5z"></path></svg>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    
+    
+
+
+</body></html>
